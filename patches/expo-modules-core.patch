@@ -1,0 +1,41 @@
+diff --git a/ios/Core/Views/SwiftUI/AutoSizingStack.swift b/ios/Core/Views/SwiftUI/AutoSizingStack.swift
+index 3c855b73f9c7640ba97773b63b1716be7af03412..f4daf618114300d8b72f67a414d7868a2a72d4da 100644
+--- a/ios/Core/Views/SwiftUI/AutoSizingStack.swift
++++ b/ios/Core/Views/SwiftUI/AutoSizingStack.swift
+@@ -30,14 +30,15 @@ extension ExpoSwiftUI {
+       if #available(iOS 16.0, tvOS 16.0, macOS 13.0, *) {
+         if proxy !== ShadowNodeProxy.SHADOW_NODE_MOCK_PROXY {
+           content.overlay {
+-            content.fixedSize(horizontal: axis.contains(.horizontal), vertical: axis.contains(.vertical))
+-              .hidden()
+-              .onGeometryChange(for: CGSize.self, of: { proxy in proxy.size }, action: { size in
+-                var size = size
+-                size.width = axis.contains(.horizontal) ? size.width : ShadowNodeProxy.UNDEFINED_SIZE
+-                size.height = axis.contains(.vertical) ? size.height : ShadowNodeProxy.UNDEFINED_SIZE
+-                proxy.setViewSize?(size)
+-              })
++            GeometryReader { geometry in
++              Color.clear
++                .onAppear {
++                  updateSize(geometry.size)
++                }
++                .onChange(of: geometry.size) { newSize in
++                  updateSize(newSize)
++                }
++            }
+           }
+         } else {
+           content
+@@ -49,5 +50,12 @@ extension ExpoSwiftUI {
+         })
+       }
+     }
++    
++    private func updateSize(_ size: CGSize) {
++      var adjustedSize = size
++      adjustedSize.width = axis.contains(.horizontal) ? adjustedSize.width : ShadowNodeProxy.UNDEFINED_SIZE
++      adjustedSize.height = axis.contains(.vertical) ? adjustedSize.height : ShadowNodeProxy.UNDEFINED_SIZE
++      proxy.setViewSize?(adjustedSize)
++    }
+   }
+ }
