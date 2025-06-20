@@ -1,6 +1,6 @@
-# The React Native & Expo App Template
+# My React Native App
 
-This is the most modern and always up-to-date React Native & Expo app template. It comes with sensible defaults, a great developer experience and is optimized for performance. You can read more about the DevX setup in this [frontend tooling article](https://cpojer.net/posts/fastest-frontend-tooling-in-2022). Check out the corresponding [web app template](https://github.com/nkzw-tech/vite-ts-react-tailwind-template).
+A modern React Native application built with Expo, TypeScript, and cutting-edge tooling. Based on the NKZW template with custom modifications for compatibility.
 
 <img src="https://github.com/user-attachments/assets/91a4b790-fde8-46f9-8052-1f678b319fbf" width="49%" />
 <img src="https://github.com/user-attachments/assets/e93b1a95-cd44-4df8-9b6d-8ae797810375" width="49%" />
@@ -53,6 +53,6 @@ pnpm ios
 
 If you already have the app installed on your simulator, you can skip the above steps and simply run `pnpm dev` to start the development server.
 
-## Contributing
+## Development
 
-Feel free to open issues, initiate discussions and send PRs to improve the template.
+Run `pnpm dev` to start the development server.
