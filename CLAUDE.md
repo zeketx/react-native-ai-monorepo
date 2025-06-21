@@ -32,16 +32,16 @@ pnpm fbtee:translate               # Process translations into src/translations/
 ```
 ## WorkFlow Patterns
 
-**IMPORTANT: When creating new features or tasks, always follow the Software Development Life Cycle workflow defined in `../.ai/sdlc/sdlc.md`**
+**IMPORTANT: When creating new features or tasks, always follow the Software Development Life Cycle workflow defined in `.ai/sdlc/sdlc.md`**
 
 ### Task-Based Development Workflow
-- **Task Management**: All tasks should be created as individual markdown files in `../.ai/tasks/backlog/`
+- **Task Management**: All tasks should be created as individual markdown files in `.ai/backlog/`
 - **Branch Strategy**: Create feature branches for each task using `git checkout -b feature/task-name`
 - **Task Lifecycle**: Move task files through the workflow stages:
-  - `../.ai/tasks/backlog/` → `../.ai/tasks/doing/` → `../.ai/tasks/done/`
+  - `.ai/backlog/` → `.ai/doing/` → `.ai/done/`
 - **Never delete** the `.ai` folder or task directories
 - **Always commit** changes with descriptive messages
-- **Review the full SDLC workflow** in `../.ai/sdlc/sdlc.md` before starting any new feature development
+- **Review the full SDLC workflow** in `.ai/sdlc/sdlc.md` before starting any new feature development
 
 ## Architecture Overview
 
