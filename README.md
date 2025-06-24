@@ -1,58 +1,180 @@
-# My React Native App
+# ClientSync Travel Platform
 
-A modern React Native application built with Expo, TypeScript, and cutting-edge tooling. Based on the NKZW template with custom modifications for compatibility.
+A comprehensive travel management platform built with React Native, featuring a mobile app for clients and a web dashboard for organizers. This project is currently transforming from a single React Native app into a full monorepo architecture.
 
 <img src="https://github.com/user-attachments/assets/91a4b790-fde8-46f9-8052-1f678b319fbf" width="49%" />
 <img src="https://github.com/user-attachments/assets/e93b1a95-cd44-4df8-9b6d-8ae797810375" width="49%" />
 
-## Technologies
+## 🎯 Project Vision
 
-You have to make a lot of decisions and install tons of packages every time you create a new React Native app. This template offers an opinionated starting point and includes the best options for various categories. Instead of spending hours on research and piecing together a setup that works, you can just copy this template and start right away. When you copy this template, you get full control to add or remove any third-party package to customize your app.
+ClientSync addresses the inefficiencies travel agencies face in managing high-value clients' trip preferences and reservations. The platform provides:
 
-- Expo 53 & React Native 0.79 with the New Architecture.
-- [Expo Router](https://docs.expo.dev/router/introduction/)
-- [NativeWind](https://www.nativewind.dev/) & [Tailwind CSS](https://tailwindcss.com/)
-- [`@gorhom/bottom-sheet`](https://github.com/gorhom/react-native-bottom-sheet), [Legend List](https://github.com/LegendApp/legend-list), [`react-native-svg`](https://github.com/software-mansion/react-native-svg) (+ `react-native-svg-transformer`), [`expo-linear-gradient`](https://docs.expo.dev/versions/latest/sdk/linear-gradient/).
-- [`fbtee`](https://github.com/nkzw-tech/fbtee) for i18n.
-- [TypeScript](https://www.typescriptlang.org)
-- [React Compiler](https://react.dev/learn/react-compiler)
-- [pnpm](https://pnpm.io/)
-- **ESM:** _It's 2025._ This template comes with `"type": "module"`.
+- **Mobile App (React Native)**: Client-facing app for email verification, onboarding, and itinerary viewing
+- **Web Dashboard (React)**: Organizer interface for client management, alerts, and allowlist control
+- **Supabase Backend**: Secure cloud database with real-time capabilities and authentication
 
-## Getting Started
+## 🏗️ Architecture Overview
 
-Start here: [Create a new app using this template](https://github.com/new?template_name=expo-app-template&template_owner=nkzw-tech).
+### Current Status: Phase 0 - Foundation
 
-After you created your repo, you can freely modify anything in this template.
+- ✅ **Monorepo Setup**: PNPM workspace configuration established
+- 🚧 **In Progress**: Transforming single React Native app into full platform
+- 📋 **65 Tasks Planned**: Organized across 5 development phases
+
+### Target Architecture (Monorepo)
+
+```
+packages/
+├── mobile-app/          # React Native client app (Expo)
+├── web-dashboard/       # React web dashboard (Vite)
+├── shared/             # Common types and utilities
+└── backend/            # Supabase Edge Functions
+```
+
+## 🤖 AI-Assisted Development System
+
+This project uses a neat `.ai/` folder system for managing development workflow:
+
+### `.ai/` Directory Structure
+
+- **`.ai/backlog/`** - Remaining bite-sized tasks with clear acceptance criteria
+- **`.ai/doing/`** - Currently active tasks (follow SDLC workflow)
+- **`.ai/done/`** - Completed tasks with implementation notes
+- **`.ai/reference/`** - PRD, project pitch, and complete task overview
+- **`.ai/rules/`** - Architecture guidelines, system patterns, and implementation guides
+- **`.ai/sdlc/`** - Software Development Life Cycle workflow documentation
+
+### Development Workflow
+
+1. **Pick a task** from `.ai/backlog/` (respecting dependencies)
+2. **Move to `.ai/doing/`** and create feature branch
+3. **Implement** following documented patterns and acceptance criteria
+4. **Mark complete** and move to `.ai/done/` with notes
+5. **Commit and merge** following established conventions
+
+## 🛠️ Technology Stack
+
+### Core Technologies
+
+- **React Native 0.79** with New Architecture enabled
+- **Expo 53** with development build workflow
+- **React 19** with React Compiler (experimental)
+- **TypeScript** with strict ESM configuration
+- **pnpm** package manager with workspaces
+
+### Frontend Stack
+
+- **Expo Router** - File-based routing
+- **NativeWind** - Tailwind CSS for React Native
+- **fbtee** - Internationalization system
+- **React Hook Form** - Form management
+- **Reanimated** - Animations
+
+### Backend & Data
+
+- **Supabase** - Backend-as-a-Service with PostgreSQL
+- **Row Level Security** - Database security policies
+- **Real-time subscriptions** - Live updates for dashboard
+- **Edge Functions** - Custom serverless logic
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-You'll need Node.js 22, pnpm 10+ and Cocoapods.
+- Node.js 22+
+- pnpm 10+
+- Cocoapods (for iOS)
 
 ```bash
-
 brew install node pnpm cocoapods
 ```
 
-For building and running apps locally, follow the [Expo setup guides](https://docs.expo.dev/get-started/set-up-your-environment/?platform=ios&device=simulated).
-
-### Installing Dependencies
-
-Run:
+### Installation
 
 ```bash
+# Clone and install dependencies
+git clone https://github.com/zeketx/react-native-ai-monorepo.git
+cd react-native-ai-monorepo
 pnpm install && pnpm dev:setup
 ```
 
-### Running the iOS App in a simulator
+### Development Commands
+
+**Mobile App Development:**
 
 ```bash
-pnpm prebuild
-pnpm ios
+pnpm dev                   # Start development server
+pnpm prebuild              # Generate native iOS/Android code
+pnpm ios                   # Build and run on iOS simulator
+pnpm android               # Build and run on Android
 ```
 
-If you already have the app installed on your simulator, you can skip the above steps and simply run `pnpm dev` to start the development server.
+**Testing & Quality:**
 
-## Development
+```bash
+pnpm test                 # Run all tests (TypeScript, Vitest, ESLint, Prettier)
+pnpm tsc:check            # TypeScript compilation check only
+pnpm vitest:run           # Unit tests only
+pnpm lint                 # ESLint check
+pnpm format               # Auto-format code with Prettier
+```
 
-Run `pnpm dev` to start the development server.
+**Internationalization:**
+
+```bash
+pnpm fbtee                # Full i18n workflow (manifest → collect → translate)
+pnpm fbtee:manifest       # Extract translatable strings
+pnpm fbtee:collect        # Generate source_strings.json
+pnpm fbtee:translate      # Process translations
+```
+
+## 🏛️ Key Architectural Patterns
+
+### Authentication Flow
+
+1. Root layout wraps app in `ViewerContext`
+2. App layout checks `isAuthenticated` status
+3. Unauthenticated users redirected to `/login`
+4. Login validates against email allowlist
+5. Successful auth loads user tier and preferences
+
+### Data Management
+
+- **Repository Pattern**: Centralized API access in `services/api.ts`
+- **Service Layer**: Business logic encapsulation
+- **Observer Pattern**: Real-time updates via Supabase subscriptions
+
+### Component Architecture
+
+- **Mobile**: Screens use shared UI components from `src/ui/`
+- **Web**: Pages render components with shared service layer
+- **Shared**: Common types and utilities across packages
+
+## 🔒 Security & Compliance
+
+- **Email Allowlist**: Exclusive access control
+- **Row Level Security**: Database-level permissions
+- **End-to-end Encryption**: Sensitive data protection
+- **GDPR/CCPA Compliance**: Privacy regulation adherence
+- **Audit Logging**: Change tracking for security
+
+## 📚 Documentation
+
+- **[Product Requirements](/.ai/reference/prd.md)** - Complete feature specifications
+- **[Architecture Guide](/.ai/rules/architecture.md)** - System design and patterns
+- **[Development Workflow](/.ai/sdlc/sdlc.md)** - SDLC process and standards
+- **[Implementation Guide](/.ai/rules/clientsync-implementation-guide.md)** - Development guidelines
+
+## 🤝 Contributing
+
+This project follows a structured development workflow:
+
+1. **Review** available tasks in `.ai/backlog/`
+2. **Follow** the SDLC process documented in `.ai/sdlc/sdlc.md`
+3. **Respect** architectural patterns in `.ai/rules/`
+4. **Test** thoroughly using `pnpm test`
+5. **Document** progress in task files
+
+---
+
+Shoutout to IndyDevDan & Parker Rex for some of the workflows!
