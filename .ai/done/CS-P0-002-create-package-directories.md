@@ -5,9 +5,11 @@
 **Dependencies:** CS-P0-001
 
 ## Objective
+
 Create the directory structure for the monorepo packages that will house the mobile app, web dashboard, and shared code.
 
 ## Acceptance Criteria
+
 - [ ] `packages/` directory exists in project root
 - [ ] `packages/mobile-app/` directory exists
 - [ ] `packages/web-dashboard/` directory exists
@@ -15,7 +17,9 @@ Create the directory structure for the monorepo packages that will house the mob
 - [ ] Directory structure is properly committed to git
 
 ## Implementation Notes
+
 1. From project root, create the packages directory structure:
+
    ```bash
    mkdir -p packages/mobile-app
    mkdir -p packages/web-dashboard
@@ -23,6 +27,7 @@ Create the directory structure for the monorepo packages that will house the mob
    ```
 
 2. Create placeholder README files to ensure directories are tracked by git:
+
    ```bash
    echo "# Mobile App Package" > packages/mobile-app/README.md
    echo "# Web Dashboard Package" > packages/web-dashboard/README.md
@@ -35,6 +40,7 @@ Create the directory structure for the monorepo packages that will house the mob
    ```
 
 ## Expected Structure
+
 ```
 packages/
 ├── mobile-app/
@@ -43,4 +49,5 @@ packages/
 ```
 
 ## Estimated Effort
+
 30 minutes
