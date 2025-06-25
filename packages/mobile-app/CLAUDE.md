@@ -1,6 +1,8 @@
-# CLAUDE.md
+# CLAUDE.md - Mobile App Package
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with the mobile app package.
+
+**Note: For monorepo-wide guidelines and SDLC workflow, see the root CLAUDE.md at `/my-rn-app/CLAUDE.md`**
 
 ## Essential Commands
 
