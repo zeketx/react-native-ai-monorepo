@@ -1,2 +1,2 @@
 // @clientsync/shared - Main entry point
-export {}
+export * from './types.js'
