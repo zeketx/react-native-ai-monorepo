@@ -8,11 +8,11 @@
 Set up authentication providers in Supabase including email/password authentication and prepare for future Google OAuth integration.
 
 ## Acceptance Criteria
-- [ ] Email/Password authentication is confirmed enabled
-- [ ] Custom user profile trigger is created
-- [ ] Redirect URLs are configured for development
-- [ ] Google OAuth is prepared (but not required to be active)
-- [ ] Authentication flow is tested
+- [x] Email/Password authentication is confirmed enabled
+- [x] Custom user profile trigger is created
+- [x] Redirect URLs are configured for development
+- [x] Google OAuth is prepared (but not required to be active)
+- [x] Authentication flow is tested
 
 ## Implementation Notes
 1. Configure Email Authentication:

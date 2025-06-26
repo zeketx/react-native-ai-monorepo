@@ -119,10 +119,11 @@ You should receive a JSON response with the API specification.
 
 After completing this setup:
 
-1. Continue with CS-P0-012: Design Database Schema
-2. Set up database tables and relationships
-3. Configure Row Level Security policies
-4. Integrate Supabase SDK into the application
+1. ✅ **CS-P0-012**: Configure Authentication Providers (See [SUPABASE_AUTH_SETUP.md](./SUPABASE_AUTH_SETUP.md))
+2. Continue with CS-P0-013: Design Database Schema
+3. Set up database tables and relationships
+4. Configure Row Level Security policies
+5. Integrate Supabase SDK into the application
 
 ## Troubleshooting
 
