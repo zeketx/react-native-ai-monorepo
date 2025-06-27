@@ -8,12 +8,12 @@
 Create Row Level Security (RLS) policies for all tables to ensure data access is properly restricted based on user roles and ownership.
 
 ## Acceptance Criteria
-- [ ] RLS is enabled on all tables
-- [ ] Clients can only access their own data
-- [ ] Organizers can view all client data
-- [ ] Allowlist is restricted to organizers/admins
-- [ ] Audit logs are admin-only
-- [ ] All policies are tested and working
+- [x] RLS is enabled on all tables
+- [x] Clients can only access their own data
+- [x] Organizers can view all client data
+- [x] Allowlist is restricted to organizers/admins
+- [x] Audit logs are admin-only
+- [x] All policies are tested and working
 
 ## Implementation Notes
 1. Enable RLS on all tables:

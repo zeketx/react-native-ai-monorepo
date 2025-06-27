@@ -8,11 +8,11 @@
 Create PostgreSQL helper functions for common database operations including email allowlist checking, audit logging, and data management utilities.
 
 ## Acceptance Criteria
-- [ ] Email allowlist check function is created
-- [ ] Audit log creation function is implemented
-- [ ] All functions have proper security definer
-- [ ] Functions handle edge cases gracefully
-- [ ] Return types are properly defined
+- [x] Email allowlist check function is created
+- [x] Audit log creation function is implemented
+- [x] All functions have proper security definer
+- [x] Functions handle edge cases gracefully
+- [x] Return types are properly defined
 
 ## Implementation Notes
 1. Create email allowlist check function:
