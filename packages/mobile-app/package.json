@@ -15,7 +15,7 @@
     "format": "prettier --write .",
     "format-graphql": "./scripts/format-graphql-schema.tsx",
     "preinstall": "command -v git >/dev/null 2>&1 && git config core.hooksPath git-hooks || exit 0",
-    "ios": "expo run:ios --device 'iPhone 16 Pro'",
+    "ios": "expo run:ios --device 'iPhone 15 Pro'",
     "lint": "eslint --cache .",
     "lint:format": "prettier --cache --check .",
     "prebuild": "expo prebuild",
@@ -87,8 +87,8 @@
       ]
     },
     "patchedDependencies": {
-      "metro": "patches/metro.patch",
-      "expo-modules-core": "patches/expo-modules-core.patch"
+      "expo-modules-core": "patches/expo-modules-core.patch",
+      "metro": "patches/metro.patch"
     },
     "ignorePatchFailures": false
   }
