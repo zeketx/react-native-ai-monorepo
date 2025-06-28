@@ -1,6 +1,6 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Redirect, Stack } from 'expo-router';
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import useViewerContext from 'src/user/useViewerContext.tsx';
 
 function TabLayout() {

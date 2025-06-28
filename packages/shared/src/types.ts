@@ -10,6 +10,12 @@ export enum ClientTier {
   ELITE = 'elite'
 }
 
+export enum UserRole {
+  CLIENT = 'client',
+  ORGANIZER = 'organizer',
+  ADMIN = 'admin'
+}
+
 // ================================
 // User Types
 // ================================
