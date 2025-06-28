@@ -83,9 +83,15 @@ The project is structured as a monorepo using PNPM workspaces to manage the mobi
 │       │   └── types.ts                 # Shared TypeScript types
 │       └── package.json
 │
-├── backend/                             # Supabase backend (custom functions)
-│   └── functions/
-│       └── emailVerification.ts         # Custom email verification logic
+├── packages/cms/                        # Payload CMS application
+│   ├── src/
+│   │   ├── collections/                 # Payload collections (data models)
+│   │   ├── components/                  # Admin UI components
+│   │   ├── endpoints/                   # Custom API endpoints
+│   │   ├── access/                      # Access control functions
+│   │   └── hooks/                       # Collection hooks
+│   ├── payload.config.ts                # Payload configuration
+│   └── package.json
 │
 ├── .gitignore
 ├── .npmrc
@@ -103,7 +109,7 @@ The project is structured as a monorepo using PNPM workspaces to manage the mobi
 packages/mobile-app/: Contains the existing React Native app structure, moved from the project root, including src/, assets/, and Expo-related files. Subdirectories like .expo/ and git-hooks/ are preserved.
 packages/web-dashboard/: A new React project using Vite, structured with components/, pages/, and services/ for the organizer dashboard.
 packages/shared/: Stores shared TypeScript types and utilities to reduce duplication.
-backend/: Houses custom Supabase functions, such as email verification.
+packages/cms/: Houses the Payload CMS application with collections, custom endpoints, and admin UI.
 Root-Level Files: Configuration files like .gitignore, .npmrc, and package.json remain at the root to manage the monorepo.
 
 Notes: 
@@ -129,12 +135,12 @@ B. Key Technical Decisions
 
 Core Programming Languages and Frameworks:
 Frontend: JavaScript/TypeScript with React Native (mobile) and React (web).
-Backend: JavaScript for Supabase serverless functions.
+Backend: TypeScript with Payload CMS (Next.js based).
 Rationale: Unified language stack speeds up development and leverages React’s ecosystem.
 
 
-Database: Supabase PostgreSQL.
-Rationale: Offers scalability, real-time subscriptions, and authentication out of the box.
+Database: PostgreSQL via Payload CMS.
+Rationale: Offers scalability, built-in content management, authentication, and API generation out of the box.
 
 
 Key Libraries/Tools:
@@ -149,7 +155,7 @@ C. Design Patterns in Use
 
 Repository Pattern:
 Description: Centralizes data access logic.
-Application: Used in services/api.ts to interact with Supabase.
+Application: Used in services/api.ts to interact with Payload CMS APIs.
 
 
 Service Layer Pattern:
@@ -159,7 +165,7 @@ Application: Handles API calls and data processing in services/.
 
 Observer Pattern:
 Description: Reacts to state changes.
-Application: Powers real-time alerts in the web dashboard via Supabase subscriptions.
+Application: Powers alerts in the web dashboard via Payload webhooks or polling.
 
 
 
@@ -167,24 +173,24 @@ D. Component Relationships
 
 Mobile App:
 Screens (e.g., app/login.tsx) use Components (e.g., ui/Text.tsx).
-Services (services/api.ts) connect to Supabase.
+Services (services/api.ts) connect to Payload CMS REST/GraphQL APIs.
 Navigation (Expo Router in app/) manages routing.
 
 
 Web Dashboard:
 Pages (e.g., Dashboard.tsx) render Components (e.g., ClientList.tsx).
-Services (services/api.ts) fetch data from Supabase.
+Services (services/api.ts) fetch data from Payload CMS APIs.
 
 
 Backend:
 Custom functions (e.g., emailVerification.ts) process frontend requests.
 
 
-Flow: Components call services, which interact with Supabase.
+Flow: Components call services, which interact with Payload CMS APIs.
 
 E. Critical Implementation Paths
 
-Set Up Supabase: Define schema (clients, trips, allowlists) and authentication.
+Set Up Payload CMS: Define collections (clients, trips, allowlists) and authentication.
 Develop Mobile App: Implement email verification, onboarding, and itinerary views.
 Develop Web Dashboard: Build client overview, alerts, and allowlist management.
 Integrate and Test: Ensure seamless data flow and usability.
@@ -194,7 +200,7 @@ Rationale for Architectural Choices
 
 Monorepo with PNPM Workspaces: Facilitates code sharing and dependency management.
 Modular Monolith: Keeps the architecture simple and robust.
-Supabase Backend: Reduces infrastructure overhead with serverless capabilities.
+Payload CMS Backend: Provides complete CMS capabilities with built-in admin UI and API generation.
 React Ecosystem: Enables rapid development and consistency across platforms.
 
 This architecture aligns with the current file structure, extends it for the web dashboard, and meets all project requirements efficiently.

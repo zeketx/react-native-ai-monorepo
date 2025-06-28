@@ -21,7 +21,7 @@
 **ClientSync** is a mobile-first travel platform designed for travel agencies managing high-value clients. The platform consists of:
 - **Mobile App**: React Native with Expo for iOS/Android clients
 - **Web Dashboard**: React with Vite for travel organizers
-- **Backend**: Supabase (PostgreSQL, Auth, Serverless Functions)
+- **Backend**: Payload CMS (PostgreSQL, Auth, REST/GraphQL APIs)
 
 ### Business Context
 Travel agencies currently use fragmented tools (CRMs, spreadsheets, emails) leading to inefficiencies and poor client experience. ClientSync provides a unified, secure, tier-based platform for managing client preferences and trip itineraries.
@@ -76,14 +76,15 @@ eas --version
 Create `.env.local` in the project root:
 
 ```bash
-# Supabase Configuration
-EXPO_PUBLIC_SUPABASE_URL=your_supabase_project_url
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+# Payload CMS Configuration
+EXPO_PUBLIC_PAYLOAD_URL=http://localhost:3000
+EXPO_PUBLIC_PAYLOAD_API_KEY=your_api_key
+PAYLOAD_SECRET=your_payload_secret
+DATABASE_URI=postgresql://user:password@localhost:5432/clientsync
 
 # Web Dashboard
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_PAYLOAD_URL=http://localhost:3000
+VITE_PAYLOAD_API_KEY=your_api_key
 
 # Development
 NODE_ENV=development
@@ -91,10 +92,11 @@ NODE_ENV=development
 
 ### Access Requirements
 
-1. **Supabase Account**: Create at https://supabase.com
+1. **PostgreSQL Database**: Local or cloud instance (e.g., Neon, Railway)
 2. **Expo Account**: Register at https://expo.dev
 3. **Apple Developer Account**: For iOS deployment (optional for development)
 4. **Google Play Console**: For Android deployment (optional for development)
+5. **Email Service**: SendGrid or Resend account for email verification
 
 ---
 

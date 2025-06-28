@@ -2,7 +2,7 @@
 
 ## Project Plan: ClientSync Travel Platform Implementation
 
-**Overall Project Goal:** Develop the ClientSync Travel Platform, a mobile-first solution for travel agencies to manage high-value clients' trip preferences and reservations. The platform consists of a React Native mobile app for clients and a React web dashboard for organizers, leveraging Supabase for backend services.
+**Overall Project Goal:** Develop the ClientSync Travel Platform, a mobile-first solution for travel agencies to manage high-value clients' trip preferences and reservations. The platform consists of a React Native mobile app for clients and a React web dashboard for organizers, leveraging Payload CMS for content management and backend services.
 
 ---
 
@@ -28,26 +28,27 @@
     3. Configure TypeScript build process for the shared package
   - **Verification/Deliverable(s):** Shared package ready for cross-package imports.
 
-#### **2. Supabase Setup & Configuration**
+#### **2. Payload CMS Setup & Configuration**
 
-- **Task 0.3: Create Supabase Project** [ ]
-  - **Objective:** Set up cloud Supabase project for the platform.
+- **Task 0.3: Set Up Payload CMS Package** [ ]
+  - **Objective:** Install and configure Payload CMS in the monorepo.
   - **Action(s):**
-    1. Create new project at supabase.com
-    2. Enable Email/Password authentication
-    3. Configure Google OAuth provider (for future enhancement)
-    4. Note down project URL, anon key, and service role key
-  - **Verification/Deliverable(s):** Supabase project created with authentication configured.
+    1. Create `packages/cms/` directory
+    2. Initialize Payload CMS with TypeScript
+    3. Configure PostgreSQL database connection
+    4. Set up authentication strategy
+    5. Configure CORS for mobile app access
+  - **Verification/Deliverable(s):** Payload CMS running locally with admin UI accessible.
 
-- **Task 0.4: Design Database Schema** [ ]
-  - **Objective:** Create the database schema for ClientSync.
+- **Task 0.4: Create Payload Collections Schema** [ ]
+  - **Objective:** Define collections (data models) for ClientSync.
   - **Action(s):**
-    1. Create `clients` table with tier system
-    2. Create `trips` table for trip management
-    3. Create `preferences` table for client preferences
-    4. Create `allowlist` table for email verification
-    5. Create `audit_logs` table for security tracking
-    6. Set up Row Level Security (RLS) policies
+    1. Create `Clients` collection with tier system
+    2. Create `Trips` collection for trip management
+    3. Create `Preferences` collections for client preferences
+    4. Create `Allowlist` collection for email verification
+    5. Create `AuditLogs` collection for security tracking
+    6. Set up collection-level access control
   - **Verification/Deliverable(s):** Database schema created with proper relationships and security.
 
 ---

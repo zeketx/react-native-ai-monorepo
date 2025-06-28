@@ -48,22 +48,29 @@ This approach minimizes infrastructure management, allowing focus on feature dev
 
 3. **Observer Pattern**:
    - **Purpose**: Responds to state changes.
-   - **Application**: Facilitates real-time alerts in the web dashboard through Supabase subscriptions.
+   - **Application**: Facilitates alerts in the web dashboard through Payload webhooks or polling mechanisms.
 
 ### 2.3. Backend Component Relationships & Flows
 
-- **Custom Functions**: Handle specific frontend requests (e.g., `emailVerification.ts` for email verification).
-- **Data Flow**: Frontend services invoke Supabase APIs, which interact with the PostgreSQL database.
+- **Custom Endpoints**: Handle specific frontend requests (e.g., allowlist verification, email sending).
+- **Data Flow**: Frontend services invoke Payload CMS APIs, which interact with the PostgreSQL database.
 
 ### 2.4. Backend Module/Directory Structure
 
 ```plaintext
-backend/
-└── functions/
-    └── emailVerification.ts  # Custom serverless functions
+packages/cms/
+├── src/
+│   ├── collections/      # Payload collections (data models)
+│   ├── components/       # Admin UI components
+│   ├── endpoints/        # Custom API endpoints
+│   ├── access/          # Access control functions
+│   └── hooks/           # Collection hooks
+└── payload.config.ts    # Payload configuration
 ```
 
-- **functions/**: Contains custom Supabase functions for backend-specific logic.
+- **collections/**: Defines data models (Clients, Trips, Preferences, etc.)
+- **endpoints/**: Contains custom API endpoints for business logic
+- **hooks/**: Collection-level hooks for data validation and processing
 
 ## 3. Frontend System Patterns
 
@@ -108,20 +115,20 @@ The frontend is divided into two distinct applications:
   - Centralized in `services/api.ts` for API calls.
   - Displays user-friendly messages in the UI.
 - **Logging**:
-  - Server-side logging via Supabase.
+  - Server-side logging via Payload CMS hooks and middleware.
   - Client-side logging for debugging (e.g., console logs in development).
 - **Validation**:
   - Frontend validation for user inputs.
-  - Backend validation using Supabase row-level security and constraints.
+  - Backend validation using Payload collection validation and access control.
 - **Security**:
-  - Authentication managed by Supabase Auth.
+  - Authentication managed by Payload CMS with JWT tokens.
   - Email allowlist for verification.
   - End-to-end encryption for sensitive data.
 - **Configuration Management**:
   - Environment variables for settings.
-  - Supabase project configurations.
+  - Payload CMS configuration via payload.config.ts.
 - **API Design Principles**:
-  - Follows RESTful conventions via Supabase.
+  - Follows RESTful conventions via Payload CMS APIs.
   - Versioning considered for future scalability.
 - **Testing Strategy**:
   - Unit tests for components and services.
@@ -136,10 +143,10 @@ The frontend is divided into two distinct applications:
   - React (Vite) for web
   - Tailwind CSS for styling
 - **Backend**:
-  - JavaScript for Supabase functions
-  - Supabase for serverless backend
+  - TypeScript with Payload CMS
+  - Next.js-based CMS with REST/GraphQL APIs
 - **Database**:
-  - PostgreSQL (via Supabase)
+  - PostgreSQL (managed by Payload CMS)
 - **Tools**:
   - PNPM for package management
   - Git for version control
