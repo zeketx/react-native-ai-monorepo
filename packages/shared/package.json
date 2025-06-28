@@ -16,6 +16,9 @@
     "dev": "tsup --watch",
     "clean": "rm -rf dist"
   },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.0"
+  },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "tsup": "^8.0.0",
