@@ -1,6 +1,13 @@
 # Our Software Development Life Cycle Workflow
 
+## Project Overview
+ClientSync Travel Platform - Transitioning from Supabase to Payload CMS for improved content management and simplified architecture.
+
 ## Architecture & Key Patterns
+- **Stack**: React Native (Expo) + Payload CMS + PostgreSQL
+- **Monorepo**: pnpm workspaces with packages for mobile-app, shared, cms
+- **API**: Payload CMS REST/GraphQL APIs
+- **Auth**: Payload CMS authentication with JWT for mobile
 
 ## Standard Workflow with Task Stages & Branch Management
 
@@ -24,6 +31,11 @@
 - [ ] Ensure responsive design (mobile-first)
 - [ ] Write proper JSDoc comments
 - [ ] Update task file in `.ai/tasks/doing/` with progress notes as needed
+- [ ] For Payload CMS tasks:
+  - [ ] Follow Payload conventions and best practices
+  - [ ] Ensure proper collection access control
+  - [ ] Test API endpoints with REST/GraphQL
+  - [ ] Update mobile app services accordingly
 
 #### Phase 3: Quality Assurance
 - [ ] Ensure environment is working with commited changes
