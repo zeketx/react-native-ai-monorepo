@@ -1,9 +1,13 @@
 // Mobile app authentication service instance
-import { 
-  createSupabaseClientFromEnv,
-  createAuthService,
-  type AuthService 
-} from '@clientsync/shared'
+// TODO: Replace with Payload CMS authentication
+// Previously used Supabase client from @clientsync/shared (removed in Payload transition)
+
+/**
+ * Placeholder authentication service - will be replaced with Payload CMS
+ */
+export interface AuthService {
+  // TODO: Define Payload CMS auth interface
+}
 
 /**
  * Authentication service instance for the mobile app
@@ -12,16 +16,12 @@ let authServiceInstance: AuthService | null = null
 
 /**
  * Initialize and get the authentication service
+ * TODO: Replace with Payload CMS authentication initialization
  */
 export function getAuthService(): AuthService {
   if (!authServiceInstance) {
-    // Initialize Supabase client first
-    try {
-      createSupabaseClientFromEnv()
-      authServiceInstance = createAuthService()
-    } catch (error) {
-      throw new Error(`Failed to initialize authentication service: ${error instanceof Error ? error.message : 'Unknown error'}`)
-    }
+    // TODO: Initialize Payload CMS client
+    throw new Error('Authentication service not yet implemented for Payload CMS')
   }
   
   return authServiceInstance

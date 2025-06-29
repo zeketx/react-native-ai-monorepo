@@ -1,20 +1,6 @@
 // Mobile app authentication exports
 export * from './service.js'
 
-// Re-export commonly used types and utilities from shared package
-export {
-  type AuthUser,
-  type AuthSession,
-  type AuthError,
-  type AuthState,
-  type RegistrationData,
-  type LoginData,
-  type PasswordResetData,
-  AuthErrorCode,
-  formatAuthError,
-  getUserDisplayName,
-  getUserRole,
-  getUserTier,
-  hasCompletedOnboarding,
-  getUserInitials
-} from '@clientsync/shared'
+// TODO: Replace with Payload CMS types and utilities
+// Previously imported from @clientsync/shared (removed in Payload transition)
+// Will be replaced with Payload CMS API client and types
