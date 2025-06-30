@@ -26,7 +26,6 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@clientsync/shared": "workspace:*",
     "@expo/vector-icons": "^14.1.0",
     "@gorhom/bottom-sheet": "^5.1.6",
     "@legendapp/list": "^1.1.0",
