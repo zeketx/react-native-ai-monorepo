@@ -10,7 +10,8 @@
     "build:all": "pnpm --filter './packages/*' build",
     "test:all": "pnpm --filter './packages/*' test",
     "lint:all": "pnpm --filter './packages/*' lint",
-    "clean": "pnpm --filter './packages/*' clean && rm -rf node_modules"
+    "clean": "pnpm --filter './packages/*' clean && rm -rf node_modules",
+    "check-env": "node scripts/check-env.js"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
