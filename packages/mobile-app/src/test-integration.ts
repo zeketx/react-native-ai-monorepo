@@ -9,16 +9,9 @@
 console.log('🔍 Testing shared package integration...')
 
 // Test 1: Basic utilities (if they exist)
-try {
-  // Try to import from shared package
-  // Note: This will be uncommented when shared package exists
-  // import { ClientTier, isValidEmail, getAvailableFlightClasses } from '@clientsync/shared'
-  
-  console.log('❌ Shared package not found - this is expected for current setup')
-  console.log('📝 Note: Shared package should be created in future tasks')
-} catch (error) {
-  console.log('❌ Shared package import failed:', error)
-}
+// Shared package test
+console.log('📝 Note: Shared package (@clientsync/shared) not yet implemented')
+console.log('   This is expected - will be created in future tasks')
 
 // Test 2: Local utilities and types
 try {

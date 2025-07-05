@@ -12,7 +12,9 @@
     "lint:all": "pnpm --filter './packages/*' lint",
     "clean": "pnpm --filter './packages/*' clean && rm -rf node_modules",
     "check-env": "node scripts/check-env.js",
-    "verify-setup": "bash scripts/verify-setup.sh"
+    "verify-setup": "bash scripts/verify-setup.sh",
+    "test:cms": "node test-cms-backend.js",
+    "diagnose": "node diagnose-startup.js"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
