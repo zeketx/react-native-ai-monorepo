@@ -11,7 +11,8 @@
     "test:all": "pnpm --filter './packages/*' test",
     "lint:all": "pnpm --filter './packages/*' lint",
     "clean": "pnpm --filter './packages/*' clean && rm -rf node_modules",
-    "check-env": "node scripts/check-env.js"
+    "check-env": "node scripts/check-env.js",
+    "verify-setup": "bash scripts/verify-setup.sh"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
