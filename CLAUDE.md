@@ -35,10 +35,10 @@ pnpm -r format                     # Format code in all packages
 **CRITICAL: All development must follow our SDLC workflow defined in `.ai/sdlc/sdlc.md`**
 
 ### Task Management Workflow
-1. **Task Files**: All tasks are individual markdown files in `.ai/tasks/`
+1. **Task Files**: All tasks are individual markdown files in `.ai/backlog/`
 2. **Task Lifecycle**: 
-   - `.ai/tasks/backlog/` → `.ai/tasks/doing/` → `.ai/tasks/done/`
-3. **Branch Strategy**: Create feature branches for each task: `git checkout -b feature/task-name`
+   - `.ai/backlog/` → `.ai/doing/` → `.ai/done/`
+3. **Branch Strategy**: Create feature branches for each task: `git checkout -b feature/feature-name`
 4. **Never Delete**: Do not delete the `.ai` folder or task directories
 5. **Always Commit**: Make descriptive commits for all changes
 

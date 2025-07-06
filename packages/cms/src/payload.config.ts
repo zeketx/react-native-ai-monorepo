@@ -13,6 +13,9 @@ import { ActivityPreferences } from './collections/ActivityPreferences'
 import { DiningPreferences } from './collections/DiningPreferences'
 import { Media } from './collections/Media'
 
+import { checkAllowlistEndpoint } from './endpoints/check-allowlist'
+import { passwordResetEndpoint, passwordResetConfirmEndpoint } from './endpoints/password-reset'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -32,6 +35,11 @@ export default buildConfig({
     ActivityPreferences,
     DiningPreferences,
     Media,
+  ],
+  endpoints: [
+    checkAllowlistEndpoint,
+    passwordResetEndpoint,
+    passwordResetConfirmEndpoint,
   ],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || 'YOUR_SECRET_HERE',

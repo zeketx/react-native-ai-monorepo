@@ -20,6 +20,8 @@ export interface AuthService {
   refreshToken(): Promise<{ success: boolean; error?: string; user?: AuthUser; session?: AuthSession }>
   initializeFromStorage(): Promise<{ success: boolean; user?: AuthUser; session?: AuthSession }>
   isAuthenticated(): Promise<boolean>
+  requestPasswordReset(email: string): Promise<{ success: boolean; error?: string; message?: string }>
+  resetPassword(token: string, password: string, passwordConfirm: string): Promise<{ success: boolean; error?: string; message?: string }>
 }
 
 /**
@@ -129,12 +131,39 @@ class PayloadAuthService implements AuthService {
 
   async register(data: RegistrationData): Promise<{ success: boolean; error?: string; message?: string }> {
     try {
+      // First, check if email is allowed via allowlist endpoint
+      const allowlistResponse = await this.makeRequest('/auth/check-allowlist', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: data.email,
+        }),
+      })
+
+      if (!allowlistResponse.ok) {
+        const allowlistError = await allowlistResponse.json().catch(() => ({}))
+        return {
+          success: false,
+          error: allowlistError.error || 'Email not authorized for registration',
+        }
+      }
+
+      const allowlistResult = await allowlistResponse.json()
+      if (!allowlistResult.success || !allowlistResult.allowed) {
+        return {
+          success: false,
+          error: allowlistResult.error || 'Email not authorized for registration',
+        }
+      }
+
+      // Proceed with registration if allowlist check passed
       const response = await this.makeRequest('/users', {
         method: 'POST',
         body: JSON.stringify({
           email: data.email,
           password: data.password,
           passwordConfirm: data.confirmPassword,
+          firstName: data.firstName || '',
+          lastName: data.lastName || '',
         }),
       })
 
@@ -352,6 +381,86 @@ class PayloadAuthService implements AuthService {
     } catch (error) {
       console.error('Authentication check error:', error)
       return false
+    }
+  }
+
+  async requestPasswordReset(email: string): Promise<{ success: boolean; error?: string; message?: string }> {
+    try {
+      const response = await this.makeRequest('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: email.toLowerCase(),
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        return {
+          success: false,
+          error: errorData.error || 'Failed to send password reset email',
+        }
+      }
+
+      const result = await response.json()
+      
+      return {
+        success: true,
+        message: result.message || 'If an account with this email exists, a password reset link has been sent.',
+      }
+    } catch (error) {
+      console.error('Password reset request error:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Network error during password reset request',
+      }
+    }
+  }
+
+  async resetPassword(token: string, password: string, passwordConfirm: string): Promise<{ success: boolean; error?: string; message?: string }> {
+    try {
+      if (password !== passwordConfirm) {
+        return {
+          success: false,
+          error: 'Passwords do not match',
+        }
+      }
+
+      if (password.length < 8) {
+        return {
+          success: false,
+          error: 'Password must be at least 8 characters long',
+        }
+      }
+
+      const response = await this.makeRequest('/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({
+          token,
+          password,
+          passwordConfirm,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        return {
+          success: false,
+          error: errorData.error || 'Failed to reset password',
+        }
+      }
+
+      const result = await response.json()
+      
+      return {
+        success: true,
+        message: result.message || 'Password has been successfully reset',
+      }
+    } catch (error) {
+      console.error('Password reset error:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Network error during password reset',
+      }
     }
   }
 }

@@ -29,6 +29,32 @@ export const Users: CollectionConfig = {
       },
       generateEmailSubject: () => 'Verify your ClientSync account',
     },
+    forgotPassword: {
+      generateEmailHTML: ({ req, token, user }) => {
+        const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/reset-password?token=${token}`
+        return `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h1 style="color: #333;">Reset Your Password</h1>
+            <p>Hello ${user.firstName || 'there'},</p>
+            <p>You requested to reset your password for your ClientSync account.</p>
+            <p>Click the button below to set a new password:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${url}" style="background-color: #dc3545; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Reset Password
+              </a>
+            </div>
+            <p>If the button doesn't work, copy and paste this link into your browser:</p>
+            <p style="word-break: break-all; color: #666;">${url}</p>
+            <p>This link will expire in 1 hour for security reasons.</p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+            <p style="color: #999; font-size: 12px;">
+              If you didn't request a password reset, you can safely ignore this email. Your password will not be changed.
+            </p>
+          </div>
+        `
+      },
+      generateEmailSubject: () => 'Reset your ClientSync password',
+    },
     maxLoginAttempts: 5,
     lockTime: 600000, // 10 minutes
   },

@@ -23,6 +23,15 @@ This directory contains the SDLC (Software Development Life Cycle) workflow stru
 3. Each task has unique ID (e.g., CS-P0-016)
 4. Tasks follow phase-based organization
 
+### Important Rules
+- **One Location Only**: Each task file must exist in only ONE folder at a time
+- **No Duplicates**: Never copy task files between folders - MOVE them
+- **Status Tracking**: 
+  - `backlog/`: Tasks not yet started (Status: PENDING)
+  - `doing/`: Tasks currently being worked on (Status: IN PROGRESS)
+  - `done/`: Completed tasks (Status: COMPLETED)
+- **Moving Tasks**: When status changes, physically move the file to the appropriate folder
+
 ### Phase Structure
 - **Phase 0**: Foundation (Database, Auth, Core Infrastructure)
 - **Phase 1**: Authentication & User Management
