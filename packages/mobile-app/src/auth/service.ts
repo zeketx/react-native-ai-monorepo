@@ -7,6 +7,7 @@
 
 import type { LoginData, RegistrationData, AuthUser, AuthSession } from './index.js'
 import { SecureTokenStorage } from './storage.js'
+import { getAPIClient } from '../api/client.js'
 
 // API Configuration
 const API_BASE_URL = process.env.EXPO_PUBLIC_CMS_API_URL || 'http://localhost:3001/api'
@@ -22,6 +23,8 @@ export interface AuthService {
   isAuthenticated(): Promise<boolean>
   requestPasswordReset(email: string): Promise<{ success: boolean; error?: string; message?: string }>
   resetPassword(token: string, password: string, passwordConfirm: string): Promise<{ success: boolean; error?: string; message?: string }>
+  updateProfile(data: { firstName?: string; lastName?: string; email?: string }): Promise<{ success: boolean; error?: string; user?: AuthUser }>
+  updatePreferences(prefs: { language?: string; theme?: 'light' | 'dark'; notifications?: { push?: boolean; email?: boolean; sms?: boolean; tripUpdates?: boolean; promotions?: boolean; reminders?: boolean }; location?: boolean }): Promise<{ success: boolean; error?: string }>
 }
 
 /**
@@ -460,6 +463,65 @@ class PayloadAuthService implements AuthService {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Network error during password reset',
+      }
+    }
+  }
+
+  async updateProfile(data: { firstName?: string; lastName?: string; email?: string }): Promise<{ success: boolean; error?: string; user?: AuthUser }> {
+    try {
+      const apiClient = getAPIClient()
+      const response = await apiClient.updateProfile(data)
+      
+      if (!response.success) {
+        return {
+          success: false,
+          error: response.error?.getUserMessage() || 'Failed to update profile',
+        }
+      }
+      
+      if (response.data) {
+        // Update stored user data
+        await SecureTokenStorage.updateStoredUser(response.data)
+        
+        return {
+          success: true,
+          user: response.data,
+        }
+      }
+      
+      return {
+        success: false,
+        error: 'Invalid response from server',
+      }
+    } catch (error) {
+      console.error('Update profile error:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Network error during profile update',
+      }
+    }
+  }
+
+  async updatePreferences(prefs: { language?: string; theme?: 'light' | 'dark'; notifications?: { push?: boolean; email?: boolean; sms?: boolean; tripUpdates?: boolean; promotions?: boolean; reminders?: boolean }; location?: boolean }): Promise<{ success: boolean; error?: string }> {
+    try {
+      const apiClient = getAPIClient()
+      const response = await apiClient.updatePreferences(prefs)
+      
+      if (!response.success) {
+        return {
+          success: false,
+          error: response.error?.getUserMessage() || 'Failed to update preferences',
+        }
+      }
+      
+      return {
+        success: true,
+      }
+    } catch (error) {
+      console.error('Update preferences error:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Network error during preferences update',
       }
     }
   }
