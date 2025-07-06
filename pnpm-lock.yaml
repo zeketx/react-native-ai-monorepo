@@ -60,15 +60,15 @@ importers:
 
   packages/mobile-app:
     dependencies:
-      '@clientsync/shared':
-        specifier: workspace:*
-        version: link:../shared
       '@expo/vector-icons':
         specifier: ^14.1.0
         version: 14.1.0(expo-font@13.3.1(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react@19.1.0))(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
       '@gorhom/bottom-sheet':
         specifier: ^5.1.6
         version: 5.1.6(@types/react@19.1.8)(react-native-gesture-handler@2.26.0(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react-native-reanimated@3.18.0(@babel/core@7.27.4)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
+      '@hookform/resolvers':
+        specifier: ^5.1.1
+        version: 5.1.1(react-hook-form@7.60.0(react@19.1.0))
       '@legendapp/list':
         specifier: ^1.1.0
         version: 1.1.1(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
@@ -114,12 +114,18 @@ importers:
       expo-linking:
         specifier: ~7.1.5
         version: 7.1.5(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
+      expo-local-authentication:
+        specifier: ^16.0.5
+        version: 16.0.5(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))
       expo-localization:
         specifier: ^16.1.5
         version: 16.1.5(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react@19.1.0)
       expo-router:
         specifier: 5.1.0
         version: 5.1.0(cc84f2807727e71631ee0e2e1940d8b2)
+      expo-secure-store:
+        specifier: ~14.1.0
+        version: 14.1.1(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))
       expo-system-ui:
         specifier: ~5.0.8
         version: 5.0.9(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react-native-web@0.20.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))
@@ -138,6 +144,9 @@ importers:
       react-dom:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
+      react-hook-form:
+        specifier: ^7.60.0
+        version: 7.60.0(react@19.1.0)
       react-native:
         specifier: ~0.79.4
         version: 0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
@@ -162,6 +171,9 @@ importers:
       react-native-web:
         specifier: ~0.20.0
         version: 0.20.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      zod:
+        specifier: ^3.25.74
+        version: 3.25.74
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.4.2
@@ -1650,6 +1662,11 @@ packages:
       react: '*'
       react-native: '*'
 
+  '@hookform/resolvers@5.1.1':
+    resolution: {integrity: sha512-J/NVING3LMAEvexJkyTLjruSm7aOFx7QX21pzkiJfMoNG0wl5aFEjLTl7ay7IQb9EWY6AkrBy7tHL2Alijpdcg==}
+    peerDependencies:
+      react-hook-form: ^7.55.0
+
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
     engines: {node: '>=18.18.0'}
@@ -2439,6 +2456,9 @@ packages:
 
   '@sinonjs/fake-timers@10.3.0':
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
+
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@supabase/auth-js@2.70.0':
     resolution: {integrity: sha512-BaAK/tOAZFJtzF1sE3gJ2FwTjLf4ky3PSvcvLGEgEmO4BSBkwWKu8l67rLLIBZPDnCyV7Owk2uPyKHa0kj5QGg==}
@@ -4147,6 +4167,11 @@ packages:
       react: '*'
       react-native: '*'
 
+  expo-local-authentication@16.0.5:
+    resolution: {integrity: sha512-JzrUssLBB5tr06ffbZJC074fru2mw6He3ALtwlRnrmL7svMJS0zvm6e5Gx5CSxfHf1DgneBVBnyRlmtWxQzY9Q==}
+    peerDependencies:
+      expo: '*'
+
   expo-localization@16.1.5:
     resolution: {integrity: sha512-dymvf0S11afyMeRbnoXd2iWWzFYwg21jHTnLBO/7ObNO1rKlYpus0ghVDnh+sJFV2u7s518e/JTcAqNR69EZkw==}
     peerDependencies:
@@ -4183,6 +4208,11 @@ packages:
         optional: true
       react-native-reanimated:
         optional: true
+
+  expo-secure-store@14.1.1:
+    resolution: {integrity: sha512-uF1A0RJwdDdrdCsnYG1BPRuFKeqhcYTEVPVSs4+UEchb6WBrZQGmiB77Ea496i4dZYwA7AntCiEOkGRxRHOCBQ==}
+    peerDependencies:
+      expo: '*'
 
   expo-system-ui@5.0.9:
     resolution: {integrity: sha512-behQ4uP384++U9GjgXmyEno1Z8raN1/tZv7ZJhYkQkRj1g2xXvNltXN/PDRcOm/wCNqStVhDpYo2OOQm5E5/lQ==}
@@ -6246,6 +6276,12 @@ packages:
     peerDependencies:
       react: '>=17.0.0'
 
+  react-hook-form@7.60.0:
+    resolution: {integrity: sha512-SBrYOvMbDB7cV8ZfNpaiLcgjH/a1c7aK0lK+aNigpf4xWLO8q+o4tcvVurv3c4EOyzn/3dCsYt4GKD42VvJ/+A==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-image-crop@10.1.8:
     resolution: {integrity: sha512-4rb8XtXNx7ZaOZarKKnckgz4xLMvds/YrU6mpJfGhGAsy2Mg4mIw1x+DCCGngVGq2soTBVVOxx2s/C6mTX9+pA==}
     peerDependencies:
@@ -7571,8 +7607,8 @@ packages:
     peerDependencies:
       zod: ^3.25.0
 
-  zod@3.25.67:
-    resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
+  zod@3.25.74:
+    resolution: {integrity: sha512-J8poo92VuhKjNknViHRAIuuN6li/EwFbAC8OedzI8uxpEPGiXHGQu9wemIAioIpqgfB4SySaJhdk0mH5Y4ICBg==}
 
   zod@4.0.0-beta.20250505T195954:
     resolution: {integrity: sha512-iB8WvxkobVIXMARvQu20fKvbS7mUTiYRpcD8OQV1xjRhxO0EEpYIRJBk6yfBzHAHEdOSDh3SxDITr5Eajr2vtg==}
@@ -9104,6 +9140,11 @@ snapshots:
       react: 19.1.0
       react-native: 0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
 
+  '@hookform/resolvers@5.1.1(react-hook-form@7.60.0(react@19.1.0))':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.60.0(react@19.1.0)
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.6':
@@ -10218,6 +10259,8 @@ snapshots:
   '@sinonjs/fake-timers@10.3.0':
     dependencies:
       '@sinonjs/commons': 3.0.1
+
+  '@standard-schema/utils@0.3.0': {}
 
   '@supabase/auth-js@2.70.0':
     dependencies:
@@ -11941,8 +11984,8 @@ snapshots:
       '@babel/plugin-transform-private-methods': 7.27.1(@babel/core@7.27.4)
       eslint: 9.29.0(jiti@1.21.7)
       hermes-parser: 0.25.1
-      zod: 3.25.67
-      zod-validation-error: 3.5.2(zod@3.25.67)
+      zod: 3.25.74
+      zod-validation-error: 3.5.2(zod@3.25.74)
     transitivePeerDependencies:
       - supports-color
 
@@ -12184,6 +12227,11 @@ snapshots:
       - expo
       - supports-color
 
+  expo-local-authentication@16.0.5(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)):
+    dependencies:
+      expo: 53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
+      invariant: 2.2.4
+
   expo-localization@16.1.5(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react@19.1.0):
     dependencies:
       expo: 53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
@@ -12241,6 +12289,10 @@ snapshots:
       - react
       - react-native
       - supports-color
+
+  expo-secure-store@14.1.1(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)):
+    dependencies:
+      expo: 53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
 
   expo-system-ui@5.0.9(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react-native-web@0.20.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)):
     dependencies:
@@ -14535,6 +14587,10 @@ snapshots:
     dependencies:
       react: 19.1.0
 
+  react-hook-form@7.60.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+
   react-image-crop@10.1.8(react@19.0.0):
     dependencies:
       react: 19.0.0
@@ -16061,11 +16117,11 @@ snapshots:
     dependencies:
       grammex: 3.1.10
 
-  zod-validation-error@3.5.2(zod@3.25.67):
+  zod-validation-error@3.5.2(zod@3.25.74):
     dependencies:
-      zod: 3.25.67
+      zod: 3.25.74
 
-  zod@3.25.67: {}
+  zod@3.25.74: {}
 
   zod@4.0.0-beta.20250505T195954:
     dependencies:

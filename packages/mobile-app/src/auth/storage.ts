@@ -14,6 +14,7 @@ const STORAGE_KEYS = {
   REFRESH_TOKEN: 'clientsync_refresh_token',
   USER_DATA: 'clientsync_user_data',
   TOKEN_EXPIRY: 'clientsync_token_expiry',
+  BIOMETRIC_PREFERENCES: 'clientsync_biometric_prefs',
 } as const
 
 // Storage options for SecureStore
@@ -25,6 +26,13 @@ const STORAGE_OPTIONS: SecureStore.SecureStoreOptions = {
 export interface StoredAuthData {
   user: AuthUser
   session: AuthSession
+}
+
+export interface BiometricPreferences {
+  enabled: boolean
+  promptTitle?: string
+  promptSubtitle?: string
+  fallbackLabel?: string
 }
 
 /**
@@ -180,6 +188,7 @@ export class SecureTokenStorage {
         SecureStore.deleteItemAsync(STORAGE_KEYS.REFRESH_TOKEN, STORAGE_OPTIONS),
         SecureStore.deleteItemAsync(STORAGE_KEYS.USER_DATA, STORAGE_OPTIONS),
         SecureStore.deleteItemAsync(STORAGE_KEYS.TOKEN_EXPIRY, STORAGE_OPTIONS),
+        // Note: We don't clear biometric preferences on logout
       ])
       console.log('✅ Auth data cleared')
     } catch (error) {
@@ -239,6 +248,57 @@ export class SecureTokenStorage {
     } catch (error) {
       console.error('❌ Failed to update user data:', error)
       throw new Error('Failed to update user data')
+    }
+  }
+
+  /**
+   * Store biometric preferences
+   */
+  static async setBiometricPreferences(preferences: BiometricPreferences): Promise<void> {
+    try {
+      await SecureStore.setItemAsync(
+        STORAGE_KEYS.BIOMETRIC_PREFERENCES,
+        JSON.stringify(preferences),
+        STORAGE_OPTIONS
+      )
+      console.log('✅ Biometric preferences updated')
+    } catch (error) {
+      console.error('❌ Failed to store biometric preferences:', error)
+      throw new Error('Failed to store biometric preferences')
+    }
+  }
+
+  /**
+   * Get biometric preferences
+   */
+  static async getBiometricPreferences(): Promise<BiometricPreferences | null> {
+    try {
+      const preferencesStr = await SecureStore.getItemAsync(
+        STORAGE_KEYS.BIOMETRIC_PREFERENCES,
+        STORAGE_OPTIONS
+      )
+
+      if (!preferencesStr) {
+        return null
+      }
+
+      return JSON.parse(preferencesStr)
+    } catch (error) {
+      console.error('❌ Failed to get biometric preferences:', error)
+      return null
+    }
+  }
+
+  /**
+   * Clear biometric preferences
+   */
+  static async clearBiometricPreferences(): Promise<void> {
+    try {
+      await SecureStore.deleteItemAsync(STORAGE_KEYS.BIOMETRIC_PREFERENCES, STORAGE_OPTIONS)
+      console.log('✅ Biometric preferences cleared')
+    } catch (error) {
+      console.error('❌ Failed to clear biometric preferences:', error)
+      // Don't throw - this is not critical
     }
   }
 }

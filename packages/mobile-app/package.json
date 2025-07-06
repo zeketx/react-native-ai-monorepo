@@ -28,6 +28,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
     "@gorhom/bottom-sheet": "^5.1.6",
+    "@hookform/resolvers": "^5.1.1",
     "@legendapp/list": "^1.1.0",
     "@nkzw/core": "^1.2.1",
     "@nkzw/create-context-hook": "^1.1.0",
@@ -43,6 +44,7 @@
     "expo-font": "^13.3.1",
     "expo-linear-gradient": "^14.1.5",
     "expo-linking": "~7.1.5",
+    "expo-local-authentication": "^16.0.5",
     "expo-localization": "^16.1.5",
     "expo-router": "5.1.0",
     "expo-secure-store": "~14.1.0",
@@ -52,6 +54,7 @@
     "nativewind": "^4.1.23",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.60.0",
     "react-native": "~0.79.4",
     "react-native-edge-to-edge": "^1.6.1",
     "react-native-gesture-handler": "^2.25.0",
@@ -59,7 +62,8 @@
     "react-native-safe-area-context": "^5.4.1",
     "react-native-screens": "4.11.1",
     "react-native-svg": "^15.12.0",
-    "react-native-web": "~0.20.0"
+    "react-native-web": "~0.20.0",
+    "zod": "^3.25.74"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
