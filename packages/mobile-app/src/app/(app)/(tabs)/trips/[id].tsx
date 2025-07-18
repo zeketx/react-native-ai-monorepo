@@ -2,8 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { fbs } from 'fbtee';
 import { Pressable, ScrollView, View } from 'react-native';
-import Text from 'src/ui/Text.tsx';
 import colors from 'src/ui/colors.ts';
+import Text from 'src/ui/Text.tsx';
 
 // Mock data for trip details
 const mockTripDetails = {
@@ -14,15 +14,16 @@ const mockTripDetails = {
     startDate: '2024-07-15',
     endDate: '2024-07-20',
     status: 'upcoming',
-    description: 'Important business meetings with key clients and potential partners.',
+    description:
+      'Important business meetings with key clients and potential partners.',
     hotel: 'Hotel Okura Tokyo',
     flight: 'AA 123 - Departure: 2024-07-15 10:00 AM',
     activities: [
       'Client meeting at Tokyo HQ',
       'Product demonstration',
       'Team dinner at Ginza',
-      'Sightseeing at Senso-ji Temple'
-    ]
+      'Sightseeing at Senso-ji Temple',
+    ],
   },
   '2': {
     id: '2',
@@ -38,8 +39,8 @@ const mockTripDetails = {
       'QBR presentation',
       'Contract renewal discussion',
       'Broadway show',
-      'Central Park visit'
-    ]
+      'Central Park visit',
+    ],
   },
   '3': {
     id: '3',
@@ -55,9 +56,9 @@ const mockTripDetails = {
       'Opening keynote',
       'Panel discussion',
       'Networking events',
-      'Tower Bridge visit'
-    ]
-  }
+      'Tower Bridge visit',
+    ],
+  },
 };
 
 const getStatusColor = (status: string) => {
@@ -92,9 +93,9 @@ export default function TripDetailsScreen() {
 
   if (!trip) {
     return (
-      <View className="flex-1 items-center justify-center bg-gray-50">
+      <View className="bg-gray-50 flex-1 items-center justify-center">
         <Ionicons name="alert-circle" size={64} color={colors.black} />
-        <Text className="text-lg font-medium text-gray-900 mt-4">
+        <Text className="text-gray-900 mt-4 text-lg font-medium">
           <fbt desc="Trip not found">Trip not found</fbt>
         </Text>
       </View>
@@ -108,18 +109,22 @@ export default function TripDetailsScreen() {
           title: trip.title,
           headerRight: () => (
             <Pressable className="mr-2 p-2">
-              <Ionicons name="ellipsis-horizontal" size={24} color={colors.purple} />
+              <Ionicons
+                name="ellipsis-horizontal"
+                size={24}
+                color={colors.purple}
+              />
             </Pressable>
           ),
         }}
       />
-      
-      <ScrollView className="flex-1 bg-gray-50">
+
+      <ScrollView className="bg-gray-50 flex-1">
         <View className="p-4">
           {/* Status and Basic Info */}
-          <View className="bg-white rounded-lg p-4 mb-4">
-            <View className="flex-row items-center justify-between mb-3">
-              <Text className="text-xl font-bold text-gray-900">
+          <View className="mb-4 rounded-lg bg-white p-4">
+            <View className="mb-3 flex-row items-center justify-between">
+              <Text className="text-gray-900 text-xl font-bold">
                 {trip.title}
               </Text>
               <View className="flex-row items-center">
@@ -128,35 +133,41 @@ export default function TripDetailsScreen() {
                   size={20}
                   color={getStatusColor(trip.status)}
                 />
-                <Text 
-                  className="text-sm font-medium ml-2"
+                <Text
+                  className="ml-2 text-sm font-medium"
                   style={{ color: getStatusColor(trip.status) }}
                 >
                   {trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
                 </Text>
               </View>
             </View>
-            
-            <View className="flex-row items-center mb-2">
+
+            <View className="mb-2 flex-row items-center">
               <Ionicons name="location" size={18} color={colors.black} />
-              <Text className="text-gray-700 ml-2 text-base">{trip.destination}</Text>
+              <Text className="text-gray-700 ml-2 text-base">
+                {trip.destination}
+              </Text>
             </View>
-            
-            <View className="flex-row items-center mb-3">
-              <Ionicons name="calendar-outline" size={18} color={colors.black} />
+
+            <View className="mb-3 flex-row items-center">
+              <Ionicons
+                name="calendar-outline"
+                size={18}
+                color={colors.black}
+              />
               <Text className="text-gray-700 ml-2 text-base">
                 {trip.startDate} - {trip.endDate}
               </Text>
             </View>
-            
+
             <Text className="text-gray-600">{trip.description}</Text>
           </View>
 
           {/* Flight Info */}
-          <View className="bg-white rounded-lg p-4 mb-4">
-            <View className="flex-row items-center mb-3">
+          <View className="mb-4 rounded-lg bg-white p-4">
+            <View className="mb-3 flex-row items-center">
               <Ionicons name="airplane" size={20} color={colors.purple} />
-              <Text className="text-lg font-semibold text-gray-900 ml-2">
+              <Text className="text-gray-900 ml-2 text-lg font-semibold">
                 <fbt desc="Flight info">Flight</fbt>
               </Text>
             </View>
@@ -164,10 +175,10 @@ export default function TripDetailsScreen() {
           </View>
 
           {/* Hotel Info */}
-          <View className="bg-white rounded-lg p-4 mb-4">
-            <View className="flex-row items-center mb-3">
+          <View className="mb-4 rounded-lg bg-white p-4">
+            <View className="mb-3 flex-row items-center">
               <Ionicons name="bed" size={20} color={colors.purple} />
-              <Text className="text-lg font-semibold text-gray-900 ml-2">
+              <Text className="text-gray-900 ml-2 text-lg font-semibold">
                 <fbt desc="Hotel info">Hotel</fbt>
               </Text>
             </View>
@@ -175,11 +186,11 @@ export default function TripDetailsScreen() {
           </View>
 
           {/* Activities */}
-          <View className="bg-white rounded-lg p-4 mb-4">
-            <View className="flex-row items-center justify-between mb-3">
+          <View className="mb-4 rounded-lg bg-white p-4">
+            <View className="mb-3 flex-row items-center justify-between">
               <View className="flex-row items-center">
                 <Ionicons name="list" size={20} color={colors.purple} />
-                <Text className="text-lg font-semibold text-gray-900 ml-2">
+                <Text className="text-gray-900 ml-2 text-lg font-semibold">
                   <fbt desc="Activities">Activities</fbt>
                 </Text>
               </View>
@@ -191,10 +202,14 @@ export default function TripDetailsScreen() {
                 </Pressable>
               </Link>
             </View>
-            
+
             {trip.activities.map((activity, index) => (
-              <View key={index} className="flex-row items-center mb-2">
-                <Ionicons name="checkmark-circle-outline" size={16} color={colors.black} />
+              <View key={index} className="mb-2 flex-row items-center">
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  size={16}
+                  color={colors.black}
+                />
                 <Text className="text-gray-700 ml-2">{activity}</Text>
               </View>
             ))}

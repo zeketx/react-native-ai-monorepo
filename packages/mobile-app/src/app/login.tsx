@@ -1,15 +1,15 @@
 /**
  * Enhanced Login Screen
- * 
+ *
  * A polished login screen with form validation, biometric authentication,
  * and integration with Payload CMS.
  */
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Ionicons } from '@expo/vector-icons'
-import { useRouter } from 'expo-router'
-import { useCallback, useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Ionicons } from '@expo/vector-icons';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -18,34 +18,36 @@ import {
   ScrollView,
   TouchableOpacity,
   View,
-} from 'react-native'
-
-// UI Components
-import Alert from 'src/ui/Alert.tsx'
-import Button from 'src/ui/Button.tsx'
-import Checkbox from 'src/ui/Checkbox.tsx'
-import Input from 'src/ui/Input.tsx'
-import Text from 'src/ui/Text.tsx'
-
+} from 'react-native';
+import biometricAuthService from 'src/auth/biometric.js';
 // Auth
-import type { LoginFormData, RegistrationFormData } from 'src/auth/validation.js'
-import { loginSchema, registrationSchema } from 'src/auth/validation.js'
-import biometricAuthService from 'src/auth/biometric.js'
-import useViewerContext from 'src/user/useViewerContext.tsx'
+import type {
+  LoginFormData,
+  RegistrationFormData,
+} from 'src/auth/validation.js';
+import { loginSchema, registrationSchema } from 'src/auth/validation.js';
+// UI Components
+import Alert from 'src/ui/Alert.tsx';
+import Button from 'src/ui/Button.tsx';
+import Checkbox from 'src/ui/Checkbox.tsx';
+import Input from 'src/ui/Input.tsx';
+import Text from 'src/ui/Text.tsx';
+import useViewerContext from 'src/user/useViewerContext.tsx';
 
-type FormMode = 'login' | 'register' | 'forgotPassword'
+type FormMode = 'login' | 'register' | 'forgotPassword';
 
 export default function EnhancedLogin() {
-  const router = useRouter()
-  const { login, register, isLoading, authError, isAuthenticated } = useViewerContext()
-  
-  const [formMode, setFormMode] = useState<FormMode>('login')
-  const [showBiometricOption, setShowBiometricOption] = useState(false)
-  const [biometricType, setBiometricType] = useState<string>('Biometric')
+  const router = useRouter();
+  const { login, register, isLoading, authError, isAuthenticated } =
+    useViewerContext();
+
+  const [formMode, setFormMode] = useState<FormMode>('login');
+  const [showBiometricOption, setShowBiometricOption] = useState(false);
+  const [biometricType, setBiometricType] = useState<string>('Biometric');
   const [alertMessage, setAlertMessage] = useState<{
-    variant: 'success' | 'error' | 'warning' | 'info'
-    message: string
-  } | null>(null)
+    variant: 'success' | 'error' | 'warning' | 'info';
+    message: string;
+  } | null>(null);
 
   // Login form
   const loginForm = useForm<LoginFormData>({
@@ -55,7 +57,7 @@ export default function EnhancedLogin() {
       password: '',
       rememberMe: false,
     },
-  })
+  });
 
   // Registration form
   const registrationForm = useForm<RegistrationFormData>({
@@ -67,7 +69,7 @@ export default function EnhancedLogin() {
       password: '',
       confirmPassword: '',
     },
-  })
+  });
 
   // Forgot password form
   const forgotPasswordForm = useForm<{ email: string }>({
@@ -75,181 +77,196 @@ export default function EnhancedLogin() {
     defaultValues: {
       email: '',
     },
-  })
+  });
 
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      router.replace('/')
+      router.replace('/');
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router]);
 
   // Check biometric availability
   useEffect(() => {
     const checkBiometricAvailability = async () => {
       try {
-        const isAvailable = await biometricAuthService.isAvailable()
-        const isEnabled = await biometricAuthService.isBiometricLoginEnabled()
-        const primaryType = await biometricAuthService.getPrimaryBiometricType()
-        
-        setShowBiometricOption(isAvailable)
-        setBiometricType(primaryType)
-        
+        const isAvailable = await biometricAuthService.isAvailable();
+        const isEnabled = await biometricAuthService.isBiometricLoginEnabled();
+        const primaryType =
+          await biometricAuthService.getPrimaryBiometricType();
+
+        setShowBiometricOption(isAvailable);
+        setBiometricType(primaryType);
+
         // Auto-trigger biometric auth if enabled and available
         if (isEnabled && isAvailable && formMode === 'login') {
-          handleBiometricLogin()
+          handleBiometricLogin();
         }
       } catch (error) {
-        console.error('Error checking biometric availability:', error)
+        console.error('Error checking biometric availability:', error);
       }
-    }
+    };
 
-    checkBiometricAvailability()
-  }, [formMode])
+    checkBiometricAvailability();
+  }, [formMode]);
 
   // Clear alerts when switching forms
   useEffect(() => {
-    setAlertMessage(null)
-  }, [formMode])
+    setAlertMessage(null);
+  }, [formMode]);
 
   // Handle biometric authentication
   const handleBiometricLogin = useCallback(async () => {
     try {
-      const result = await biometricAuthService.authenticateForLogin()
-      
+      const result = await biometricAuthService.authenticateForLogin();
+
       if (result.success) {
         // Biometric auth successful - perform automatic login
         // This would typically involve retrieving stored credentials
         // For now, we'll show a success message
         setAlertMessage({
           variant: 'success',
-          message: 'Biometric authentication successful! Please complete login.',
-        })
+          message:
+            'Biometric authentication successful! Please complete login.',
+        });
       } else if (result.errorCode !== 'USER_CANCEL') {
         setAlertMessage({
           variant: 'error',
           message: result.error || 'Biometric authentication failed',
-        })
+        });
       }
     } catch (error) {
       setAlertMessage({
         variant: 'error',
         message: 'Biometric authentication error',
-      })
+      });
     }
-  }, [])
+  }, []);
 
   // Handle login form submission
-  const handleLogin = useCallback(async (data: LoginFormData) => {
-    try {
-      setAlertMessage(null)
-      
-      const result = await login({
-        email: data.email,
-        password: data.password,
-      })
-      
-      if (result.success) {
-        // Enable biometric login if remember me is checked and biometrics are available
-        if (data.rememberMe && showBiometricOption) {
-          try {
-            await biometricAuthService.enableBiometricLogin()
-          } catch (error) {
-            console.warn('Failed to enable biometric login:', error)
+  const handleLogin = useCallback(
+    async (data: LoginFormData) => {
+      try {
+        setAlertMessage(null);
+
+        const result = await login({
+          email: data.email,
+          password: data.password,
+        });
+
+        if (result.success) {
+          // Enable biometric login if remember me is checked and biometrics are available
+          if (data.rememberMe && showBiometricOption) {
+            try {
+              await biometricAuthService.enableBiometricLogin();
+            } catch (error) {
+              console.warn('Failed to enable biometric login:', error);
+            }
           }
+
+          setAlertMessage({
+            variant: 'success',
+            message: 'Login successful! Redirecting...',
+          });
+        } else {
+          setAlertMessage({
+            variant: 'error',
+            message: result.error || 'Login failed',
+          });
         }
-        
-        setAlertMessage({
-          variant: 'success',
-          message: 'Login successful! Redirecting...',
-        })
-      } else {
+      } catch (error) {
         setAlertMessage({
           variant: 'error',
-          message: result.error || 'Login failed',
-        })
+          message: 'An unexpected error occurred',
+        });
       }
-    } catch (error) {
-      setAlertMessage({
-        variant: 'error',
-        message: 'An unexpected error occurred',
-      })
-    }
-  }, [login, showBiometricOption])
+    },
+    [login, showBiometricOption],
+  );
 
   // Handle registration form submission
-  const handleRegistration = useCallback(async (data: RegistrationFormData) => {
-    try {
-      setAlertMessage(null)
-      
-      const result = await register({
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-        firstName: data.firstName,
-        lastName: data.lastName,
-      })
-      
-      if (result.success) {
-        setAlertMessage({
-          variant: 'success',
-          message: result.message || 'Registration successful! Please check your email to verify your account.',
-        })
-        
-        // Switch to login form after successful registration
-        setTimeout(() => {
-          setFormMode('login')
-          registrationForm.reset()
-        }, 3000)
-      } else {
+  const handleRegistration = useCallback(
+    async (data: RegistrationFormData) => {
+      try {
+        setAlertMessage(null);
+
+        const result = await register({
+          email: data.email,
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+          firstName: data.firstName,
+          lastName: data.lastName,
+        });
+
+        if (result.success) {
+          setAlertMessage({
+            variant: 'success',
+            message:
+              result.message ||
+              'Registration successful! Please check your email to verify your account.',
+          });
+
+          // Switch to login form after successful registration
+          setTimeout(() => {
+            setFormMode('login');
+            registrationForm.reset();
+          }, 3000);
+        } else {
+          setAlertMessage({
+            variant: 'error',
+            message: result.error || 'Registration failed',
+          });
+        }
+      } catch (error) {
         setAlertMessage({
           variant: 'error',
-          message: result.error || 'Registration failed',
-        })
+          message: 'An unexpected error occurred',
+        });
       }
-    } catch (error) {
-      setAlertMessage({
-        variant: 'error',
-        message: 'An unexpected error occurred',
-      })
-    }
-  }, [register, registrationForm])
+    },
+    [register, registrationForm],
+  );
 
   // Handle forgot password
-  const handleForgotPassword = useCallback(async (data: { email: string }) => {
-    try {
-      setAlertMessage(null)
-      
-      // Import auth service and call forgot password
-      const { getAuthService } = await import('src/auth/service.js')
-      const authService = getAuthService()
-      
-      const result = await authService.requestPasswordReset(data.email)
-      
-      if (result.success) {
-        setAlertMessage({
-          variant: 'success',
-          message: result.message || 'If an account with this email exists, a password reset link has been sent.',
-        })
-        
-        // Switch back to login after showing message
-        setTimeout(() => {
-          setFormMode('login')
-          forgotPasswordForm.reset()
-        }, 3000)
-      } else {
+  const handleForgotPassword = useCallback(
+    async (data: { email: string }) => {
+      try {
+        setAlertMessage(null);
+
+        // Import auth service and call forgot password
+        const { getAuthService } = await import('src/auth/service.js');
+        const authService = getAuthService();
+
+        const result = await authService.requestPasswordReset(data.email);
+
+        if (result.success) {
+          setAlertMessage({
+            variant: 'success',
+            message:
+              result.message ||
+              'If an account with this email exists, a password reset link has been sent.',
+          });
+
+          // Switch back to login after showing message
+          setTimeout(() => {
+            setFormMode('login');
+            forgotPasswordForm.reset();
+          }, 3000);
+        } else {
+          setAlertMessage({
+            variant: 'error',
+            message: result.error || 'Failed to send password reset email',
+          });
+        }
+      } catch (error) {
         setAlertMessage({
           variant: 'error',
-          message: result.error || 'Failed to send password reset email',
-        })
+          message: 'An unexpected error occurred while sending the reset email',
+        });
       }
-    } catch (error) {
-      setAlertMessage({
-        variant: 'error',
-        message: 'An unexpected error occurred while sending the reset email',
-      })
-    }
-  }, [forgotPasswordForm])
+    },
+    [forgotPasswordForm],
+  );
 
   // Render login form
   const renderLoginForm = () => (
@@ -257,7 +274,10 @@ export default function EnhancedLogin() {
       <Controller
         control={loginForm.control}
         name="email"
-        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { error },
+        }) => (
           <Input
             label="Email Address"
             placeholder="Enter your email"
@@ -277,7 +297,10 @@ export default function EnhancedLogin() {
       <Controller
         control={loginForm.control}
         name="password"
-        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { error },
+        }) => (
           <Input
             label="Password"
             placeholder="Enter your password"
@@ -329,27 +352,23 @@ export default function EnhancedLogin() {
         </Button>
       )}
 
-      <View className="flex-row justify-between items-center mt-4">
+      <View className="mt-4 flex-row items-center justify-between">
         <TouchableOpacity
           onPress={() => setFormMode('forgotPassword')}
           testID="forgot-password-link"
         >
-          <Text className="text-blue-600 text-sm">
-            Forgot password?
-          </Text>
+          <Text className="text-blue-600 text-sm">Forgot password?</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => setFormMode('register')}
           testID="switch-to-register-link"
         >
-          <Text className="text-blue-600 text-sm">
-            Create account
-          </Text>
+          <Text className="text-blue-600 text-sm">Create account</Text>
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 
   // Render registration form
   const renderRegistrationForm = () => (
@@ -359,7 +378,10 @@ export default function EnhancedLogin() {
           <Controller
             control={registrationForm.control}
             name="firstName"
-            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { error },
+            }) => (
               <Input
                 label="First Name"
                 placeholder="First name"
@@ -380,7 +402,10 @@ export default function EnhancedLogin() {
           <Controller
             control={registrationForm.control}
             name="lastName"
-            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { error },
+            }) => (
               <Input
                 label="Last Name"
                 placeholder="Last name"
@@ -401,7 +426,10 @@ export default function EnhancedLogin() {
       <Controller
         control={registrationForm.control}
         name="email"
-        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { error },
+        }) => (
           <Input
             label="Email Address"
             placeholder="Enter your email"
@@ -421,7 +449,10 @@ export default function EnhancedLogin() {
       <Controller
         control={registrationForm.control}
         name="password"
-        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { error },
+        }) => (
           <Input
             label="Password"
             placeholder="Create a password"
@@ -441,7 +472,10 @@ export default function EnhancedLogin() {
       <Controller
         control={registrationForm.control}
         name="confirmPassword"
-        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { error },
+        }) => (
           <Input
             label="Confirm Password"
             placeholder="Confirm your password"
@@ -472,12 +506,12 @@ export default function EnhancedLogin() {
         className="mt-4"
         testID="switch-to-login-link"
       >
-        <Text className="text-center text-blue-600 text-sm">
+        <Text className="text-blue-600 text-center text-sm">
           Already have an account? Sign in
         </Text>
       </TouchableOpacity>
     </View>
-  )
+  );
 
   // Render forgot password form
   const renderForgotPasswordForm = () => (
@@ -485,7 +519,10 @@ export default function EnhancedLogin() {
       <Controller
         control={forgotPasswordForm.control}
         name="email"
-        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { error },
+        }) => (
           <Input
             label="Email Address"
             placeholder="Enter your email"
@@ -497,7 +534,9 @@ export default function EnhancedLogin() {
             error={error?.message}
             testID="forgot-password-email-input"
             returnKeyType="go"
-            onSubmitEditing={forgotPasswordForm.handleSubmit(handleForgotPassword)}
+            onSubmitEditing={forgotPasswordForm.handleSubmit(
+              handleForgotPassword,
+            )}
           />
         )}
       />
@@ -516,48 +555,48 @@ export default function EnhancedLogin() {
         className="mt-4"
         testID="back-to-login-link"
       >
-        <Text className="text-center text-blue-600 text-sm">
+        <Text className="text-blue-600 text-center text-sm">
           Back to sign in
         </Text>
       </TouchableOpacity>
     </View>
-  )
+  );
 
   const getFormTitle = () => {
     switch (formMode) {
       case 'login':
-        return 'Welcome back'
+        return 'Welcome back';
       case 'register':
-        return 'Create your account'
+        return 'Create your account';
       case 'forgotPassword':
-        return 'Reset your password'
+        return 'Reset your password';
       default:
-        return 'Welcome'
+        return 'Welcome';
     }
-  }
+  };
 
   const getFormSubtitle = () => {
     switch (formMode) {
       case 'login':
-        return 'Sign in to your account'
+        return 'Sign in to your account';
       case 'register':
-        return 'Join ClientSync today'
+        return 'Join ClientSync today';
       case 'forgotPassword':
-        return 'Enter your email to receive a reset link'
+        return 'Enter your email to receive a reset link';
       default:
-        return ''
+        return '';
     }
-  }
+  };
 
   if (isAuthenticated) {
     return (
       <SafeAreaView className="flex-1 bg-white">
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#3b82f6" />
-          <Text className="mt-4 text-gray-600">Redirecting...</Text>
+          <Text className="text-gray-600 mt-4">Redirecting...</Text>
         </View>
       </SafeAreaView>
-    )
+    );
   }
 
   return (
@@ -575,16 +614,16 @@ export default function EnhancedLogin() {
             {/* Header */}
             <View className="mb-8 items-center">
               <Ionicons name="shield-checkmark" size={64} color="#3b82f6" />
-              
-              <Text className="text-center text-3xl font-bold text-gray-900 mt-4 mb-2">
+
+              <Text className="text-gray-900 mb-2 mt-4 text-center text-3xl font-bold">
                 ClientSync
               </Text>
-              
-              <Text className="text-center text-xl font-semibold text-gray-800 mb-1">
+
+              <Text className="text-gray-800 mb-1 text-center text-xl font-semibold">
                 {getFormTitle()}
               </Text>
-              
-              <Text className="text-center text-gray-600">
+
+              <Text className="text-gray-600 text-center">
                 {getFormSubtitle()}
               </Text>
             </View>
@@ -619,5 +658,5 @@ export default function EnhancedLogin() {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
-  )
+  );
 }

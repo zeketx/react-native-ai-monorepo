@@ -2,30 +2,30 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack } from 'expo-router';
 import { fbs } from 'fbtee';
 import { Pressable, ScrollView, View } from 'react-native';
-import Text from 'src/ui/Text.tsx';
 import colors from 'src/ui/colors.ts';
+import Text from 'src/ui/Text.tsx';
 
-const SettingsItem = ({ 
-  icon, 
-  title, 
-  description, 
-  href, 
-  showArrow = true 
-}: { 
-  icon: string; 
-  title: string; 
-  description: string; 
-  href?: string; 
-  showArrow?: boolean; 
+const SettingsItem = ({
+  icon,
+  title,
+  description,
+  href,
+  showArrow = true,
+}: {
+  icon: string;
+  title: string;
+  description: string;
+  href?: string;
+  showArrow?: boolean;
 }) => {
   const content = (
-    <View className="flex-row items-center py-4 px-4 border-b border-gray-100">
-      <View className="w-10 h-10 rounded-full bg-gray-100 items-center justify-center mr-4">
+    <View className="border-gray-100 flex-row items-center border-b px-4 py-4">
+      <View className="bg-gray-100 mr-4 h-10 w-10 items-center justify-center rounded-full">
         <Ionicons name={icon as any} size={20} color={colors.purple} />
       </View>
       <View className="flex-1">
-        <Text className="text-base font-medium text-gray-900">{title}</Text>
-        <Text className="text-sm text-gray-600">{description}</Text>
+        <Text className="text-gray-900 text-base font-medium">{title}</Text>
+        <Text className="text-gray-600 text-sm">{description}</Text>
       </View>
       {showArrow && (
         <Ionicons name="chevron-forward" size={20} color={colors.black} />
@@ -44,20 +44,18 @@ const SettingsItem = ({
   return <Pressable>{content}</Pressable>;
 };
 
-const SettingsSection = ({ 
-  title, 
-  children 
-}: { 
-  title: string; 
-  children: React.ReactNode; 
+const SettingsSection = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
 }) => (
   <View className="mb-6">
-    <Text className="text-lg font-semibold text-gray-900 mb-3 px-4">
+    <Text className="text-gray-900 mb-3 px-4 text-lg font-semibold">
       {title}
     </Text>
-    <View className="bg-white rounded-lg mx-4">
-      {children}
-    </View>
+    <View className="mx-4 rounded-lg bg-white">{children}</View>
   </View>
 );
 
@@ -69,8 +67,8 @@ export default function SettingsScreen() {
           title: String(fbs('Settings', 'Settings screen header title')),
         }}
       />
-      
-      <ScrollView className="flex-1 bg-gray-50">
+
+      <ScrollView className="bg-gray-50 flex-1">
         <View className="py-4">
           {/* Preferences */}
           <SettingsSection title="Preferences">
@@ -142,6 +140,7 @@ export default function SettingsScreen() {
               icon="chatbubble-ellipses"
               title="Contact Support"
               description="Get in touch with our team"
+              href="/(app)/support"
             />
             <SettingsItem
               icon="star"
@@ -156,6 +155,7 @@ export default function SettingsScreen() {
               icon="information-circle"
               title="About ClientSync"
               description="Learn more about our app"
+              href="/(app)/about"
             />
             <SettingsItem
               icon="document-text"
@@ -171,12 +171,12 @@ export default function SettingsScreen() {
 
           {/* App Info */}
           <View className="mx-4 mb-4">
-            <View className="bg-white rounded-lg p-4">
+            <View className="rounded-lg bg-white p-4">
               <View className="items-center">
-                <Text className="text-sm text-gray-600 mb-1">
+                <Text className="text-gray-600 mb-1 text-sm">
                   <fbt desc="App version">Version 1.0.0</fbt>
                 </Text>
-                <Text className="text-xs text-gray-500">
+                <Text className="text-gray-500 text-xs">
                   <fbt desc="App build">Build 2024.01.01</fbt>
                 </Text>
               </View>

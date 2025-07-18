@@ -1,12 +1,12 @@
 /**
  * Secure Token Storage Service
- * 
+ *
  * This service handles secure storage of authentication tokens using Expo SecureStore.
  * It provides encryption and secure storage for sensitive authentication data.
  */
 
-import * as SecureStore from 'expo-secure-store'
-import type { AuthUser, AuthSession } from './index.js'
+import * as SecureStore from 'expo-secure-store';
+import type { AuthSession, AuthUser } from './index.js';
 
 // Storage keys
 const STORAGE_KEYS = {
@@ -15,24 +15,24 @@ const STORAGE_KEYS = {
   USER_DATA: 'clientsync_user_data',
   TOKEN_EXPIRY: 'clientsync_token_expiry',
   BIOMETRIC_PREFERENCES: 'clientsync_biometric_prefs',
-} as const
+} as const;
 
 // Storage options for SecureStore
 const STORAGE_OPTIONS: SecureStore.SecureStoreOptions = {
   keychainService: 'clientsync-auth',
   requireAuthentication: false, // Set to true for biometric authentication
-}
+};
 
 export interface StoredAuthData {
-  user: AuthUser
-  session: AuthSession
+  user: AuthUser;
+  session: AuthSession;
 }
 
 export interface BiometricPreferences {
-  enabled: boolean
-  promptTitle?: string
-  promptSubtitle?: string
-  fallbackLabel?: string
+  enabled: boolean;
+  promptTitle?: string;
+  promptSubtitle?: string;
+  fallbackLabel?: string;
 }
 
 /**
@@ -48,35 +48,35 @@ export class SecureTokenStorage {
       await SecureStore.setItemAsync(
         STORAGE_KEYS.ACCESS_TOKEN,
         data.session.token,
-        STORAGE_OPTIONS
-      )
+        STORAGE_OPTIONS,
+      );
 
       if (data.session.refreshToken) {
         await SecureStore.setItemAsync(
           STORAGE_KEYS.REFRESH_TOKEN,
           data.session.refreshToken,
-          STORAGE_OPTIONS
-        )
+          STORAGE_OPTIONS,
+        );
       }
 
       // Store expiry time
       await SecureStore.setItemAsync(
         STORAGE_KEYS.TOKEN_EXPIRY,
         data.session.expiresAt.toISOString(),
-        STORAGE_OPTIONS
-      )
+        STORAGE_OPTIONS,
+      );
 
       // Store user data (encrypted by SecureStore)
       await SecureStore.setItemAsync(
         STORAGE_KEYS.USER_DATA,
         JSON.stringify(data.user),
-        STORAGE_OPTIONS
-      )
+        STORAGE_OPTIONS,
+      );
 
-      console.log('✅ Auth data stored securely')
+      console.log('✅ Auth data stored securely');
     } catch (error) {
-      console.error('❌ Failed to store auth data:', error)
-      throw new Error('Failed to store authentication data')
+      console.error('❌ Failed to store auth data:', error);
+      throw new Error('Failed to store authentication data');
     }
   }
 
@@ -85,30 +85,31 @@ export class SecureTokenStorage {
    */
   static async getAuthData(): Promise<StoredAuthData | null> {
     try {
-      const [accessToken, refreshToken, userDataStr, expiryStr] = await Promise.all([
-        SecureStore.getItemAsync(STORAGE_KEYS.ACCESS_TOKEN, STORAGE_OPTIONS),
-        SecureStore.getItemAsync(STORAGE_KEYS.REFRESH_TOKEN, STORAGE_OPTIONS),
-        SecureStore.getItemAsync(STORAGE_KEYS.USER_DATA, STORAGE_OPTIONS),
-        SecureStore.getItemAsync(STORAGE_KEYS.TOKEN_EXPIRY, STORAGE_OPTIONS),
-      ])
+      const [accessToken, refreshToken, userDataStr, expiryStr] =
+        await Promise.all([
+          SecureStore.getItemAsync(STORAGE_KEYS.ACCESS_TOKEN, STORAGE_OPTIONS),
+          SecureStore.getItemAsync(STORAGE_KEYS.REFRESH_TOKEN, STORAGE_OPTIONS),
+          SecureStore.getItemAsync(STORAGE_KEYS.USER_DATA, STORAGE_OPTIONS),
+          SecureStore.getItemAsync(STORAGE_KEYS.TOKEN_EXPIRY, STORAGE_OPTIONS),
+        ]);
 
       if (!accessToken || !userDataStr || !expiryStr) {
-        return null
+        return null;
       }
 
-      const user: AuthUser = JSON.parse(userDataStr)
-      const expiresAt = new Date(expiryStr)
+      const user: AuthUser = JSON.parse(userDataStr);
+      const expiresAt = new Date(expiryStr);
 
       const session: AuthSession = {
         token: accessToken,
         refreshToken: refreshToken || undefined,
         expiresAt,
-      }
+      };
 
-      return { user, session }
+      return { user, session };
     } catch (error) {
-      console.error('❌ Failed to retrieve auth data:', error)
-      return null
+      console.error('❌ Failed to retrieve auth data:', error);
+      return null;
     }
   }
 
@@ -119,22 +120,22 @@ export class SecureTokenStorage {
     try {
       const expiryStr = await SecureStore.getItemAsync(
         STORAGE_KEYS.TOKEN_EXPIRY,
-        STORAGE_OPTIONS
-      )
+        STORAGE_OPTIONS,
+      );
 
       if (!expiryStr) {
-        return false
+        return false;
       }
 
-      const expiryDate = new Date(expiryStr)
-      const now = new Date()
+      const expiryDate = new Date(expiryStr);
+      const now = new Date();
 
       // Add 5-minute buffer for token refresh
-      const bufferTime = 5 * 60 * 1000 // 5 minutes in milliseconds
-      return expiryDate.getTime() > now.getTime() + bufferTime
+      const bufferTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+      return expiryDate.getTime() > now.getTime() + bufferTime;
     } catch (error) {
-      console.error('❌ Failed to check token validity:', error)
-      return false
+      console.error('❌ Failed to check token validity:', error);
+      return false;
     }
   }
 
@@ -143,10 +144,13 @@ export class SecureTokenStorage {
    */
   static async getAccessToken(): Promise<string | null> {
     try {
-      return await SecureStore.getItemAsync(STORAGE_KEYS.ACCESS_TOKEN, STORAGE_OPTIONS)
+      return await SecureStore.getItemAsync(
+        STORAGE_KEYS.ACCESS_TOKEN,
+        STORAGE_OPTIONS,
+      );
     } catch (error) {
-      console.error('❌ Failed to get access token:', error)
-      return null
+      console.error('❌ Failed to get access token:', error);
+      return null;
     }
   }
 
@@ -155,26 +159,40 @@ export class SecureTokenStorage {
    */
   static async getRefreshToken(): Promise<string | null> {
     try {
-      return await SecureStore.getItemAsync(STORAGE_KEYS.REFRESH_TOKEN, STORAGE_OPTIONS)
+      return await SecureStore.getItemAsync(
+        STORAGE_KEYS.REFRESH_TOKEN,
+        STORAGE_OPTIONS,
+      );
     } catch (error) {
-      console.error('❌ Failed to get refresh token:', error)
-      return null
+      console.error('❌ Failed to get refresh token:', error);
+      return null;
     }
   }
 
   /**
    * Update just the access token (for token refresh)
    */
-  static async updateAccessToken(newToken: string, expiresAt: Date): Promise<void> {
+  static async updateAccessToken(
+    newToken: string,
+    expiresAt: Date,
+  ): Promise<void> {
     try {
       await Promise.all([
-        SecureStore.setItemAsync(STORAGE_KEYS.ACCESS_TOKEN, newToken, STORAGE_OPTIONS),
-        SecureStore.setItemAsync(STORAGE_KEYS.TOKEN_EXPIRY, expiresAt.toISOString(), STORAGE_OPTIONS),
-      ])
-      console.log('✅ Access token updated')
+        SecureStore.setItemAsync(
+          STORAGE_KEYS.ACCESS_TOKEN,
+          newToken,
+          STORAGE_OPTIONS,
+        ),
+        SecureStore.setItemAsync(
+          STORAGE_KEYS.TOKEN_EXPIRY,
+          expiresAt.toISOString(),
+          STORAGE_OPTIONS,
+        ),
+      ]);
+      console.log('✅ Access token updated');
     } catch (error) {
-      console.error('❌ Failed to update access token:', error)
-      throw new Error('Failed to update access token')
+      console.error('❌ Failed to update access token:', error);
+      throw new Error('Failed to update access token');
     }
   }
 
@@ -185,14 +203,17 @@ export class SecureTokenStorage {
     try {
       await Promise.all([
         SecureStore.deleteItemAsync(STORAGE_KEYS.ACCESS_TOKEN, STORAGE_OPTIONS),
-        SecureStore.deleteItemAsync(STORAGE_KEYS.REFRESH_TOKEN, STORAGE_OPTIONS),
+        SecureStore.deleteItemAsync(
+          STORAGE_KEYS.REFRESH_TOKEN,
+          STORAGE_OPTIONS,
+        ),
         SecureStore.deleteItemAsync(STORAGE_KEYS.USER_DATA, STORAGE_OPTIONS),
         SecureStore.deleteItemAsync(STORAGE_KEYS.TOKEN_EXPIRY, STORAGE_OPTIONS),
         // Note: We don't clear biometric preferences on logout
-      ])
-      console.log('✅ Auth data cleared')
+      ]);
+      console.log('✅ Auth data cleared');
     } catch (error) {
-      console.error('❌ Failed to clear auth data:', error)
+      console.error('❌ Failed to clear auth data:', error);
       // Don't throw here - we want logout to succeed even if clear fails
     }
   }
@@ -204,12 +225,12 @@ export class SecureTokenStorage {
     try {
       const accessToken = await SecureStore.getItemAsync(
         STORAGE_KEYS.ACCESS_TOKEN,
-        STORAGE_OPTIONS
-      )
-      return accessToken !== null
+        STORAGE_OPTIONS,
+      );
+      return accessToken !== null;
     } catch (error) {
-      console.error('❌ Failed to check stored auth:', error)
-      return false
+      console.error('❌ Failed to check stored auth:', error);
+      return false;
     }
   }
 
@@ -220,17 +241,17 @@ export class SecureTokenStorage {
     try {
       const userDataStr = await SecureStore.getItemAsync(
         STORAGE_KEYS.USER_DATA,
-        STORAGE_OPTIONS
-      )
+        STORAGE_OPTIONS,
+      );
 
       if (!userDataStr) {
-        return null
+        return null;
       }
 
-      return JSON.parse(userDataStr)
+      return JSON.parse(userDataStr);
     } catch (error) {
-      console.error('❌ Failed to get stored user:', error)
-      return null
+      console.error('❌ Failed to get stored user:', error);
+      return null;
     }
   }
 
@@ -242,29 +263,31 @@ export class SecureTokenStorage {
       await SecureStore.setItemAsync(
         STORAGE_KEYS.USER_DATA,
         JSON.stringify(user),
-        STORAGE_OPTIONS
-      )
-      console.log('✅ User data updated')
+        STORAGE_OPTIONS,
+      );
+      console.log('✅ User data updated');
     } catch (error) {
-      console.error('❌ Failed to update user data:', error)
-      throw new Error('Failed to update user data')
+      console.error('❌ Failed to update user data:', error);
+      throw new Error('Failed to update user data');
     }
   }
 
   /**
    * Store biometric preferences
    */
-  static async setBiometricPreferences(preferences: BiometricPreferences): Promise<void> {
+  static async setBiometricPreferences(
+    preferences: BiometricPreferences,
+  ): Promise<void> {
     try {
       await SecureStore.setItemAsync(
         STORAGE_KEYS.BIOMETRIC_PREFERENCES,
         JSON.stringify(preferences),
-        STORAGE_OPTIONS
-      )
-      console.log('✅ Biometric preferences updated')
+        STORAGE_OPTIONS,
+      );
+      console.log('✅ Biometric preferences updated');
     } catch (error) {
-      console.error('❌ Failed to store biometric preferences:', error)
-      throw new Error('Failed to store biometric preferences')
+      console.error('❌ Failed to store biometric preferences:', error);
+      throw new Error('Failed to store biometric preferences');
     }
   }
 
@@ -275,17 +298,17 @@ export class SecureTokenStorage {
     try {
       const preferencesStr = await SecureStore.getItemAsync(
         STORAGE_KEYS.BIOMETRIC_PREFERENCES,
-        STORAGE_OPTIONS
-      )
+        STORAGE_OPTIONS,
+      );
 
       if (!preferencesStr) {
-        return null
+        return null;
       }
 
-      return JSON.parse(preferencesStr)
+      return JSON.parse(preferencesStr);
     } catch (error) {
-      console.error('❌ Failed to get biometric preferences:', error)
-      return null
+      console.error('❌ Failed to get biometric preferences:', error);
+      return null;
     }
   }
 
@@ -294,13 +317,16 @@ export class SecureTokenStorage {
    */
   static async clearBiometricPreferences(): Promise<void> {
     try {
-      await SecureStore.deleteItemAsync(STORAGE_KEYS.BIOMETRIC_PREFERENCES, STORAGE_OPTIONS)
-      console.log('✅ Biometric preferences cleared')
+      await SecureStore.deleteItemAsync(
+        STORAGE_KEYS.BIOMETRIC_PREFERENCES,
+        STORAGE_OPTIONS,
+      );
+      console.log('✅ Biometric preferences cleared');
     } catch (error) {
-      console.error('❌ Failed to clear biometric preferences:', error)
+      console.error('❌ Failed to clear biometric preferences:', error);
       // Don't throw - this is not critical
     }
   }
 }
 
-export default SecureTokenStorage
+export default SecureTokenStorage;

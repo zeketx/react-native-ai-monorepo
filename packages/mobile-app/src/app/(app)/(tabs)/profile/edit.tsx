@@ -4,9 +4,9 @@ import { fbs } from 'fbtee';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
 import Button from 'src/ui/Button.tsx';
+import colors from 'src/ui/colors.ts';
 import Input from 'src/ui/Input.tsx';
 import Text from 'src/ui/Text.tsx';
-import colors from 'src/ui/colors.ts';
 
 // Mock user data
 const mockUser = {
@@ -25,14 +25,14 @@ export default function EditProfileScreen() {
 
   const handleSave = async () => {
     setIsLoading(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
       Alert.alert(
         'Profile Updated',
         'Your profile has been successfully updated.',
-        [{ text: 'OK' }]
+        [{ text: 'OK' }],
       );
     }, 1000);
   };
@@ -46,9 +46,11 @@ export default function EditProfileScreen() {
     <>
       <Stack.Screen
         options={{
-          title: String(fbs('Edit Profile', 'Edit profile screen header title')),
+          title: String(
+            fbs('Edit Profile', 'Edit profile screen header title'),
+          ),
           headerRight: () => (
-            <Pressable 
+            <Pressable
               className="mr-2 p-2"
               onPress={handleSave}
               disabled={isLoading}
@@ -60,12 +62,12 @@ export default function EditProfileScreen() {
           ),
         }}
       />
-      
-      <ScrollView className="flex-1 bg-gray-50">
+
+      <ScrollView className="bg-gray-50 flex-1">
         <View className="p-4">
           {/* Profile Picture */}
-          <View className="items-center mb-6">
-            <View className="w-24 h-24 rounded-full bg-gray-200 items-center justify-center">
+          <View className="mb-6 items-center">
+            <View className="bg-gray-200 h-24 w-24 items-center justify-center rounded-full">
               <Ionicons name="person" size={48} color={colors.black} />
             </View>
             <Pressable className="mt-3">
@@ -76,84 +78,88 @@ export default function EditProfileScreen() {
           </View>
 
           {/* Personal Information */}
-          <View className="bg-white rounded-lg p-4 mb-4">
-            <Text className="text-lg font-semibold text-gray-900 mb-4">
+          <View className="mb-4 rounded-lg bg-white p-4">
+            <Text className="text-gray-900 mb-4 text-lg font-semibold">
               <fbt desc="Personal info">Personal Information</fbt>
             </Text>
-            
+
             <Input
               label="Full Name"
               value={profile.name}
-              onChangeText={(text) => setProfile(prev => ({ ...prev, name: text }))}
+              onChangeText={(text) =>
+                setProfile((prev) => ({ ...prev, name: text }))
+              }
               placeholder="Enter your full name"
               leftIcon="person"
             />
-            
+
             <Input
               label="Email"
               value={profile.email}
-              onChangeText={(text) => setProfile(prev => ({ ...prev, email: text }))}
+              onChangeText={(text) =>
+                setProfile((prev) => ({ ...prev, email: text }))
+              }
               placeholder="Enter your email"
               keyboardType="email-address"
               leftIcon="mail"
               autoCapitalize="none"
             />
-            
+
             <Input
               label="Phone"
               value={profile.phone}
-              onChangeText={(text) => setProfile(prev => ({ ...prev, phone: text }))}
+              onChangeText={(text) =>
+                setProfile((prev) => ({ ...prev, phone: text }))
+              }
               placeholder="Enter your phone number"
               keyboardType="phone-pad"
               leftIcon="call"
             />
-            
+
             <Input
               label="Location"
               value={profile.location}
-              onChangeText={(text) => setProfile(prev => ({ ...prev, location: text }))}
+              onChangeText={(text) =>
+                setProfile((prev) => ({ ...prev, location: text }))
+              }
               placeholder="Enter your location"
               leftIcon="location"
             />
           </View>
 
           {/* Professional Information */}
-          <View className="bg-white rounded-lg p-4 mb-4">
-            <Text className="text-lg font-semibold text-gray-900 mb-4">
+          <View className="mb-4 rounded-lg bg-white p-4">
+            <Text className="text-gray-900 mb-4 text-lg font-semibold">
               <fbt desc="Professional info">Professional Information</fbt>
             </Text>
-            
+
             <Input
               label="Job Title"
               value={profile.title}
-              onChangeText={(text) => setProfile(prev => ({ ...prev, title: text }))}
+              onChangeText={(text) =>
+                setProfile((prev) => ({ ...prev, title: text }))
+              }
               placeholder="Enter your job title"
               leftIcon="briefcase"
             />
-            
+
             <Input
               label="Company"
               value={profile.company}
-              onChangeText={(text) => setProfile(prev => ({ ...prev, company: text }))}
+              onChangeText={(text) =>
+                setProfile((prev) => ({ ...prev, company: text }))
+              }
               placeholder="Enter your company"
               leftIcon="business"
             />
           </View>
 
           {/* Action Buttons */}
-          <View className="flex-row space-x-3 mt-4">
-            <Button
-              variant="outline"
-              onPress={handleCancel}
-              className="flex-1"
-            >
+          <View className="mt-4 flex-row space-x-3">
+            <Button variant="outline" onPress={handleCancel} className="flex-1">
               <fbt desc="Cancel">Cancel</fbt>
             </Button>
-            <Button
-              onPress={handleSave}
-              loading={isLoading}
-              className="flex-1"
-            >
+            <Button onPress={handleSave} loading={isLoading} className="flex-1">
               <fbt desc="Save changes">Save Changes</fbt>
             </Button>
           </View>

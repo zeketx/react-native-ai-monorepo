@@ -1,14 +1,22 @@
 import { useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { SafeAreaView, View, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  SafeAreaView,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import type { LoginData, RegistrationData } from 'src/auth/index.js';
 import Text from 'src/ui/Text.tsx';
 import useViewerContext from 'src/user/useViewerContext.tsx';
-import type { LoginData, RegistrationData } from 'src/auth/index.js';
 
 export default function Login() {
   const router = useRouter();
-  const { login, register, isLoading, authError, isAuthenticated } = useViewerContext();
-  
+  const { login, register, isLoading, authError, isAuthenticated } =
+    useViewerContext();
+
   const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,11 +36,11 @@ export default function Login() {
 
     const loginData: LoginData = {
       email: email.trim(),
-      password: password
+      password: password,
     };
 
     const result = await login(loginData);
-    
+
     if (!result.success) {
       Alert.alert('Login Failed', result.error || 'Unable to sign in');
     }
@@ -52,14 +60,14 @@ export default function Login() {
     const registrationData: RegistrationData = {
       email: email.trim(),
       password: password,
-      confirmPassword: confirmPassword
+      confirmPassword: confirmPassword,
     };
 
     const result = await register(registrationData);
-    
+
     if (result.success) {
       Alert.alert(
-        'Registration Successful', 
+        'Registration Successful',
         result.message || 'Please check your email to confirm your account',
         [
           {
@@ -69,12 +77,15 @@ export default function Login() {
               setEmail('');
               setPassword('');
               setConfirmPassword('');
-            }
-          }
-        ]
+            },
+          },
+        ],
       );
     } else {
-      Alert.alert('Registration Failed', result.error || 'Unable to create account');
+      Alert.alert(
+        'Registration Failed',
+        result.error || 'Unable to create account',
+      );
     }
   }, [email, password, confirmPassword, register]);
 
@@ -89,23 +100,25 @@ export default function Login() {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 justify-center p-6">
         <View className="mb-8">
-          <Text className="text-center text-3xl font-bold text-gray-900 mb-2">
+          <Text className="text-gray-900 mb-2 text-center text-3xl font-bold">
             <fbt desc="App name">ClientSync</fbt>
           </Text>
-          <Text className="text-center text-gray-600">
+          <Text className="text-gray-600 text-center">
             <fbt desc="Login subtitle">
-              {isRegistering ? 'Create your account' : 'Sign in to your account'}
+              {isRegistering
+                ? 'Create your account'
+                : 'Sign in to your account'}
             </fbt>
           </Text>
         </View>
 
-        <View className="space-y-4 mb-6">
+        <View className="mb-6 space-y-4">
           <View>
-            <Text className="text-sm font-medium text-gray-700 mb-1">
+            <Text className="text-gray-700 mb-1 text-sm font-medium">
               <fbt desc="Email label">Email</fbt>
             </Text>
             <TextInput
-              className="w-full p-4 border border-gray-300 rounded-lg bg-white"
+              className="border-gray-300 w-full rounded-lg border bg-white p-4"
               placeholder="Enter your email"
               value={email}
               onChangeText={setEmail}
@@ -117,11 +130,11 @@ export default function Login() {
           </View>
 
           <View>
-            <Text className="text-sm font-medium text-gray-700 mb-1">
+            <Text className="text-gray-700 mb-1 text-sm font-medium">
               <fbt desc="Password label">Password</fbt>
             </Text>
             <TextInput
-              className="w-full p-4 border border-gray-300 rounded-lg bg-white"
+              className="border-gray-300 w-full rounded-lg border bg-white p-4"
               placeholder="Enter your password"
               value={password}
               onChangeText={setPassword}
@@ -134,11 +147,11 @@ export default function Login() {
 
           {isRegistering && (
             <View>
-              <Text className="text-sm font-medium text-gray-700 mb-1">
+              <Text className="text-gray-700 mb-1 text-sm font-medium">
                 <fbt desc="Confirm password label">Confirm Password</fbt>
               </Text>
               <TextInput
-                className="w-full p-4 border border-gray-300 rounded-lg bg-white"
+                className="border-gray-300 w-full rounded-lg border bg-white p-4"
                 placeholder="Confirm your password"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
@@ -152,13 +165,13 @@ export default function Login() {
         </View>
 
         {authError && (
-          <View className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <View className="bg-red-50 border-red-200 mb-4 rounded-lg border p-3">
             <Text className="text-red-700 text-sm">{authError}</Text>
           </View>
         )}
 
         <TouchableOpacity
-          className={`w-full p-4 rounded-lg mb-4 ${
+          className={`mb-4 w-full rounded-lg p-4 ${
             isLoading ? 'bg-gray-400' : 'bg-blue-600'
           }`}
           onPress={isRegistering ? handleRegister : handleLogin}
@@ -167,7 +180,7 @@ export default function Login() {
           {isLoading ? (
             <ActivityIndicator color="white" />
           ) : (
-            <Text className="text-center text-white font-semibold">
+            <Text className="text-center font-semibold text-white">
               <fbt desc="Auth button">
                 {isRegistering ? 'Create Account' : 'Sign In'}
               </fbt>
@@ -180,12 +193,11 @@ export default function Login() {
           onPress={toggleMode}
           disabled={isLoading}
         >
-          <Text className="text-center text-blue-600">
+          <Text className="text-blue-600 text-center">
             <fbt desc="Toggle auth mode">
-              {isRegistering 
-                ? 'Already have an account? Sign in' 
-                : "Don't have an account? Sign up"
-              }
+              {isRegistering
+                ? 'Already have an account? Sign in'
+                : "Don't have an account? Sign up"}
             </fbt>
           </Text>
         </TouchableOpacity>

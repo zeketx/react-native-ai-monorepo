@@ -1,23 +1,23 @@
 /**
  * Alert Component
- * 
+ *
  * A reusable alert component for displaying messages with different variants.
  */
 
-import { Ionicons } from '@expo/vector-icons'
-import React from 'react'
-import { TouchableOpacity, View } from 'react-native'
-import Text from './Text.js'
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import Text from './Text.js';
 
-export type AlertVariant = 'success' | 'error' | 'warning' | 'info'
+export type AlertVariant = 'success' | 'error' | 'warning' | 'info';
 
 export interface AlertProps {
-  variant: AlertVariant
-  title?: string
-  message: string
-  dismissible?: boolean
-  onDismiss?: () => void
-  testID?: string
+  variant: AlertVariant;
+  title?: string;
+  message: string;
+  dismissible?: boolean;
+  onDismiss?: () => void;
+  testID?: string;
 }
 
 const Alert: React.FC<AlertProps> = ({
@@ -53,34 +53,34 @@ const Alert: React.FC<AlertProps> = ({
       title: 'text-blue-800',
       message: 'text-blue-700',
     },
-  }
+  };
 
-  const styles = variantStyles[variant]
+  const styles = variantStyles[variant];
 
   return (
     <View
-      className={`border rounded-lg p-4 mb-4 ${styles.container}`}
+      className={`mb-4 rounded-lg border p-4 ${styles.container}`}
       testID={testID}
     >
       <View className="flex-row">
-        <View className="flex-shrink-0 mr-3">
+        <View className="mr-3 flex-shrink-0">
           <Ionicons
             name={styles.icon.name}
             size={20}
             color={styles.icon.color}
           />
         </View>
-        
+
         <View className="flex-1">
           {title && (
             <Text
-              className={`font-semibold text-sm mb-1 ${styles.title}`}
+              className={`mb-1 text-sm font-semibold ${styles.title}`}
               testID={`${testID}-title`}
             >
               {title}
             </Text>
           )}
-          
+
           <Text
             className={`text-sm ${styles.message}`}
             testID={`${testID}-message`}
@@ -88,23 +88,19 @@ const Alert: React.FC<AlertProps> = ({
             {message}
           </Text>
         </View>
-        
+
         {dismissible && (
           <TouchableOpacity
-            className="flex-shrink-0 ml-3"
+            className="ml-3 flex-shrink-0"
             onPress={onDismiss}
             testID={`${testID}-dismiss`}
           >
-            <Ionicons
-              name="close"
-              size={18}
-              color={styles.icon.color}
-            />
+            <Ionicons name="close" size={18} color={styles.icon.color} />
           </TouchableOpacity>
         )}
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default Alert
+export default Alert;
