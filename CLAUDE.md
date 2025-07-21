@@ -6,8 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a pnpm workspace monorepo containing multiple packages:
 - `packages/mobile-app/` - React Native mobile application
-- `packages/shared/` - Shared utilities and components
-- `packages/web-dashboard/` - Web dashboard application
+- `packages/cms/` - Payload CMS
 
 ## Essential Monorepo Commands
 

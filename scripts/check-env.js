@@ -34,8 +34,10 @@ const colors = {
 const requiredVariables = {
   // Core Supabase variables (used by all packages)
   core: [
-    'SUPABASE_URL',
-    'SUPABASE_SERVICE_ROLE_KEY',
+    'EXPO_PUBLIC_SUPABASE_URL',
+    'EXPO_PUBLIC_SUPABASE_ANON_KEY',
+    'VITE_SUPABASE_URL',
+    'VITE_SUPABASE_ANON_KEY',
   ],
   
   // Mobile app variables (React Native + Expo)
