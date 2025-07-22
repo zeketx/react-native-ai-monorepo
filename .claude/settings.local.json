@@ -7,7 +7,8 @@
       "Bash(pnpm --filter mobile-app add @clientsync/shared)",
       "Bash(pnpm build:*)",
       "Bash(mv:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }
