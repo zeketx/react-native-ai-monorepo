@@ -5,7 +5,9 @@
       "WebFetch(domain:github.com)",
       "Bash(ls:*)",
       "Bash(pnpm --filter mobile-app add @clientsync/shared)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "Bash(mv:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }
