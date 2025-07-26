@@ -8,11 +8,11 @@
 Set up environment variable files for local development with proper Supabase configuration for both mobile app and web dashboard.
 
 ## Acceptance Criteria
-- [x] Root .env.local file is created with Supabase credentials
-- [x] Mobile app can access environment variables
-- [x] Web dashboard environment is configured
-- [x] .gitignore is updated to exclude env files
-- [x] Example env file is provided for team members
+- [ ] Root .env.local file is created with Supabase credentials
+- [ ] Mobile app can access environment variables
+- [ ] Web dashboard environment is configured
+- [ ] .gitignore is updated to exclude env files
+- [ ] Example env file is provided for team members
 
 ## Implementation Notes
 1. Create root .env.local file:
