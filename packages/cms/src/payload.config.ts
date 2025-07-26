@@ -15,6 +15,20 @@ import { Media } from './collections/Media'
 
 import { checkAllowlistEndpoint } from './endpoints/check-allowlist'
 import { passwordResetEndpoint, passwordResetConfirmEndpoint } from './endpoints/password-reset'
+import { getUserMeEndpoint, updateUserMeEndpoint } from './endpoints/user-me'
+import { registerEndpoint } from './endpoints/auth-register'
+import { verifyEmailEndpoint, resendVerificationEndpoint } from './endpoints/auth-verify'
+import { refreshTokenEndpoint, logoutEndpoint } from './endpoints/auth-refresh'
+import { getUserPreferencesEndpoint, updateUserPreferencesEndpoint } from './endpoints/user-preferences'
+import { getUserTripsEndpoint, searchUsersEndpoint, getUserByIdEndpoint } from './endpoints/user-trips'
+import { 
+  getTripsEndpoint, 
+  getTripByIdEndpoint, 
+  createTripEndpoint, 
+  updateTripEndpoint, 
+  deleteTripEndpoint, 
+  updateTripStatusEndpoint 
+} from './endpoints/trips-crud'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -40,6 +54,24 @@ export default buildConfig({
     checkAllowlistEndpoint,
     passwordResetEndpoint,
     passwordResetConfirmEndpoint,
+    getUserMeEndpoint,
+    updateUserMeEndpoint,
+    registerEndpoint,
+    verifyEmailEndpoint,
+    resendVerificationEndpoint,
+    refreshTokenEndpoint,
+    logoutEndpoint,
+    getUserPreferencesEndpoint,
+    updateUserPreferencesEndpoint,
+    getUserTripsEndpoint,
+    searchUsersEndpoint,
+    getUserByIdEndpoint,
+    getTripsEndpoint,
+    getTripByIdEndpoint,
+    createTripEndpoint,
+    updateTripEndpoint,
+    deleteTripEndpoint,
+    updateTripStatusEndpoint,
   ],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || 'YOUR_SECRET_HERE',
