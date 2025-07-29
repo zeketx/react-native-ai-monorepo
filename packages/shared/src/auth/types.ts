@@ -1,8 +1,17 @@
-import { User, Session } from '@supabase/supabase-js';
-
 export type UserRole = 'client' | 'organizer' | 'admin';
 
-export interface AuthUser extends User {
+export interface AuthUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
+  phone?: string;
+  emailVerified: boolean;
+  avatar?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  lastLoginAt?: string;
   profile?: {
     id: string;
     user_id: string;
@@ -15,7 +24,11 @@ export interface AuthUser extends User {
   };
 }
 
-export interface AuthSession extends Session {
+export interface AuthSession {
+  access_token: string;
+  refresh_token: string;
+  expires_at: number;
+  token_type: 'bearer';
   user: AuthUser;
 }
 
@@ -49,4 +62,49 @@ export interface AuthContextType extends AuthState {
   register: (credentials: RegisterCredentials) => Promise<{ error?: AuthError }>;
   logout: () => Promise<{ error?: AuthError }>;
   refreshSession: () => Promise<{ error?: AuthError }>;
+  getCurrentUser: () => Promise<{ data?: AuthUser; error?: AuthError }>;
+  forgotPassword: (email: string) => Promise<{ error?: AuthError }>;
+  resetPassword: (token: string, password: string, passwordConfirm: string) => Promise<{ error?: AuthError }>;
+}
+
+// Additional Payload-specific types
+export interface PayloadAuthResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: {
+    message: string;
+    code?: string;
+    statusCode?: number;
+  };
+  message?: string;
+}
+
+export interface PayloadJWTPayload {
+  id: string;
+  email: string;
+  role: UserRole;
+  iat: number;
+  exp: number;
+}
+
+export interface TokenValidationResult {
+  valid: boolean;
+  payload?: PayloadJWTPayload;
+  error?: string;
+}
+
+// Login/Registration data types
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+export interface RegistrationData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+  role?: UserRole;
 }

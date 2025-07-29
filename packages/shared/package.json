@@ -15,9 +15,7 @@
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.39.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "typescript": "^5.3.0",
     "@types/node": "^20.0.0"

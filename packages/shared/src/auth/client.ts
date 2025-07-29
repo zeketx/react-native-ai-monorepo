@@ -1,35 +1,48 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+/**
+ * Payload CMS Client Configuration
+ * 
+ * This file provides client configuration for Payload CMS.
+ * The actual client implementation is now in ../api/payload-client.ts
+ */
 
-interface SupabaseConfig {
-  url: string;
-  anonKey: string;
+import { createPayloadClient, type PayloadClient, type PayloadClientConfig } from '../api/payload-client';
+
+let payloadClientInstance: PayloadClient | null = null;
+
+export interface PayloadConfig {
+  baseURL: string;
+  timeout?: number;
+  authTokenProvider?: () => Promise<string | null>;
+  onTokenExpired?: () => Promise<void>;
 }
 
-let supabaseClient: SupabaseClient | null = null;
-
-export function createSupabaseClient(config: SupabaseConfig): SupabaseClient {
-  if (!config.url || !config.anonKey) {
-    throw new Error('Supabase URL and Anon Key are required');
+export function createPayloadAuthClient(config: PayloadConfig): PayloadClient {
+  if (!config.baseURL) {
+    throw new Error('Payload base URL is required');
   }
 
-  if (supabaseClient) {
-    return supabaseClient;
+  if (payloadClientInstance) {
+    return payloadClientInstance;
   }
 
-  supabaseClient = createClient(config.url, config.anonKey, {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: false,
-    },
-  });
+  const clientConfig: Partial<PayloadClientConfig> = {
+    baseURL: config.baseURL,
+    timeout: config.timeout,
+    authTokenProvider: config.authTokenProvider,
+    onTokenExpired: config.onTokenExpired,
+  };
 
-  return supabaseClient;
+  payloadClientInstance = createPayloadClient(clientConfig);
+  return payloadClientInstance;
 }
 
-export function getSupabaseClient(): SupabaseClient {
-  if (!supabaseClient) {
-    throw new Error('Supabase client not initialized. Call createSupabaseClient first.');
+export function getPayloadClient(): PayloadClient {
+  if (!payloadClientInstance) {
+    throw new Error('Payload client not initialized. Call createPayloadAuthClient first.');
   }
-  return supabaseClient;
+  return payloadClientInstance;
+}
+
+export function resetPayloadClient(): void {
+  payloadClientInstance = null;
 }

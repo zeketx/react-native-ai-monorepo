@@ -1,6 +1,12 @@
 // Authentication module (already implemented)
 export * from './auth/index';
 
+// API Client module
+export * from './api/payload-client';
+
+// Services module
+export * from './services/index';
+
 // Types module - specific exports to avoid conflicts
 export type {
   // User types
