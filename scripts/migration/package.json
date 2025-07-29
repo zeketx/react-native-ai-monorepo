@@ -1,0 +1,33 @@
+{
+  "name": "data-migration-scripts",
+  "version": "1.0.0",
+  "description": "Data migration scripts for Supabase to Payload CMS migration",
+  "main": "index.js",
+  "scripts": {
+    "export": "ts-node export-supabase.ts",
+    "transform": "ts-node transform-data.ts",
+    "import": "ts-node import-payload.ts",
+    "import:dry": "DRY_RUN=true ts-node import-payload.ts",
+    "validate": "ts-node validate-migration.ts",
+    "migrate:all": "npm run export && npm run transform && npm run import && npm run validate",
+    "migrate:dry": "npm run export && npm run transform && npm run import:dry",
+    "test:staging": "ts-node test-migration.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "payload": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "migration",
+    "supabase",
+    "payload-cms",
+    "data-migration"
+  ],
+  "author": "Development Team",
+  "license": "MIT"
+}
