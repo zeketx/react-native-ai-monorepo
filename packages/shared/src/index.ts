@@ -107,7 +107,9 @@ export * from './constants/index';
 
 // Utils module - specific exports to avoid conflicts
 export {
-  // Validation utilities (excluding conflicting ones)
+  // Validation utilities (including basic ones)
+  validateEmail,
+  validatePassword,
   validateEmailWithMessage,
   validatePasswordWithMessage,
   validatePhone,

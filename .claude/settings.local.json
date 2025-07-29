@@ -10,7 +10,12 @@
       "Bash(mkdir:*)",
       "Bash(git checkout:*)",
       "Bash(git add:*)",
-      "Bash(pnpm --filter shared type-check)"
+      "Bash(pnpm --filter shared type-check)",
+      "Bash(npm run:*)",
+      "Bash(npm start)",
+      "Bash(pnpm tsc:check:*)",
+      "Bash(find:*)",
+      "Bash(pnpm dev:*)"
     ],
     "deny": []
   }
