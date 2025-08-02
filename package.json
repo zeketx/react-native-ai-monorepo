@@ -6,6 +6,7 @@
   "scripts": {
     "dev:mobile": "pnpm --filter mobile-app dev",
     "dev:cms": "pnpm --filter cms dev",
+    "dev:web": "pnpm --filter web-dashboard dev",
     "dev:all": "pnpm --parallel --filter './packages/*' dev",
     "build:all": "pnpm --filter './packages/*' build",
     "test:all": "pnpm --filter './packages/*' test",
