@@ -112,6 +112,8 @@ export {
   validatePassword,
   validateEmailWithMessage,
   validatePasswordWithMessage,
+  isAllowedDomain,
+  validateEmailAllowlist,
   validatePhone,
   validatePhoneWithMessage,
   validateName,
@@ -147,6 +149,23 @@ export {
   rgbToHex,
   formatStatus,
   formatEnumValue,
+  
+  // Error handling utilities
+  AppError,
+  AuthenticationError,
+  AuthorizationError,
+  ValidationError as AppValidationError,
+  NotFoundError,
+  ConflictError,
+  RateLimitError,
+  ERROR_CODES,
+  isOperationalError,
+  createErrorResponse,
+  formatValidationErrors,
+  handleAsyncError,
+  withErrorHandler,
+  safeJsonParse,
+  retryWithBackoff,
   
   // General utilities
   debounce,

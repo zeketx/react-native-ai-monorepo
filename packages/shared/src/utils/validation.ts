@@ -6,6 +6,13 @@
 import { REGEX } from '../constants/app';
 import type { ValidationError } from '../types';
 
+// Default allowed email domains for allowlist checking
+const DEFAULT_ALLOWED_DOMAINS = [
+  '@clientsync.com',
+  '@partner.com', 
+  '@enterprise.com'
+];
+
 // Email validation
 export function validateEmail(email: string): boolean {
   if (!email || typeof email !== 'string') return false;
@@ -311,4 +318,37 @@ export function validateForm(
   }
   
   return errors;
+}
+
+// Email allowlist validation
+export function isAllowedDomain(email: string, allowedDomains?: string[]): boolean {
+  if (!validateEmail(email)) return false;
+  
+  const domains = allowedDomains || DEFAULT_ALLOWED_DOMAINS;
+  const emailLower = email.toLowerCase();
+  
+  return domains.some(domain => {
+    if (domain.startsWith('@')) {
+      return emailLower.endsWith(domain.toLowerCase());
+    } else {
+      return emailLower.endsWith(`@${domain.toLowerCase()}`);
+    }
+  });
+}
+
+export function validateEmailAllowlist(
+  email: string, 
+  allowedDomains?: string[]
+): ValidationError | null {
+  const emailValidation = validateEmailWithMessage(email);
+  if (emailValidation) return emailValidation;
+  
+  if (!isAllowedDomain(email, allowedDomains)) {
+    return { 
+      field: 'email', 
+      message: 'Email domain is not allowed. Please use a company or partner email address.' 
+    };
+  }
+  
+  return null;
 }

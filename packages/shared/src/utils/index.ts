@@ -5,6 +5,7 @@
 
 export * from './validation';
 export * from './formatting';
+export * from './errors';
 
 // Additional utility functions
 export function debounce<T extends (...args: any[]) => any>(
