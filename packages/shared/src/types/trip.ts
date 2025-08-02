@@ -6,8 +6,7 @@
 import type { BaseUser, MediaFile } from './user';
 
 export type TripStatus = 
-  | 'draft'
-  | 'planning' 
+  | 'planning'
   | 'confirmed'
   | 'in-progress'
   | 'completed'
@@ -59,45 +58,55 @@ export interface TripActivity {
   attachments?: MediaFile[];
 }
 
+export interface TripDestination {
+  city: string;
+  country: string;
+  airport?: string;
+}
+
+export interface TripBudget {
+  total?: number;
+  currency: 'USD' | 'EUR' | 'GBP' | 'JPY';
+}
+
+export interface TripTraveler {
+  name: string;
+  dateOfBirth?: string;
+  relationship: 'self' | 'spouse' | 'child' | 'parent' | 'sibling' | 'friend' | 'colleague' | 'other';
+}
+
+export interface TripItineraryDetails {
+  flightDetails?: string;
+  hotelDetails?: string;
+  activityDetails?: string;
+  diningDetails?: string;
+  transportationDetails?: string;
+}
+
+export interface PayloadTripDocument {
+  title: string;
+  type: 'passport' | 'visa' | 'insurance' | 'boarding-pass' | 'hotel-confirmation' | 'other';
+  file?: string; // relationship to media
+  notes?: string;
+}
+
 export interface BaseTrip {
   id: string;
   title: string;
   description?: string;
-  
-  // Participants
-  client: string | BaseUser; // User ID or populated user object
-  organizer?: string | BaseUser;
-  travelers?: string[] | BaseUser[];
-  
-  // Trip details
-  type: TripType;
-  status: TripStatus;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  
-  // Dates and locations
+  client: string; // relationship to clients
   startDate: string;
   endDate: string;
-  destinations: Location[];
-  
-  // Budget
-  estimatedBudget?: number;
-  actualBudget?: number;
-  currency: string;
-  
-  // Travel preferences
-  accommodationPreference?: 'budget' | 'mid-range' | 'luxury' | 'premium';
-  transportationPreference?: 'economy' | 'business' | 'first-class';
-  
-  // Documentation
-  itinerary?: TripItinerary[];
-  documents?: MediaFile[];
-  notes?: string;
-  
-  // Metadata
+  status: TripStatus;
+  destination: TripDestination;
+  budget?: TripBudget;
+  travelers?: TripTraveler[];
+  itinerary?: TripItineraryDetails;
+  documents?: PayloadTripDocument[];
+  specialRequests?: string;
+  internalNotes?: string;
   createdAt: string;
   updatedAt: string;
-  createdBy: string | BaseUser;
-  lastModifiedBy?: string | BaseUser;
 }
 
 export interface TripPreferences {
@@ -145,7 +154,7 @@ export interface TripDocument {
 // Utility types
 export type TripCreationData = Omit<BaseTrip, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'lastModifiedBy'>;
 export type TripUpdateData = Partial<Omit<BaseTrip, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>>;
-export type TripSummary = Pick<BaseTrip, 'id' | 'title' | 'status' | 'startDate' | 'endDate' | 'destinations' | 'client'>;
+export type TripSummary = Pick<BaseTrip, 'id' | 'title' | 'status' | 'startDate' | 'endDate' | 'destination' | 'client'>;
 
 // Type guards and utilities
 export const isActiveTripStatus = (status: TripStatus): boolean => 

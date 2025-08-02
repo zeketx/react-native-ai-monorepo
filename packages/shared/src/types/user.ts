@@ -18,6 +18,10 @@ export interface BaseUser {
   phone?: string;
   role: UserRole;
   profileImage?: string | MediaFile;
+  bio?: string;
+  preferences?: UserNotificationPreferences;
+  mobileSettings?: MobileSettings;
+  status?: UserStatus;
   createdAt: string;
   updatedAt: string;
   emailVerified?: boolean;
@@ -59,6 +63,31 @@ export interface UserProfile {
   preferences?: UserPreferences;
   createdAt: string;
   updatedAt: string;
+}
+
+export type UserStatus = 'active' | 'inactive' | 'suspended';
+
+export interface UserNotificationPreferences {
+  notifications: {
+    email: boolean;
+    push: boolean;
+    sms: boolean;
+  };
+  privacy: {
+    profilePublic: boolean;
+    shareData: boolean;
+  };
+}
+
+export interface DeviceToken {
+  token: string;
+  platform: 'ios' | 'android' | 'web';
+  active: boolean;
+}
+
+export interface MobileSettings {
+  deviceTokens?: DeviceToken[];
+  lastLoginAt?: string;
 }
 
 export interface UserPreferences {

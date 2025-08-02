@@ -6,48 +6,37 @@
 import type { BaseUser, UserPreferences } from './user';
 import type { BaseTrip, TripPreferences } from './trip';
 
-export type ClientTier = 'standard' | 'premium' | 'enterprise';
-export type ClientStatus = 'active' | 'inactive' | 'suspended' | 'pending-approval';
+export type ClientTier = 'standard' | 'premium' | 'platinum';
+export type ClientStatus = 'active' | 'inactive' | 'pending';
+
+export interface EmergencyContact {
+  name?: string;
+  phone?: string;
+  relationship?: string;
+}
 
 export interface ClientProfile {
   id: string;
-  userId: string; // Reference to User
-  
-  // Business information
-  companyName?: string;
-  industry?: string;
-  title?: string;
-  department?: string;
-  
-  // Contact preferences
-  preferredContactMethod: 'email' | 'phone' | 'sms' | 'in-app';
-  businessPhone?: string;
-  businessEmail?: string;
-  
-  // Account details
+  user: string; // Reference to User (relationship)
+  name: string;
+  email: string;
+  phone?: string;
+  dateOfBirth?: string;
+  emergencyContact?: EmergencyContact;
   tier: ClientTier;
   status: ClientStatus;
-  accountManager?: string; // User ID of assigned organizer/admin
+  preferences?: ClientPreferences;
+  notes?: string; // Internal notes
   
-  // Billing information
-  billingAddress?: Address;
-  paymentMethods?: PaymentMethod[];
-  creditLimit?: number;
-  currency: string;
-  
-  // Travel patterns and preferences
-  travelFrequency: 'rare' | 'occasional' | 'frequent' | 'very-frequent';
-  averageTripDuration?: number; // in days
-  preferredDestinations?: string[];
-  
-  // Loyalty and rewards
-  loyaltyPoints?: number;
-  membershipLevel?: 'bronze' | 'silver' | 'gold' | 'platinum';
-  
-  // Metadata
   createdAt: string;
   updatedAt: string;
-  lastActivityAt?: string;
+}
+
+export interface ClientPreferences {
+  flightPreferences?: string; // relationship to flight-preferences
+  hotelPreferences?: string; // relationship to hotel-preferences
+  activityPreferences?: string; // relationship to activity-preferences
+  diningPreferences?: string; // relationship to dining-preferences
 }
 
 export interface Address {
@@ -186,11 +175,11 @@ export interface TravelPreferences extends TripPreferences {
 // Utility types
 export type ClientCreationData = Omit<ClientProfile, 'id' | 'createdAt' | 'updatedAt' | 'lastActivityAt'>;
 export type ClientUpdateData = Partial<Omit<ClientProfile, 'id' | 'userId' | 'createdAt' | 'updatedAt'>>;
-export type ClientSummary = Pick<ClientProfile, 'id' | 'companyName' | 'tier' | 'status' | 'travelFrequency'>;
+export type ClientSummary = Pick<ClientProfile, 'id' | 'name' | 'tier' | 'status'>;
 
 // Type guards and utilities
 export const isPremiumClient = (client: ClientProfile): boolean => 
-  client.tier === 'premium' || client.tier === 'enterprise';
+  client.tier === 'premium' || client.tier === 'platinum';
 
 export const isActiveClient = (client: ClientProfile): boolean => 
   client.status === 'active';
@@ -199,13 +188,13 @@ export const canCreateTrips = (client: ClientProfile): boolean =>
   client.status === 'active';
 
 export const clientRequiresApproval = (client: ClientProfile): boolean => 
-  client.tier === 'enterprise' || client.status === 'pending-approval';
+  client.tier === 'platinum' || client.status === 'pending';
 
 export const getClientTierDisplayName = (tier: ClientTier): string => {
   const displayNames: Record<ClientTier, string> = {
     'standard': 'Standard',
     'premium': 'Premium',
-    'enterprise': 'Enterprise'
+    'platinum': 'Platinum'
   };
   return displayNames[tier];
 };
@@ -213,9 +202,8 @@ export const getClientTierDisplayName = (tier: ClientTier): string => {
 export const getClientStatusDisplayName = (status: ClientStatus): string => {
   const displayNames: Record<ClientStatus, string> = {
     'active': 'Active',
-    'inactive': 'Inactive', 
-    'suspended': 'Suspended',
-    'pending-approval': 'Pending Approval'
+    'inactive': 'Inactive',
+    'pending': 'Pending'
   };
   return displayNames[status];
 };

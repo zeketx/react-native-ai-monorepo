@@ -142,22 +142,32 @@ export class TripService {
       const trip: Omit<BaseTrip, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'lastModifiedBy'> = {
         title: tripData.title,
         description: tripData.description || '',
-        type: tripData.type,
-        status: 'draft' as TripStatus,
-        priority: tripData.priority || 'medium',
-        destinations: tripData.destinations,
+        // type field removed - not in Payload schema
+        status: 'planning' as TripStatus,
+        // priority field removed - not in Payload schema
+        destination: { city: '', country: '' }, // Default destination
         startDate: tripData.startDate,
         endDate: tripData.endDate,
         client: '', // Will be set by the API based on authenticated user  
-        organizer: '', // Will be set by the API
-        travelers: tripData.travelerIds || [],
-        estimatedBudget: tripData.estimatedBudget,
-        currency: tripData.currency || 'USD',
-        accommodationPreference: tripData.accommodationPreference,
-        transportationPreference: tripData.transportationPreference,
-        itinerary: [],
+        // organizer field removed - not in Payload schema
+        travelers: (tripData.travelerIds || []).map((id: string) => ({
+          name: `Traveler ${id}`,
+          relationship: 'self' as const
+        })),
+        budget: {
+          total: tripData.estimatedBudget,
+          currency: (tripData.currency || 'USD') as 'USD' | 'EUR' | 'GBP' | 'JPY'
+        },
+        // accommodation and transportation preferences removed - not in Payload schema
+        itinerary: {
+          flightDetails: '',
+          hotelDetails: '',
+          activityDetails: '',
+          diningDetails: '',
+          transportationDetails: ''
+        },
         documents: [],
-        notes: tripData.notes,
+        specialRequests: tripData.notes,
       };
 
       return await this.payloadClient.trips.create(trip);
@@ -367,7 +377,7 @@ export class TripService {
         stats.byStatus[trip.status] = (stats.byStatus[trip.status] || 0) + 1;
         
         // Count by type
-        stats.byType[trip.type] = (stats.byType[trip.type] || 0) + 1;
+        // stats.byType[trip.type] = (stats.byType[trip.type] || 0) + 1; // type field not available
         
         // Budget not available in BaseTrip - skip budget calculations
         
@@ -406,7 +416,8 @@ export class TripService {
       };
     }
 
-    if (!tripData.type) {
+    // Type validation removed since not in Payload schema
+    if (false) {
       return {
         code: 'VALIDATION_FAILED',
         message: 'Trip type is required',
