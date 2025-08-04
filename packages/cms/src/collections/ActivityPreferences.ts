@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const ActivityPreferences: CollectionConfig = {
   slug: 'activity-preferences',
+  dbName: 'activity_prefs',
   admin: {
     useAsTitle: 'client',
     defaultColumns: ['client', 'activityLevel', 'updatedAt'],
@@ -183,14 +184,17 @@ export const ActivityPreferences: CollectionConfig = {
     {
       name: 'timePreferences',
       type: 'group',
+      dbName: 'time_prefs',
       fields: [
         {
           name: 'preferredTimes',
           type: 'array',
+          dbName: 'pref_times',
           fields: [
             {
               name: 'timeOfDay',
               type: 'select',
+              dbName: 'time_of_day',
               options: [
                 { label: 'Early Morning (6-9 AM)', value: 'early-morning' },
                 { label: 'Morning (9 AM-12 PM)', value: 'morning' },
@@ -234,10 +238,12 @@ export const ActivityPreferences: CollectionConfig = {
     {
       name: 'accessibility',
       type: 'group',
+      dbName: 'access',
       fields: [
         {
           name: 'mobilityRequirements',
           type: 'array',
+          dbName: 'mobility_reqs',
           fields: [
             {
               name: 'requirement',

@@ -15,7 +15,14 @@
       "Bash(npm start)",
       "Bash(pnpm tsc:check:*)",
       "Bash(find:*)",
-      "Bash(pnpm dev:*)"
+      "Bash(pnpm dev:*)",
+      "Bash(pnpm --filter web-dashboard exec tailwindcss init -p)",
+      "Bash(pnpm --filter web-dashboard build)",
+      "Bash(pnpm --filter web-dashboard dev)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "Bash(true)",
+      "Bash(pnpm --filter cms dev)"
     ],
     "deny": []
   }

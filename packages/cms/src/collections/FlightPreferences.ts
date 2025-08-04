@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const FlightPreferences: CollectionConfig = {
   slug: 'flight-preferences',
+  dbName: 'flight_prefs',
   admin: {
     useAsTitle: 'client',
     defaultColumns: ['client', 'class', 'seatPreference', 'updatedAt'],

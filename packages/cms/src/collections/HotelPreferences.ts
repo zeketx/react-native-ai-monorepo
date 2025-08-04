@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const HotelPreferences: CollectionConfig = {
   slug: 'hotel-preferences',
+  dbName: 'hotel_prefs',
   admin: {
     useAsTitle: 'client',
     defaultColumns: ['client', 'category', 'roomType', 'updatedAt'],
@@ -287,6 +288,7 @@ export const HotelPreferences: CollectionConfig = {
         {
           name: 'proximityRequirements',
           type: 'array',
+          dbName: 'proximity_reqs',
           fields: [
             {
               name: 'landmark',
@@ -305,6 +307,7 @@ export const HotelPreferences: CollectionConfig = {
             {
               name: 'transportation',
               type: 'select',
+              dbName: 'transport',
               options: [
                 { label: 'Walking Distance', value: 'walking' },
                 { label: 'Public Transport', value: 'public' },

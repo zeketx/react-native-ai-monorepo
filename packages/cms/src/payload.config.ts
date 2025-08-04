@@ -1,5 +1,5 @@
 import { buildConfig } from 'payload'
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -78,18 +78,23 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, '../payload-types.ts'),
   },
-  db: sqliteAdapter({
-    client: {
-      url: './data.db',
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false
+      }
     },
   }),
   cors: [
     process.env.EXPO_PUBLIC_PAYLOAD_URL || 'http://localhost:3000',
+    'http://localhost:3001', // Web dashboard
     'http://localhost:19006', // Expo web dev server
     'http://localhost:19007', // Expo dev tools
   ],
   csrf: [
     process.env.EXPO_PUBLIC_PAYLOAD_URL || 'http://localhost:3000',
+    'http://localhost:3001', // Web dashboard
     'http://localhost:19006',
     'http://localhost:19007',
   ],
