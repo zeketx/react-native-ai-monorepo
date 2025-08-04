@@ -1,4 +1,15 @@
-/* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
+#!/usr/bin/env node
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const layoutPath = path.join(__dirname, '../src/app/(payload)/admin/[[...segments]]/layout.tsx');
+
+const patchedContent = `/* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 /* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
 import type { Metadata } from 'next'
 import type { ServerFunctionClient } from 'payload'
@@ -33,4 +44,12 @@ const Layout = ({ children }: Args) => (
   </RootLayout>
 )
 
-export default Layout
+export default Layout`;
+
+try {
+  fs.writeFileSync(layoutPath, patchedContent);
+  console.log('✅ Admin layout patched successfully');
+} catch (error) {
+  console.error('❌ Failed to patch admin layout:', error);
+  process.exit(1);
+}

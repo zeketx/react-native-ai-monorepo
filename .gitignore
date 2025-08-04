@@ -17,6 +17,10 @@ build/
 
 # Keep example files
 !.env.example
+!.mcp.json.example
+
+# MCP configuration (contains sensitive tokens)
+.mcp.json
 
 # IDE
 .vscode/

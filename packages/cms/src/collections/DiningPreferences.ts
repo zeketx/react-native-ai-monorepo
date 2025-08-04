@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const DiningPreferences: CollectionConfig = {
   slug: 'dining-preferences',
+  dbName: 'dining_prefs',
   admin: {
     useAsTitle: 'client',
     defaultColumns: ['client', 'dietaryRestrictions', 'updatedAt'],
