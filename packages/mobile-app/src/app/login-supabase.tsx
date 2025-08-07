@@ -78,7 +78,7 @@ export default function SupabaseLogin() {
 
   // Login form
   const loginForm = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema) as any,
     defaultValues: {
       email: '',
       password: '',
@@ -88,7 +88,7 @@ export default function SupabaseLogin() {
 
   // Registration form
   const registrationForm = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema) as any,
     defaultValues: {
       firstName: '',
       lastName: '',

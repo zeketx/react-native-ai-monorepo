@@ -19,7 +19,7 @@ The CMS is unable to connect to Supabase PostgreSQL database due to DNS resoluti
 
 ## Technical Details
 - **Project ID**: kzoqlvzcqbfwlqvqbmrd
-- **Current Connection String**: `postgresql://postgres:GrizzDev2025!@db.kzoqlvzcqbfwlqvqbmrd.supabase.co:5432/postgres`
+- **Current Connection String**: `postgresql://postgres:[REDACTED]@db.kzoqlvzcqbfwlqvqbmrd.supabase.co:5432/postgres`
 - **Environment**: Local development
 - **CMS Version**: Payload CMS v3.44.0
 - **Database Adapter**: @payloadcms/db-postgres v3.49.1
@@ -59,7 +59,7 @@ The CMS is unable to connect to Supabase PostgreSQL database due to DNS resoluti
 
 ## Resolution
 - **Fixed**: Changed from direct connection to pooler connection endpoint
-- **Working Connection String**: `postgresql://postgres.kzoqlvzcqbfwlqvqbmrd:GrizzDev2025!@aws-0-us-east-2.pooler.supabase.com:6543/postgres`
+- **Working Connection String**: `postgresql://postgres.kzoqlvzcqbfwlqvqbmrd:[REDACTED]@aws-0-us-east-2.pooler.supabase.com:6543/postgres`
 - **Key Changes**:
   1. Use pooler endpoint format: `aws-0-us-east-2.pooler.supabase.com` instead of `db.kzoqlvzcqbfwlqvqbmrd.supabase.co`
   2. Username format includes project ref: `postgres.kzoqlvzcqbfwlqvqbmrd`

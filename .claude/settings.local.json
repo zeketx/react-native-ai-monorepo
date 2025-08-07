@@ -22,8 +22,17 @@
       "Bash(curl:*)",
       "Bash(pkill:*)",
       "Bash(true)",
-      "Bash(pnpm --filter cms dev)"
+      "Bash(pnpm --filter cms dev)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(pnpm --filter mobile-app format)",
+      "Bash(pnpm --filter web-dashboard lint)",
+      "Bash(pnpm -r lint)",
+      "Bash(pnpm:*)"
     ],
     "deny": []
-  }
+  },
+  "disabledMcpjsonServers": [
+    "supabase"
+  ]
 }

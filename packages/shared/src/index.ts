@@ -1,5 +1,6 @@
 // Authentication module (already implemented)
 export * from './auth/index';
+export { authService } from './auth/service';
 
 // API Client module
 export * from './api/payload-client';
@@ -78,6 +79,35 @@ export type {
   TripId,
   ClientId,
 } from './types/index';
+
+// Auth types - explicitly export for mobile app compatibility
+export type {
+  AuthUser,
+  AuthSession,
+  AuthState,
+  AuthError,
+  AuthContextType,
+  LoginCredentials,
+  RegisterCredentials,
+  UserRole,
+} from './auth/types';
+
+// Auth utility functions for mobile app compatibility
+export {
+  isAuthenticated,
+  hasRole,
+  hasAnyRole,
+  isAdmin,
+  isOrganizer,
+  isClient,
+  canAccessAdminFeatures,
+  canManageTrips,
+  canViewTrips,
+  getUserDisplayName,
+  getUserInitials,
+  isSessionExpired,
+  shouldRefreshSession,
+} from './auth/utils';
 
 // Type utility functions that don't conflict
 export {

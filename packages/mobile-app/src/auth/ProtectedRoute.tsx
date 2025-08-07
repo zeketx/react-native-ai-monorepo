@@ -2,7 +2,7 @@ import { isAuthenticated } from '@clientsync/shared';
 import type { UserRole } from '@clientsync/shared';
 import { Redirect } from 'expo-router';
 import { View } from 'react-native';
-import { Text } from '../ui/Text.js';
+import Text from '../ui/Text.js';
 import { useAuth } from './AuthContext.js';
 
 interface ProtectedRouteProps {

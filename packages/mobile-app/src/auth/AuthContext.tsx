@@ -4,7 +4,7 @@ import {
   AuthState,
   LoginCredentials,
   RegisterCredentials,
-} from '@clientsync/shared/auth';
+} from '@clientsync/shared';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   createContext,
@@ -13,7 +13,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase.js';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   const updateAuthState = useCallback((updates: Partial<AuthState>) => {
-    setAuthState((prev) => ({ ...prev, ...updates }));
+    setAuthState((prev: AuthState) => ({ ...prev, ...updates }));
   }, []);
 
   const login = useCallback(
@@ -44,10 +44,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (result.data) {
-          const { user, ...session } = result.data;
+          const { user } = result.data;
 
           // Store session in AsyncStorage
-          await AsyncStorage.setItem(
+          await (AsyncStorage as any).setItem(
             SESSION_STORAGE_KEY,
             JSON.stringify(result.data),
           );
@@ -82,10 +82,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (result.data) {
-          const { user, ...session } = result.data;
+          const { user } = result.data;
 
           // Store session in AsyncStorage
-          await AsyncStorage.setItem(
+          await (AsyncStorage as any).setItem(
             SESSION_STORAGE_KEY,
             JSON.stringify(result.data),
           );
@@ -117,7 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       await authService.logout();
-      await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
+      await (AsyncStorage as any).removeItem(SESSION_STORAGE_KEY);
 
       updateAuthState({
         user: null,
@@ -139,7 +139,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (result.error) {
         // Session refresh failed, clear stored session
-        await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
+        await (AsyncStorage as any).removeItem(SESSION_STORAGE_KEY);
         updateAuthState({
           user: null,
           session: null,
@@ -150,10 +150,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (result.data) {
-        const { user, ...session } = result.data;
+        const { user } = result.data;
 
         // Update stored session
-        await AsyncStorage.setItem(
+        await (AsyncStorage as any).setItem(
           SESSION_STORAGE_KEY,
           JSON.stringify(result.data),
         );
@@ -168,7 +168,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       return {};
     } catch (error) {
-      await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
+      await (AsyncStorage as any).removeItem(SESSION_STORAGE_KEY);
       updateAuthState({
         user: null,
         session: null,
@@ -188,12 +188,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const initializeAuth = async () => {
       try {
         // Try to get session from AsyncStorage first
-        const storedSession = await AsyncStorage.getItem(SESSION_STORAGE_KEY);
+        const storedSession = await (AsyncStorage as any).getItem(SESSION_STORAGE_KEY);
 
         if (storedSession) {
           try {
-            const parsedSession = JSON.parse(storedSession);
-            const { user, ...session } = parsedSession;
+            JSON.parse(storedSession);
 
             // Verify the session is still valid
             const { data: currentSession } =
@@ -210,7 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           } catch (parseError) {
             // Invalid stored session, remove it
-            await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
+            await (AsyncStorage as any).removeItem(SESSION_STORAGE_KEY);
           }
         }
 
@@ -219,8 +218,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (mounted) {
           if (currentSession) {
-            const { user, ...session } = currentSession;
-            await AsyncStorage.setItem(
+            const { user } = currentSession;
+            await (AsyncStorage as any).setItem(
               SESSION_STORAGE_KEY,
               JSON.stringify(currentSession),
             );
@@ -263,9 +262,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event: any, session: any) => {
       if (event === 'SIGNED_OUT') {
-        await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
+        await (AsyncStorage as any).removeItem(SESSION_STORAGE_KEY);
         updateAuthState({
           user: null,
           session: null,
@@ -277,8 +276,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { data: currentSession } = await authService.getCurrentSession();
 
         if (currentSession) {
-          const { user, ...sessionData } = currentSession;
-          await AsyncStorage.setItem(
+          const { user } = currentSession;
+          await (AsyncStorage as any).setItem(
             SESSION_STORAGE_KEY,
             JSON.stringify(currentSession),
           );

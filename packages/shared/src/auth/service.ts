@@ -183,13 +183,40 @@ export class AuthService {
 
   // Auth state change is handled at the application level with Payload CMS
   // since Payload doesn't provide a built-in listener like Supabase
-  onAuthStateChange(callback: (session: AuthSession | null) => void) {
+  onAuthStateChange(callback: (event: { session: AuthSession | null; user?: AuthUser }) => void) {
     // In Payload CMS, auth state changes are managed through token refresh
     // and local storage. This method is kept for compatibility but should
     // be implemented by the consuming application using their preferred
     // state management solution (Context, Redux, etc.)
     console.warn('onAuthStateChange is not implemented for Payload CMS. Handle auth state in your app-level context.');
     return () => {}; // Return empty unsubscribe function
+  }
+
+  // Supabase-style method aliases for mobile app compatibility
+  async getSession(): Promise<{ session?: AuthSession; error?: AuthError }> {
+    const result = await this.getCurrentSession();
+    return { session: result.data, error: result.error };
+  }
+
+  async signIn(credentials: LoginCredentials): Promise<{ user?: AuthUser; session?: AuthSession; error?: AuthError }> {
+    const result = await this.login(credentials);
+    return { 
+      user: result.data?.user, 
+      session: result.data, 
+      error: result.error 
+    };
+  }
+
+  async signUp(credentials: RegisterCredentials): Promise<{ user?: AuthUser; error?: AuthError }> {
+    const result = await this.register(credentials);
+    return { 
+      user: result.data?.user, 
+      error: result.error 
+    };
+  }
+
+  async signOut(): Promise<{ error?: AuthError }> {
+    return await this.logout();
   }
 }
 

@@ -12,9 +12,9 @@ import {
   isOrganizer,
   isSessionExpired,
   shouldRefreshSession,
-} from '@clientsync/shared/auth';
-import type { UserRole } from '@clientsync/shared/auth';
-import { useAuth } from './AuthContext';
+} from '@clientsync/shared';
+import type { UserRole } from '@clientsync/shared';
+import { useAuth } from './AuthContext.js';
 
 export function useAuthState() {
   const { user, session, loading, initialized } = useAuth();
