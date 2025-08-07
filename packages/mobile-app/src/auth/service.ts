@@ -23,9 +23,7 @@ const API_TIMEOUT = parseInt(
 );
 
 export interface AuthService {
-  login(
-    data: LoginData,
-  ): Promise<{
+  login(data: LoginData): Promise<{
     success: boolean;
     error?: string;
     user?: AuthUser;
@@ -139,9 +137,7 @@ class PayloadAuthService implements AuthService {
     return this.makeRequest(endpoint, options);
   }
 
-  async login(
-    data: LoginData,
-  ): Promise<{
+  async login(data: LoginData): Promise<{
     success: boolean;
     error?: string;
     user?: AuthUser;

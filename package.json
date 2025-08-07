@@ -24,5 +24,17 @@
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=8.0.0"
+  },
+  "pnpm": {
+    "updateConfig": {
+      "ignoreDependencies": [
+        "tailwindcss"
+      ]
+    },
+    "patchedDependencies": {
+      "expo-modules-core": "packages/mobile-app/patches/expo-modules-core.patch",
+      "metro": "packages/mobile-app/patches/metro.patch"
+    },
+    "ignorePatchFailures": false
   }
 }

@@ -3,8 +3,8 @@
  * Tests for the Supabase authentication integration
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
 import { authService } from '@clientsync/shared';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 // Mock Supabase client for testing
 const mockSupabaseClient = {
@@ -37,7 +37,8 @@ vi.mock('@clientsync/shared', () => ({
   validateEmail: (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
   validatePassword: (password: string) => ({
     isValid: password.length >= 8,
-    errors: password.length < 8 ? ['Password must be at least 8 characters'] : [],
+    errors:
+      password.length < 8 ? ['Password must be at least 8 characters'] : [],
   }),
 }));
 
@@ -49,7 +50,7 @@ describe('Authentication Service', () => {
   describe('Email Validation', () => {
     it('should validate correct email format', async () => {
       const { validateEmail } = await import('@clientsync/shared');
-      
+
       expect(validateEmail('test@example.com')).toBe(true);
       expect(validateEmail('user@domain.co.uk')).toBe(true);
       expect(validateEmail('invalid-email')).toBe(false);
@@ -61,11 +62,11 @@ describe('Authentication Service', () => {
   describe('Password Validation', () => {
     it('should validate password requirements', async () => {
       const { validatePassword } = await import('@clientsync/shared');
-      
+
       const weakPassword = validatePassword('weak');
       expect(weakPassword.isValid).toBe(false);
       expect(weakPassword.errors.length).toBeGreaterThan(0);
-      
+
       const strongPassword = validatePassword('StrongP@ssw0rd');
       expect(strongPassword.isValid).toBe(true);
       expect(strongPassword.errors.length).toBe(0);
@@ -166,7 +167,9 @@ describe('Authentication Service', () => {
       };
 
       const mockAuthService = await import('@clientsync/shared');
-      vi.mocked(mockAuthService.authService.getCurrentSession).mockResolvedValue({
+      vi.mocked(
+        mockAuthService.authService.getCurrentSession,
+      ).mockResolvedValue({
         data: mockSession,
       });
 

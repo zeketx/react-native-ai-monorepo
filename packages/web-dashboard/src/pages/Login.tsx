@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ export default function Login() {
   const location = useLocation();
 
   // Get the path the user was trying to access, or default to dashboard
-  const from = (location.state as any)?.from?.pathname || '/';
+  const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/';
 
   // Redirect if already authenticated
   if (isAuthenticated && !loading) {

@@ -1,24 +1,24 @@
-import { useAuth } from './AuthContext';
-import { 
-  isAuthenticated, 
-  hasRole, 
-  hasAnyRole, 
-  isAdmin, 
-  isOrganizer, 
-  isClient,
+import {
   canAccessAdminFeatures,
   canManageTrips,
   canViewTrips,
   getUserDisplayName,
   getUserInitials,
+  hasAnyRole,
+  hasRole,
+  isAdmin,
+  isAuthenticated,
+  isClient,
+  isOrganizer,
   isSessionExpired,
-  shouldRefreshSession
+  shouldRefreshSession,
 } from '@clientsync/shared/auth';
 import type { UserRole } from '@clientsync/shared/auth';
+import { useAuth } from './AuthContext';
 
 export function useAuthState() {
   const { user, session, loading, initialized } = useAuth();
-  
+
   return {
     user,
     session,
@@ -30,7 +30,7 @@ export function useAuthState() {
 
 export function useAuthActions() {
   const { login, register, logout, refreshSession } = useAuth();
-  
+
   return {
     login,
     register,
@@ -41,7 +41,7 @@ export function useAuthActions() {
 
 export function useUserPermissions() {
   const { user } = useAuth();
-  
+
   return {
     hasRole: (role: UserRole) => hasRole(user, role),
     hasAnyRole: (roles: UserRole[]) => hasAnyRole(user, roles),
@@ -56,7 +56,7 @@ export function useUserPermissions() {
 
 export function useUserProfile() {
   const { user } = useAuth();
-  
+
   return {
     user,
     displayName: getUserDisplayName(user),
@@ -69,7 +69,7 @@ export function useUserProfile() {
 
 export function useSessionManager() {
   const { session, refreshSession } = useAuth();
-  
+
   return {
     session,
     isExpired: isSessionExpired(session),
@@ -84,7 +84,7 @@ export function useAuthStatus() {
   const permissions = useUserPermissions();
   const profile = useUserProfile();
   const sessionManager = useSessionManager();
-  
+
   return {
     ...authState,
     ...permissions,

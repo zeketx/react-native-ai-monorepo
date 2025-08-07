@@ -1,10 +1,11 @@
 /**
  * Supabase Authentication Login Screen
- * 
+ *
  * Updated login screen that uses the new Supabase authentication system
  * with the shared authentication package.
  */
 
+import { validateEmail, validatePassword } from '@clientsync/shared';
 import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
@@ -20,11 +21,8 @@ import {
   View,
 } from 'react-native';
 import { z } from 'zod';
-
 // New Supabase Auth
 import { useAuth } from '../auth/AuthContext.js';
-import { validateEmail, validatePassword } from '@clientsync/shared';
-
 // UI Components
 import Alert from '../ui/Alert.js';
 import Button from '../ui/Button.js';
@@ -54,7 +52,8 @@ const registerSchema = z
       .string()
       .min(1, 'Password is required')
       .refine((val) => validatePassword(val).isValid, {
-        message: 'Password must be at least 8 characters with uppercase, lowercase, number, and special character',
+        message:
+          'Password must be at least 8 characters with uppercase, lowercase, number, and special character',
       }),
     confirmPassword: z.string().min(1, 'Please confirm your password'),
   })
@@ -132,7 +131,7 @@ export default function SupabaseLogin() {
             variant: 'success',
             message: 'Login successful! Redirecting...',
           });
-          
+
           // Navigation will be handled by useEffect when auth state updates
         }
       } catch (error) {
@@ -167,7 +166,8 @@ export default function SupabaseLogin() {
         } else {
           setAlertMessage({
             variant: 'success',
-            message: 'Registration successful! Please check your email to verify your account.',
+            message:
+              'Registration successful! Please check your email to verify your account.',
           });
 
           // Switch to login form after successful registration

@@ -1,8 +1,19 @@
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { AuthState, AuthContextType, LoginCredentials, RegisterCredentials } from '@clientsync/shared/auth';
-import { authService } from '@clientsync/shared/auth';
-import { supabase } from '../lib/supabase';
+import {
+  AuthContextType,
+  authService,
+  AuthState,
+  LoginCredentials,
+  RegisterCredentials,
+} from '@clientsync/shared/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -17,83 +28,97 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   const updateAuthState = useCallback((updates: Partial<AuthState>) => {
-    setAuthState(prev => ({ ...prev, ...updates }));
+    setAuthState((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  const login = useCallback(async (credentials: LoginCredentials) => {
-    updateAuthState({ loading: true });
-    
-    try {
-      const result = await authService.login(credentials);
-      
-      if (result.error) {
+  const login = useCallback(
+    async (credentials: LoginCredentials) => {
+      updateAuthState({ loading: true });
+
+      try {
+        const result = await authService.login(credentials);
+
+        if (result.error) {
+          updateAuthState({ loading: false });
+          return { error: result.error };
+        }
+
+        if (result.data) {
+          const { user, ...session } = result.data;
+
+          // Store session in AsyncStorage
+          await AsyncStorage.setItem(
+            SESSION_STORAGE_KEY,
+            JSON.stringify(result.data),
+          );
+
+          updateAuthState({
+            user,
+            session: result.data,
+            loading: false,
+            initialized: true,
+          });
+        }
+
+        return {};
+      } catch (error) {
         updateAuthState({ loading: false });
-        return { error: result.error };
+        return { error: { message: 'Login failed', code: 'UNKNOWN_ERROR' } };
       }
+    },
+    [updateAuthState],
+  );
 
-      if (result.data) {
-        const { user, ...session } = result.data;
-        
-        // Store session in AsyncStorage
-        await AsyncStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(result.data));
-        
-        updateAuthState({
-          user,
-          session: result.data,
-          loading: false,
-          initialized: true,
-        });
-      }
+  const register = useCallback(
+    async (credentials: RegisterCredentials) => {
+      updateAuthState({ loading: true });
 
-      return {};
-    } catch (error) {
-      updateAuthState({ loading: false });
-      return { error: { message: 'Login failed', code: 'UNKNOWN_ERROR' } };
-    }
-  }, [updateAuthState]);
+      try {
+        const result = await authService.register(credentials);
 
-  const register = useCallback(async (credentials: RegisterCredentials) => {
-    updateAuthState({ loading: true });
-    
-    try {
-      const result = await authService.register(credentials);
-      
-      if (result.error) {
+        if (result.error) {
+          updateAuthState({ loading: false });
+          return { error: result.error };
+        }
+
+        if (result.data) {
+          const { user, ...session } = result.data;
+
+          // Store session in AsyncStorage
+          await AsyncStorage.setItem(
+            SESSION_STORAGE_KEY,
+            JSON.stringify(result.data),
+          );
+
+          updateAuthState({
+            user,
+            session: result.data,
+            loading: false,
+            initialized: true,
+          });
+        } else {
+          // Registration successful but needs email verification
+          updateAuthState({ loading: false });
+        }
+
+        return {};
+      } catch (error) {
         updateAuthState({ loading: false });
-        return { error: result.error };
+        return {
+          error: { message: 'Registration failed', code: 'UNKNOWN_ERROR' },
+        };
       }
-
-      if (result.data) {
-        const { user, ...session } = result.data;
-        
-        // Store session in AsyncStorage
-        await AsyncStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(result.data));
-        
-        updateAuthState({
-          user,
-          session: result.data,
-          loading: false,
-          initialized: true,
-        });
-      } else {
-        // Registration successful but needs email verification
-        updateAuthState({ loading: false });
-      }
-
-      return {};
-    } catch (error) {
-      updateAuthState({ loading: false });
-      return { error: { message: 'Registration failed', code: 'UNKNOWN_ERROR' } };
-    }
-  }, [updateAuthState]);
+    },
+    [updateAuthState],
+  );
 
   const logout = useCallback(async () => {
     updateAuthState({ loading: true });
-    
+
     try {
       await authService.logout();
       await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
-      
+
       updateAuthState({
         user: null,
         session: null,
@@ -111,7 +136,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const refreshSession = useCallback(async () => {
     try {
       const result = await authService.refreshSession();
-      
+
       if (result.error) {
         // Session refresh failed, clear stored session
         await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
@@ -126,10 +151,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (result.data) {
         const { user, ...session } = result.data;
-        
+
         // Update stored session
-        await AsyncStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(result.data));
-        
+        await AsyncStorage.setItem(
+          SESSION_STORAGE_KEY,
+          JSON.stringify(result.data),
+        );
+
         updateAuthState({
           user,
           session: result.data,
@@ -147,7 +175,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         loading: false,
         initialized: true,
       });
-      return { error: { message: 'Session refresh failed', code: 'UNKNOWN_ERROR' } };
+      return {
+        error: { message: 'Session refresh failed', code: 'UNKNOWN_ERROR' },
+      };
     }
   }, [updateAuthState]);
 
@@ -159,15 +189,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         // Try to get session from AsyncStorage first
         const storedSession = await AsyncStorage.getItem(SESSION_STORAGE_KEY);
-        
+
         if (storedSession) {
           try {
             const parsedSession = JSON.parse(storedSession);
             const { user, ...session } = parsedSession;
-            
+
             // Verify the session is still valid
-            const { data: currentSession } = await authService.getCurrentSession();
-            
+            const { data: currentSession } =
+              await authService.getCurrentSession();
+
             if (currentSession && mounted) {
               updateAuthState({
                 user: currentSession.user,
@@ -185,12 +216,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // Try to get current session from Supabase
         const { data: currentSession } = await authService.getCurrentSession();
-        
+
         if (mounted) {
           if (currentSession) {
             const { user, ...session } = currentSession;
-            await AsyncStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(currentSession));
-            
+            await AsyncStorage.setItem(
+              SESSION_STORAGE_KEY,
+              JSON.stringify(currentSession),
+            );
+
             updateAuthState({
               user,
               session: currentSession,
@@ -227,7 +261,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Listen for auth state changes
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT') {
         await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
         updateAuthState({
@@ -239,11 +275,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else if (session) {
         // Get user with profile
         const { data: currentSession } = await authService.getCurrentSession();
-        
+
         if (currentSession) {
           const { user, ...sessionData } = currentSession;
-          await AsyncStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(currentSession));
-          
+          await AsyncStorage.setItem(
+            SESSION_STORAGE_KEY,
+            JSON.stringify(currentSession),
+          );
+
           updateAuthState({
             user,
             session: currentSession,
@@ -266,9 +305,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 }
 

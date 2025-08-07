@@ -85,17 +85,5 @@
     "typescript": "^5.8.3",
     "vitest": "^3.2.4",
     "vitest-react-native": "^0.1.5"
-  },
-  "pnpm": {
-    "updateConfig": {
-      "ignoreDependencies": [
-        "tailwindcss"
-      ]
-    },
-    "patchedDependencies": {
-      "expo-modules-core": "patches/expo-modules-core.patch",
-      "metro": "patches/metro.patch"
-    },
-    "ignorePatchFailures": false
   }
 }

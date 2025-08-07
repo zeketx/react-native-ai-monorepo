@@ -4,6 +4,14 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  expo-modules-core:
+    hash: 778fee72d8d332c818371a0efeb0429ef507e859b95b3c338be671427bef5a7d
+    path: packages/mobile-app/patches/expo-modules-core.patch
+  metro:
+    hash: 23700a21f6660714fad6aa79ec9762ef1b6f237cb4f4d5e96e9f9b13f4fe1133
+    path: packages/mobile-app/patches/metro.patch
+
 importers:
 
   .:
@@ -10427,7 +10435,7 @@ snapshots:
       chalk: 4.1.2
       debug: 2.6.9
       invariant: 2.2.4
-      metro: 0.82.4
+      metro: 0.82.4(patch_hash=23700a21f6660714fad6aa79ec9762ef1b6f237cb4f4d5e96e9f9b13f4fe1133)
       metro-config: 0.82.4
       metro-core: 0.82.4
       semver: 7.7.2
@@ -12904,7 +12912,7 @@ snapshots:
       require-from-string: 2.0.2
       resolve-from: 5.0.0
 
-  expo-modules-core@2.4.0:
+  expo-modules-core@2.4.0(patch_hash=778fee72d8d332c818371a0efeb0429ef507e859b95b3c338be671427bef5a7d):
     dependencies:
       invariant: 2.2.4
 
@@ -12978,7 +12986,7 @@ snapshots:
       expo-font: 13.3.1(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react@19.1.0)
       expo-keep-awake: 14.1.4(expo@53.0.11(@babel/core@7.27.4)(@expo/metro-runtime@5.0.4(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)))(babel-plugin-react-compiler@19.1.0-rc.2)(graphql@16.11.0)(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0))(react@19.1.0)
       expo-modules-autolinking: 2.1.11
-      expo-modules-core: 2.4.0
+      expo-modules-core: 2.4.0(patch_hash=778fee72d8d332c818371a0efeb0429ef507e859b95b3c338be671427bef5a7d)
       react: 19.1.0
       react-native: 0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
       react-native-edge-to-edge: 1.6.0(react-native@0.79.4(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
@@ -14123,7 +14131,7 @@ snapshots:
       cosmiconfig: 5.2.1
       flow-enums-runtime: 0.0.6
       jest-validate: 29.7.0
-      metro: 0.82.4
+      metro: 0.82.4(patch_hash=23700a21f6660714fad6aa79ec9762ef1b6f237cb4f4d5e96e9f9b13f4fe1133)
       metro-cache: 0.82.4
       metro-core: 0.82.4
       metro-runtime: 0.82.4
@@ -14210,7 +14218,7 @@ snapshots:
       '@babel/parser': 7.27.5
       '@babel/types': 7.27.6
       flow-enums-runtime: 0.0.6
-      metro: 0.82.4
+      metro: 0.82.4(patch_hash=23700a21f6660714fad6aa79ec9762ef1b6f237cb4f4d5e96e9f9b13f4fe1133)
       metro-babel-transformer: 0.82.4
       metro-cache: 0.82.4
       metro-cache-key: 0.82.4
@@ -14223,7 +14231,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  metro@0.82.4:
+  metro@0.82.4(patch_hash=23700a21f6660714fad6aa79ec9762ef1b6f237cb4f4d5e96e9f9b13f4fe1133):
     dependencies:
       '@babel/code-frame': 7.27.1
       '@babel/core': 7.27.4

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { authService } from '../services/auth';
 import type { User, LoginCredentials } from '../services/auth';
@@ -150,15 +150,4 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 }
 
-export function useAuth(): AuthContextType {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
 
-// Hook for accessing auth state without the provider requirement (useful for testing)
-export function useOptionalAuth(): AuthContextType | undefined {
-  return useContext(AuthContext);
-}

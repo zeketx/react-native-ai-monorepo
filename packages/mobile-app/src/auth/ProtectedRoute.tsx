@@ -1,9 +1,9 @@
-import { Redirect } from 'expo-router';
-import { useAuth } from './AuthContext.js';
 import { isAuthenticated } from '@clientsync/shared';
 import type { UserRole } from '@clientsync/shared';
+import { Redirect } from 'expo-router';
 import { View } from 'react-native';
 import { Text } from '../ui/Text.js';
+import { useAuth } from './AuthContext.js';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ export function ProtectedRoute({
   if (!initialized || loading) {
     return (
       loadingComponent || (
-        <View className="flex-1 justify-center items-center bg-white">
+        <View className="flex-1 items-center justify-center bg-white">
           <Text className="text-gray-600">Loading...</Text>
         </View>
       )
@@ -41,15 +41,15 @@ export function ProtectedRoute({
   // Check role-based permissions
   if (roles && roles.length > 0) {
     const userRole = user?.profile?.role;
-    
+
     if (!userRole || !roles.includes(userRole)) {
       if (unauthorizedComponent) {
         return <>{unauthorizedComponent}</>;
       }
-      
+
       return (
-        <View className="flex-1 justify-center items-center bg-white px-6">
-          <Text className="text-xl font-semibold text-gray-900 text-center mb-4">
+        <View className="flex-1 items-center justify-center bg-white px-6">
+          <Text className="text-gray-900 mb-4 text-center text-xl font-semibold">
             Access Denied
           </Text>
           <Text className="text-gray-600 text-center">
@@ -64,7 +64,10 @@ export function ProtectedRoute({
 }
 
 // Convenience components for specific roles
-export function AdminRoute({ children, ...props }: Omit<ProtectedRouteProps, 'roles'>) {
+export function AdminRoute({
+  children,
+  ...props
+}: Omit<ProtectedRouteProps, 'roles'>) {
   return (
     <ProtectedRoute roles={['admin']} {...props}>
       {children}
@@ -72,7 +75,10 @@ export function AdminRoute({ children, ...props }: Omit<ProtectedRouteProps, 'ro
   );
 }
 
-export function OrganizerRoute({ children, ...props }: Omit<ProtectedRouteProps, 'roles'>) {
+export function OrganizerRoute({
+  children,
+  ...props
+}: Omit<ProtectedRouteProps, 'roles'>) {
   return (
     <ProtectedRoute roles={['admin', 'organizer']} {...props}>
       {children}
@@ -80,7 +86,10 @@ export function OrganizerRoute({ children, ...props }: Omit<ProtectedRouteProps,
   );
 }
 
-export function ClientRoute({ children, ...props }: Omit<ProtectedRouteProps, 'roles'>) {
+export function ClientRoute({
+  children,
+  ...props
+}: Omit<ProtectedRouteProps, 'roles'>) {
   return (
     <ProtectedRoute roles={['admin', 'organizer', 'client']} {...props}>
       {children}
