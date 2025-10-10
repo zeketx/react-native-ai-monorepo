@@ -19,13 +19,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import biometricAuthService from 'src/auth/biometric.js';
+import biometricAuthService from 'src/auth/biometric';
 // Auth
 import type {
   LoginFormData,
   RegistrationFormData,
-} from 'src/auth/validation.js';
-import { loginSchema, registrationSchema } from 'src/auth/validation.js';
+} from 'src/auth/validation';
+import { loginSchema, registrationSchema } from 'src/auth/validation';
 // UI Components
 import Alert from 'src/ui/Alert.tsx';
 import Button from 'src/ui/Button.tsx';
