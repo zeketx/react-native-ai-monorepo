@@ -58,6 +58,9 @@ node_modules/
 # Payload
 payload-types.ts
 
+# Credentials
+ADMIN_CREDENTIALS.md
+
 # IDE
 .vscode/
 .idea/
