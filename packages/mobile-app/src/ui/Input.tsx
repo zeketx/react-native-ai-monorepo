@@ -10,47 +10,47 @@ import { TextInput, TouchableOpacity, View } from 'react-native';
 import Text from './Text.js';
 
 export interface InputProps {
-  label?: string;
-  placeholder?: string;
-  value?: string;
-  onChangeText?: (text: string) => void;
-  onBlur?: () => void;
-  secureTextEntry?: boolean;
-  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   autoCorrect?: boolean;
   editable?: boolean;
   error?: string;
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
+  label?: string;
   leftIcon?: keyof typeof Ionicons.glyphMap;
-  rightIcon?: keyof typeof Ionicons.glyphMap;
-  onRightIconPress?: () => void;
-  testID?: string;
-  returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
-  onSubmitEditing?: () => void;
   maxLength?: number;
+  onBlur?: () => void;
+  onChangeText?: (text: string) => void;
+  onRightIconPress?: () => void;
+  onSubmitEditing?: () => void;
+  placeholder?: string;
+  returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
+  rightIcon?: keyof typeof Ionicons.glyphMap;
+  secureTextEntry?: boolean;
+  testID?: string;
+  value?: string;
 }
 
 const Input = forwardRef<TextInput, InputProps>(
   (
     {
-      label,
-      placeholder,
-      value,
-      onChangeText,
-      onBlur,
-      secureTextEntry = false,
-      keyboardType = 'default',
       autoCapitalize = 'none',
       autoCorrect = false,
       editable = true,
       error,
+      keyboardType = 'default',
+      label,
       leftIcon,
-      rightIcon,
-      onRightIconPress,
-      testID,
-      returnKeyType = 'done',
-      onSubmitEditing,
       maxLength,
+      onBlur,
+      onChangeText,
+      onRightIconPress,
+      onSubmitEditing,
+      placeholder,
+      returnKeyType = 'done',
+      rightIcon,
+      secureTextEntry = false,
+      testID,
+      value,
     },
     ref,
   ) => {
@@ -93,32 +93,32 @@ const Input = forwardRef<TextInput, InputProps>(
           {leftIcon && (
             <View className="absolute left-3 z-10">
               <Ionicons
+                color={hasError ? '#ef4444' : isFocused ? '#3b82f6' : '#6b7280'}
                 name={leftIcon}
                 size={20}
-                color={hasError ? '#ef4444' : isFocused ? '#3b82f6' : '#6b7280'}
               />
             </View>
           )}
 
           <TextInput
-            ref={ref}
-            className={`text-gray-900 flex-1 p-4 text-base ${leftIcon ? 'pl-12' : ''} ${showPasswordToggle || rightIcon ? 'pr-12' : ''} `}
-            placeholder={placeholder}
-            placeholderTextColor={hasError ? '#ef4444' : '#9ca3af'}
-            value={value}
-            onChangeText={onChangeText}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            secureTextEntry={secureTextEntry && !isPasswordVisible}
-            keyboardType={keyboardType}
             autoCapitalize={autoCapitalize}
             autoCorrect={autoCorrect}
+            className={`text-gray-900 flex-1 p-4 text-base ${leftIcon ? 'pl-12' : ''} ${showPasswordToggle || rightIcon ? 'pr-12' : ''} `}
             editable={editable}
-            testID={testID}
-            returnKeyType={returnKeyType}
-            onSubmitEditing={onSubmitEditing}
+            keyboardType={keyboardType}
             maxLength={maxLength}
+            onBlur={handleBlur}
+            onChangeText={onChangeText}
+            onFocus={handleFocus}
+            onSubmitEditing={onSubmitEditing}
+            placeholder={placeholder}
+            placeholderTextColor={hasError ? '#ef4444' : '#9ca3af'}
+            ref={ref}
+            returnKeyType={returnKeyType}
+            secureTextEntry={secureTextEntry && !isPasswordVisible}
             selectionColor="#3b82f6"
+            testID={testID}
+            value={value}
           />
 
           {(showPasswordToggle || rightIcon) && (
@@ -134,6 +134,7 @@ const Input = forwardRef<TextInput, InputProps>(
               }
             >
               <Ionicons
+                color={hasError ? '#ef4444' : isFocused ? '#3b82f6' : '#6b7280'}
                 name={
                   showPasswordToggle
                     ? isPasswordVisible
@@ -142,7 +143,6 @@ const Input = forwardRef<TextInput, InputProps>(
                     : rightIcon!
                 }
                 size={20}
-                color={hasError ? '#ef4444' : isFocused ? '#3b82f6' : '#6b7280'}
               />
             </TouchableOpacity>
           )}
@@ -150,7 +150,7 @@ const Input = forwardRef<TextInput, InputProps>(
 
         {error && (
           <View className="mt-1 flex-row items-center">
-            <Ionicons name="alert-circle" size={16} color="#ef4444" />
+            <Ionicons color="#ef4444" name="alert-circle" size={16} />
             <Text
               className="text-red-600 ml-1 text-sm"
               testID={`${testID}-error`}

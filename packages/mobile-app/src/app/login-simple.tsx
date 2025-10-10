@@ -14,7 +14,7 @@ import useViewerContext from 'src/user/useViewerContext.tsx';
 
 export default function Login() {
   const router = useRouter();
-  const { login, register, isLoading, authError, isAuthenticated } =
+  const { authError, isAuthenticated, isLoading, login, register } =
     useViewerContext();
 
   const [isRegistering, setIsRegistering] = useState(false);
@@ -36,7 +36,7 @@ export default function Login() {
 
     const loginData: LoginData = {
       email: email.trim(),
-      password: password,
+      password,
     };
 
     const result = await login(loginData);
@@ -58,9 +58,9 @@ export default function Login() {
     }
 
     const registrationData: RegistrationData = {
+      confirmPassword,
       email: email.trim(),
-      password: password,
-      confirmPassword: confirmPassword,
+      password,
     };
 
     const result = await register(registrationData);
@@ -71,13 +71,13 @@ export default function Login() {
         result.message || 'Please check your email to confirm your account',
         [
           {
-            text: 'OK',
             onPress: () => {
               setIsRegistering(false);
               setEmail('');
               setPassword('');
               setConfirmPassword('');
             },
+            text: 'OK',
           },
         ],
       );
@@ -118,14 +118,14 @@ export default function Login() {
               <fbt desc="Email label">Email</fbt>
             </Text>
             <TextInput
-              className="border-gray-300 w-full rounded-lg border bg-white p-4"
-              placeholder="Enter your email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              className="border-gray-300 w-full rounded-lg border bg-white p-4"
               editable={!isLoading}
+              keyboardType="email-address"
+              onChangeText={setEmail}
+              placeholder="Enter your email"
+              value={email}
             />
           </View>
 
@@ -134,14 +134,14 @@ export default function Login() {
               <fbt desc="Password label">Password</fbt>
             </Text>
             <TextInput
-              className="border-gray-300 w-full rounded-lg border bg-white p-4"
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
               autoCapitalize="none"
               autoCorrect={false}
+              className="border-gray-300 w-full rounded-lg border bg-white p-4"
               editable={!isLoading}
+              onChangeText={setPassword}
+              placeholder="Enter your password"
+              secureTextEntry
+              value={password}
             />
           </View>
 
@@ -151,14 +151,14 @@ export default function Login() {
                 <fbt desc="Confirm password label">Confirm Password</fbt>
               </Text>
               <TextInput
-                className="border-gray-300 w-full rounded-lg border bg-white p-4"
-                placeholder="Confirm your password"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
                 autoCapitalize="none"
                 autoCorrect={false}
+                className="border-gray-300 w-full rounded-lg border bg-white p-4"
                 editable={!isLoading}
+                onChangeText={setConfirmPassword}
+                placeholder="Confirm your password"
+                secureTextEntry
+                value={confirmPassword}
               />
             </View>
           )}
@@ -174,8 +174,8 @@ export default function Login() {
           className={`mb-4 w-full rounded-lg p-4 ${
             isLoading ? 'bg-gray-400' : 'bg-blue-600'
           }`}
-          onPress={isRegistering ? handleRegister : handleLogin}
           disabled={isLoading}
+          onPress={isRegistering ? handleRegister : handleLogin}
         >
           {isLoading ? (
             <ActivityIndicator color="white" />
@@ -190,8 +190,8 @@ export default function Login() {
 
         <TouchableOpacity
           className="w-full p-2"
-          onPress={toggleMode}
           disabled={isLoading}
+          onPress={toggleMode}
         >
           <Text className="text-blue-600 text-center">
             <fbt desc="Toggle auth mode">

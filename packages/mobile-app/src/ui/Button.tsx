@@ -23,26 +23,26 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends Omit<TouchableOpacityProps, 'children'> {
   children: React.ReactNode;
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  loading?: boolean;
   disabled?: boolean;
-  leftIcon?: keyof typeof Ionicons.glyphMap;
-  rightIcon?: keyof typeof Ionicons.glyphMap;
   fullWidth?: boolean;
+  leftIcon?: keyof typeof Ionicons.glyphMap;
+  loading?: boolean;
+  rightIcon?: keyof typeof Ionicons.glyphMap;
+  size?: ButtonSize;
+  variant?: ButtonVariant;
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  variant = 'primary',
-  size = 'md',
-  loading = false,
-  disabled = false,
-  leftIcon,
-  rightIcon,
-  fullWidth = false,
   className = '',
+  disabled = false,
+  fullWidth = false,
+  leftIcon,
+  loading = false,
+  rightIcon,
+  size = 'md',
   testID,
+  variant = 'primary',
   ...props
 }) => {
   const isDisabled = disabled || loading;
@@ -52,41 +52,41 @@ const Button: React.FC<ButtonProps> = ({
 
   // Size styles
   const sizeStyles = {
-    sm: 'px-3 py-2',
-    md: 'px-4 py-3',
     lg: 'px-6 py-4',
+    md: 'px-4 py-3',
+    sm: 'px-3 py-2',
   };
 
   // Variant styles
   const variantStyles = {
-    primary: isDisabled ? 'bg-gray-300' : 'bg-blue-600 active:bg-blue-700',
-    secondary: isDisabled ? 'bg-gray-300' : 'bg-gray-600 active:bg-gray-700',
+    danger: isDisabled ? 'bg-gray-300' : 'bg-red-600 active:bg-red-700',
+    ghost: isDisabled ? 'bg-transparent' : 'bg-transparent active:bg-gray-100',
     outline: isDisabled
       ? 'border border-gray-300 bg-white'
       : 'border border-blue-600 bg-white active:bg-blue-50',
-    ghost: isDisabled ? 'bg-transparent' : 'bg-transparent active:bg-gray-100',
-    danger: isDisabled ? 'bg-gray-300' : 'bg-red-600 active:bg-red-700',
+    primary: isDisabled ? 'bg-gray-300' : 'bg-blue-600 active:bg-blue-700',
+    secondary: isDisabled ? 'bg-gray-300' : 'bg-gray-600 active:bg-gray-700',
   };
 
   // Text color styles
   const textColorStyles = {
+    danger: isDisabled ? 'text-gray-500' : 'text-white',
+    ghost: isDisabled ? 'text-gray-400' : 'text-gray-700',
+    outline: isDisabled ? 'text-gray-400' : 'text-blue-600',
     primary: isDisabled ? 'text-gray-500' : 'text-white',
     secondary: isDisabled ? 'text-gray-500' : 'text-white',
-    outline: isDisabled ? 'text-gray-400' : 'text-blue-600',
-    ghost: isDisabled ? 'text-gray-400' : 'text-gray-700',
-    danger: isDisabled ? 'text-gray-500' : 'text-white',
   };
 
   // Text size styles
   const textSizeStyles = {
-    sm: 'text-sm',
-    md: 'text-base',
     lg: 'text-lg',
+    md: 'text-base',
+    sm: 'text-sm',
   };
 
   // Icon color
   const getIconColor = () => {
-    if (isDisabled) return '#9ca3af';
+    if (isDisabled) {return '#9ca3af';}
 
     switch (variant) {
       case 'primary':
@@ -135,17 +135,17 @@ const Button: React.FC<ButtonProps> = ({
     >
       {loading ? (
         <ActivityIndicator
-          size="small"
           color={getIconColor()}
+          size="small"
           testID={`${testID}-loading`}
         />
       ) : (
         <>
           {leftIcon && !loading && (
             <Ionicons
+              color={getIconColor()}
               name={leftIcon}
               size={getIconSize()}
-              color={getIconColor()}
               style={{ marginRight: 8 }}
             />
           )}
@@ -159,9 +159,9 @@ const Button: React.FC<ButtonProps> = ({
 
           {rightIcon && !loading && (
             <Ionicons
+              color={getIconColor()}
               name={rightIcon}
               size={getIconSize()}
-              color={getIconColor()}
               style={{ marginLeft: 8 }}
             />
           )}

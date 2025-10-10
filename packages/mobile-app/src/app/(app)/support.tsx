@@ -8,28 +8,28 @@ import Text from 'src/ui/Text.tsx';
 
 const supportOptions = [
   {
+    action: () => Linking.openURL('mailto:support@clientsync.com'),
+    description: 'Get help via email',
     icon: 'mail',
     title: 'Email Support',
-    description: 'Get help via email',
-    action: () => Linking.openURL('mailto:support@clientsync.com'),
   },
   {
+    action: () => console.log('Open live chat'),
+    description: 'Chat with our support team',
     icon: 'chatbubble',
     title: 'Live Chat',
-    description: 'Chat with our support team',
-    action: () => console.log('Open live chat'),
   },
   {
+    action: () => Linking.openURL('tel:+1-800-SUPPORT'),
+    description: 'Call our support line',
     icon: 'call',
     title: 'Phone Support',
-    description: 'Call our support line',
-    action: () => Linking.openURL('tel:+1-800-SUPPORT'),
   },
   {
+    action: () => console.log('Open FAQ'),
+    description: 'Find answers to common questions',
     icon: 'help-circle',
     title: 'FAQ',
-    description: 'Find answers to common questions',
-    action: () => console.log('Open FAQ'),
   },
 ];
 
@@ -42,13 +42,13 @@ export default function SupportModal() {
     <>
       <Stack.Screen
         options={{
-          title: String(fbs('Support', 'Support modal title')),
           headerLeft: () => (
-            <Pressable onPress={handleClose} className="p-2">
-              <Ionicons name="close" size={24} color={colors.black} />
+            <Pressable className="p-2" onPress={handleClose}>
+              <Ionicons color={colors.black} name="close" size={24} />
             </Pressable>
           ),
           presentation: 'modal',
+          title: String(fbs('Support', 'Support modal title')),
         }}
       />
 
@@ -66,15 +66,15 @@ export default function SupportModal() {
 
             {supportOptions.map((option, index) => (
               <Pressable
+                className="border-gray-200 mb-3 flex-row items-center rounded-lg border p-3"
                 key={index}
                 onPress={option.action}
-                className="border-gray-200 mb-3 flex-row items-center rounded-lg border p-3"
               >
                 <View className="bg-purple-100 mr-3 h-10 w-10 items-center justify-center rounded-full">
                   <Ionicons
+                    color={colors.purple}
                     name={option.icon as any}
                     size={20}
-                    color={colors.purple}
                   />
                 </View>
                 <View className="flex-1">
@@ -86,9 +86,9 @@ export default function SupportModal() {
                   </Text>
                 </View>
                 <Ionicons
+                  color={colors.black}
                   name="chevron-forward"
                   size={16}
-                  color={colors.black}
                 />
               </Pressable>
             ))}

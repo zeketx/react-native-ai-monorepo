@@ -7,56 +7,56 @@ import Text from 'src/ui/Text.tsx';
 // Mock data for trip details
 const mockTripDetails = {
   '1': {
-    id: '1',
-    title: 'Business Trip to Tokyo',
-    destination: 'Tokyo, Japan',
-    startDate: '2024-07-15',
-    endDate: '2024-07-20',
-    status: 'upcoming',
-    description:
-      'Important business meetings with key clients and potential partners.',
-    hotel: 'Hotel Okura Tokyo',
-    flight: 'AA 123 - Departure: 2024-07-15 10:00 AM',
     activities: [
       'Client meeting at Tokyo HQ',
       'Product demonstration',
       'Team dinner at Ginza',
       'Sightseeing at Senso-ji Temple',
     ],
+    description:
+      'Important business meetings with key clients and potential partners.',
+    destination: 'Tokyo, Japan',
+    endDate: '2024-07-20',
+    flight: 'AA 123 - Departure: 2024-07-15 10:00 AM',
+    hotel: 'Hotel Okura Tokyo',
+    id: '1',
+    startDate: '2024-07-15',
+    status: 'upcoming',
+    title: 'Business Trip to Tokyo',
   },
   '2': {
-    id: '2',
-    title: 'Client Meeting in New York',
-    destination: 'New York, USA',
-    startDate: '2024-06-01',
-    endDate: '2024-06-05',
-    status: 'completed',
-    description: 'Quarterly business review with major client.',
-    hotel: 'The Plaza Hotel',
-    flight: 'UA 456 - Departure: 2024-06-01 8:00 AM',
     activities: [
       'QBR presentation',
       'Contract renewal discussion',
       'Broadway show',
       'Central Park visit',
     ],
+    description: 'Quarterly business review with major client.',
+    destination: 'New York, USA',
+    endDate: '2024-06-05',
+    flight: 'UA 456 - Departure: 2024-06-01 8:00 AM',
+    hotel: 'The Plaza Hotel',
+    id: '2',
+    startDate: '2024-06-01',
+    status: 'completed',
+    title: 'Client Meeting in New York',
   },
   '3': {
-    id: '3',
-    title: 'Conference in London',
-    destination: 'London, UK',
-    startDate: '2024-08-10',
-    endDate: '2024-08-15',
-    status: 'planning',
-    description: 'Annual tech conference with industry leaders.',
-    hotel: 'The Savoy London',
-    flight: 'BA 789 - Departure: 2024-08-10 2:00 PM',
     activities: [
       'Opening keynote',
       'Panel discussion',
       'Networking events',
       'Tower Bridge visit',
     ],
+    description: 'Annual tech conference with industry leaders.',
+    destination: 'London, UK',
+    endDate: '2024-08-15',
+    flight: 'BA 789 - Departure: 2024-08-10 2:00 PM',
+    hotel: 'The Savoy London',
+    id: '3',
+    startDate: '2024-08-10',
+    status: 'planning',
+    title: 'Conference in London',
   },
 };
 
@@ -93,7 +93,7 @@ export default function TripDetailsScreen() {
   if (!trip) {
     return (
       <View className="bg-gray-50 flex-1 items-center justify-center">
-        <Ionicons name="alert-circle" size={64} color={colors.black} />
+        <Ionicons color={colors.black} name="alert-circle" size={64} />
         <Text className="text-gray-900 mt-4 text-lg font-medium">
           <fbt desc="Trip not found">Trip not found</fbt>
         </Text>
@@ -105,16 +105,16 @@ export default function TripDetailsScreen() {
     <>
       <Stack.Screen
         options={{
-          title: trip.title,
           headerRight: () => (
             <Pressable className="mr-2 p-2">
               <Ionicons
+                color={colors.purple}
                 name="ellipsis-horizontal"
                 size={24}
-                color={colors.purple}
               />
             </Pressable>
           ),
+          title: trip.title,
         }}
       />
 
@@ -128,9 +128,9 @@ export default function TripDetailsScreen() {
               </Text>
               <View className="flex-row items-center">
                 <Ionicons
+                  color={getStatusColor(trip.status)}
                   name={getStatusIcon(trip.status)}
                   size={20}
-                  color={getStatusColor(trip.status)}
                 />
                 <Text
                   className="ml-2 text-sm font-medium"
@@ -142,7 +142,7 @@ export default function TripDetailsScreen() {
             </View>
 
             <View className="mb-2 flex-row items-center">
-              <Ionicons name="location" size={18} color={colors.black} />
+              <Ionicons color={colors.black} name="location" size={18} />
               <Text className="text-gray-700 ml-2 text-base">
                 {trip.destination}
               </Text>
@@ -150,9 +150,9 @@ export default function TripDetailsScreen() {
 
             <View className="mb-3 flex-row items-center">
               <Ionicons
+                color={colors.black}
                 name="calendar-outline"
                 size={18}
-                color={colors.black}
               />
               <Text className="text-gray-700 ml-2 text-base">
                 {trip.startDate} - {trip.endDate}
@@ -165,7 +165,7 @@ export default function TripDetailsScreen() {
           {/* Flight Info */}
           <View className="mb-4 rounded-lg bg-white p-4">
             <View className="mb-3 flex-row items-center">
-              <Ionicons name="airplane" size={20} color={colors.purple} />
+              <Ionicons color={colors.purple} name="airplane" size={20} />
               <Text className="text-gray-900 ml-2 text-lg font-semibold">
                 <fbt desc="Flight info">Flight</fbt>
               </Text>
@@ -176,7 +176,7 @@ export default function TripDetailsScreen() {
           {/* Hotel Info */}
           <View className="mb-4 rounded-lg bg-white p-4">
             <View className="mb-3 flex-row items-center">
-              <Ionicons name="bed" size={20} color={colors.purple} />
+              <Ionicons color={colors.purple} name="bed" size={20} />
               <Text className="text-gray-900 ml-2 text-lg font-semibold">
                 <fbt desc="Hotel info">Hotel</fbt>
               </Text>
@@ -188,12 +188,12 @@ export default function TripDetailsScreen() {
           <View className="mb-4 rounded-lg bg-white p-4">
             <View className="mb-3 flex-row items-center justify-between">
               <View className="flex-row items-center">
-                <Ionicons name="list" size={20} color={colors.purple} />
+                <Ionicons color={colors.purple} name="list" size={20} />
                 <Text className="text-gray-900 ml-2 text-lg font-semibold">
                   <fbt desc="Activities">Activities</fbt>
                 </Text>
               </View>
-              <Link href={`/(app)/(tabs)/trips/${id}/itinerary`} asChild>
+              <Link asChild href={`/(app)/(tabs)/trips/${id}/itinerary`}>
                 <Pressable>
                   <Text className="text-purple-600 font-medium">
                     <fbt desc="View itinerary">View Itinerary</fbt>
@@ -203,11 +203,11 @@ export default function TripDetailsScreen() {
             </View>
 
             {trip.activities.map((activity, index) => (
-              <View key={index} className="mb-2 flex-row items-center">
+              <View className="mb-2 flex-row items-center" key={index}>
                 <Ionicons
+                  color={colors.black}
                   name="checkmark-circle-outline"
                   size={16}
-                  color={colors.black}
                 />
                 <Text className="text-gray-700 ml-2">{activity}</Text>
               </View>

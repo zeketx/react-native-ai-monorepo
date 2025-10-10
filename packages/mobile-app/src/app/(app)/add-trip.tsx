@@ -22,20 +22,20 @@ export default function AddTripModal() {
     <>
       <Stack.Screen
         options={{
-          title: String(fbs('Add Trip', 'Add trip modal title')),
           headerLeft: () => (
-            <Pressable onPress={handleClose} className="p-2">
-              <Ionicons name="close" size={24} color={colors.black} />
+            <Pressable className="p-2" onPress={handleClose}>
+              <Ionicons color={colors.black} name="close" size={24} />
             </Pressable>
           ),
           headerRight: () => (
-            <Pressable onPress={handleSave} className="p-2">
+            <Pressable className="p-2" onPress={handleSave}>
               <Text className="text-purple-600 font-medium">
                 <fbs desc="Save button">Save</fbs>
               </Text>
             </Pressable>
           ),
           presentation: 'modal',
+          title: String(fbs('Add Trip', 'Add trip modal title')),
         }}
       />
 

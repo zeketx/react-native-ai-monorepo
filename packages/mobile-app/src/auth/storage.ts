@@ -11,10 +11,10 @@ import type { AuthSession, AuthUser } from './index.js';
 // Storage keys
 const STORAGE_KEYS = {
   ACCESS_TOKEN: 'clientsync_access_token',
-  REFRESH_TOKEN: 'clientsync_refresh_token',
-  USER_DATA: 'clientsync_user_data',
-  TOKEN_EXPIRY: 'clientsync_token_expiry',
   BIOMETRIC_PREFERENCES: 'clientsync_biometric_prefs',
+  REFRESH_TOKEN: 'clientsync_refresh_token',
+  TOKEN_EXPIRY: 'clientsync_token_expiry',
+  USER_DATA: 'clientsync_user_data',
 } as const;
 
 // Storage options for SecureStore
@@ -24,15 +24,15 @@ const STORAGE_OPTIONS: SecureStore.SecureStoreOptions = {
 };
 
 export interface StoredAuthData {
-  user: AuthUser;
   session: AuthSession;
+  user: AuthUser;
 }
 
 export interface BiometricPreferences {
   enabled: boolean;
-  promptTitle?: string;
-  promptSubtitle?: string;
   fallbackLabel?: string;
+  promptSubtitle?: string;
+  promptTitle?: string;
 }
 
 /**
@@ -101,12 +101,12 @@ export class SecureTokenStorage {
       const expiresAt = new Date(expiryStr);
 
       const session: AuthSession = {
-        token: accessToken,
-        refreshToken: refreshToken || undefined,
         expiresAt,
+        refreshToken: refreshToken || undefined,
+        token: accessToken,
       };
 
-      return { user, session };
+      return { session, user };
     } catch (error) {
       console.error('❌ Failed to retrieve auth data:', error);
       return null;

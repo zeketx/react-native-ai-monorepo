@@ -19,13 +19,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import biometricAuthService from 'src/auth/biometric.js';
+import biometricAuthService from 'src/auth/biometric';
 // Auth
 import type {
   LoginFormData,
   RegistrationFormData,
-} from 'src/auth/validation.js';
-import { loginSchema, registrationSchema } from 'src/auth/validation.js';
+} from 'src/auth/validation';
+import { loginSchema, registrationSchema } from 'src/auth/validation';
 // UI Components
 import Alert from 'src/ui/Alert.tsx';
 import Button from 'src/ui/Button.tsx';
@@ -38,45 +38,45 @@ type FormMode = 'login' | 'register' | 'forgotPassword';
 
 export default function EnhancedLogin() {
   const router = useRouter();
-  const { login, register, isLoading, authError, isAuthenticated } =
+  const { authError, isAuthenticated, isLoading, login, register } =
     useViewerContext();
 
   const [formMode, setFormMode] = useState<FormMode>('login');
   const [showBiometricOption, setShowBiometricOption] = useState(false);
   const [biometricType, setBiometricType] = useState<string>('Biometric');
   const [alertMessage, setAlertMessage] = useState<{
-    variant: 'success' | 'error' | 'warning' | 'info';
     message: string;
+    variant: 'success' | 'error' | 'warning' | 'info';
   } | null>(null);
 
   // Login form
   const loginForm = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
       rememberMe: false,
     },
+    resolver: zodResolver(loginSchema),
   });
 
   // Registration form
   const registrationForm = useForm<RegistrationFormData>({
-    resolver: zodResolver(registrationSchema),
     defaultValues: {
+      confirmPassword: '',
+      email: '',
       firstName: '',
       lastName: '',
-      email: '',
       password: '',
-      confirmPassword: '',
     },
+    resolver: zodResolver(registrationSchema),
   });
 
   // Forgot password form
   const forgotPasswordForm = useForm<{ email: string }>({
-    resolver: zodResolver(loginSchema.pick({ email: true })),
     defaultValues: {
       email: '',
     },
+    resolver: zodResolver(loginSchema.pick({ email: true })),
   });
 
   // Redirect if already authenticated
@@ -125,20 +125,20 @@ export default function EnhancedLogin() {
         // This would typically involve retrieving stored credentials
         // For now, we'll show a success message
         setAlertMessage({
-          variant: 'success',
           message:
             'Biometric authentication successful! Please complete login.',
+          variant: 'success',
         });
       } else if (result.errorCode !== 'USER_CANCEL') {
         setAlertMessage({
-          variant: 'error',
           message: result.error || 'Biometric authentication failed',
+          variant: 'error',
         });
       }
-    } catch (error) {
+    } catch {
       setAlertMessage({
-        variant: 'error',
         message: 'Biometric authentication error',
+        variant: 'error',
       });
     }
   }, []);
@@ -165,19 +165,19 @@ export default function EnhancedLogin() {
           }
 
           setAlertMessage({
-            variant: 'success',
             message: 'Login successful! Redirecting...',
+            variant: 'success',
           });
         } else {
           setAlertMessage({
-            variant: 'error',
             message: result.error || 'Login failed',
+            variant: 'error',
           });
         }
-      } catch (error) {
+      } catch {
         setAlertMessage({
-          variant: 'error',
           message: 'An unexpected error occurred',
+          variant: 'error',
         });
       }
     },
@@ -191,19 +191,19 @@ export default function EnhancedLogin() {
         setAlertMessage(null);
 
         const result = await register({
-          email: data.email,
-          password: data.password,
           confirmPassword: data.confirmPassword,
+          email: data.email,
           firstName: data.firstName,
           lastName: data.lastName,
+          password: data.password,
         });
 
         if (result.success) {
           setAlertMessage({
-            variant: 'success',
             message:
               result.message ||
               'Registration successful! Please check your email to verify your account.',
+            variant: 'success',
           });
 
           // Switch to login form after successful registration
@@ -213,14 +213,14 @@ export default function EnhancedLogin() {
           }, 3000);
         } else {
           setAlertMessage({
-            variant: 'error',
             message: result.error || 'Registration failed',
+            variant: 'error',
           });
         }
-      } catch (error) {
+      } catch {
         setAlertMessage({
-          variant: 'error',
           message: 'An unexpected error occurred',
+          variant: 'error',
         });
       }
     },
@@ -241,10 +241,10 @@ export default function EnhancedLogin() {
 
         if (result.success) {
           setAlertMessage({
-            variant: 'success',
             message:
               result.message ||
               'If an account with this email exists, a password reset link has been sent.',
+            variant: 'success',
           });
 
           // Switch back to login after showing message
@@ -254,14 +254,14 @@ export default function EnhancedLogin() {
           }, 3000);
         } else {
           setAlertMessage({
-            variant: 'error',
             message: result.error || 'Failed to send password reset email',
+            variant: 'error',
           });
         }
-      } catch (error) {
+      } catch {
         setAlertMessage({
-          variant: 'error',
           message: 'An unexpected error occurred while sending the reset email',
+          variant: 'error',
         });
       }
     },
@@ -275,21 +275,21 @@ export default function EnhancedLogin() {
         control={loginForm.control}
         name="email"
         render={({
-          field: { onChange, onBlur, value },
+          field: { onBlur, onChange, value },
           fieldState: { error },
         }) => (
           <Input
-            label="Email Address"
-            placeholder="Enter your email"
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            keyboardType="email-address"
-            leftIcon="mail"
             error={error?.message}
-            testID="login-email-input"
-            returnKeyType="next"
+            keyboardType="email-address"
+            label="Email Address"
+            leftIcon="mail"
+            onBlur={onBlur}
+            onChangeText={onChange}
             onSubmitEditing={() => loginForm.setFocus('password')}
+            placeholder="Enter your email"
+            returnKeyType="next"
+            testID="login-email-input"
+            value={value}
           />
         )}
       />
@@ -298,21 +298,21 @@ export default function EnhancedLogin() {
         control={loginForm.control}
         name="password"
         render={({
-          field: { onChange, onBlur, value },
+          field: { onBlur, onChange, value },
           fieldState: { error },
         }) => (
           <Input
-            label="Password"
-            placeholder="Enter your password"
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            secureTextEntry
-            leftIcon="lock-closed"
             error={error?.message}
-            testID="login-password-input"
-            returnKeyType="go"
+            label="Password"
+            leftIcon="lock-closed"
+            onBlur={onBlur}
+            onChangeText={onChange}
             onSubmitEditing={loginForm.handleSubmit(handleLogin)}
+            placeholder="Enter your password"
+            returnKeyType="go"
+            secureTextEntry
+            testID="login-password-input"
+            value={value}
           />
         )}
       />
@@ -322,8 +322,8 @@ export default function EnhancedLogin() {
         name="rememberMe"
         render={({ field: { onChange, value } }) => (
           <Checkbox
-            label="Remember me and enable biometric login"
             checked={value || false}
+            label="Remember me and enable biometric login"
             onPress={() => onChange(!value)}
             testID="login-remember-checkbox"
           />
@@ -331,9 +331,9 @@ export default function EnhancedLogin() {
       />
 
       <Button
-        onPress={loginForm.handleSubmit(handleLogin)}
-        loading={isLoading}
         fullWidth
+        loading={isLoading}
+        onPress={loginForm.handleSubmit(handleLogin)}
         testID="login-submit-button"
       >
         Sign In
@@ -341,12 +341,12 @@ export default function EnhancedLogin() {
 
       {showBiometricOption && (
         <Button
-          variant="outline"
+          className="mt-3"
+          fullWidth
           leftIcon="finger-print"
           onPress={handleBiometricLogin}
-          fullWidth
           testID="biometric-login-button"
-          className="mt-3"
+          variant="outline"
         >
           Use {biometricType}
         </Button>
@@ -379,20 +379,20 @@ export default function EnhancedLogin() {
             control={registrationForm.control}
             name="firstName"
             render={({
-              field: { onChange, onBlur, value },
+              field: { onBlur, onChange, value },
               fieldState: { error },
             }) => (
               <Input
-                label="First Name"
-                placeholder="First name"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                leftIcon="person"
                 error={error?.message}
-                testID="register-firstname-input"
-                returnKeyType="next"
+                label="First Name"
+                leftIcon="person"
+                onBlur={onBlur}
+                onChangeText={onChange}
                 onSubmitEditing={() => registrationForm.setFocus('lastName')}
+                placeholder="First name"
+                returnKeyType="next"
+                testID="register-firstname-input"
+                value={value}
               />
             )}
           />
@@ -403,20 +403,20 @@ export default function EnhancedLogin() {
             control={registrationForm.control}
             name="lastName"
             render={({
-              field: { onChange, onBlur, value },
+              field: { onBlur, onChange, value },
               fieldState: { error },
             }) => (
               <Input
-                label="Last Name"
-                placeholder="Last name"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                leftIcon="person"
                 error={error?.message}
-                testID="register-lastname-input"
-                returnKeyType="next"
+                label="Last Name"
+                leftIcon="person"
+                onBlur={onBlur}
+                onChangeText={onChange}
                 onSubmitEditing={() => registrationForm.setFocus('email')}
+                placeholder="Last name"
+                returnKeyType="next"
+                testID="register-lastname-input"
+                value={value}
               />
             )}
           />
@@ -427,21 +427,21 @@ export default function EnhancedLogin() {
         control={registrationForm.control}
         name="email"
         render={({
-          field: { onChange, onBlur, value },
+          field: { onBlur, onChange, value },
           fieldState: { error },
         }) => (
           <Input
-            label="Email Address"
-            placeholder="Enter your email"
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            keyboardType="email-address"
-            leftIcon="mail"
             error={error?.message}
-            testID="register-email-input"
-            returnKeyType="next"
+            keyboardType="email-address"
+            label="Email Address"
+            leftIcon="mail"
+            onBlur={onBlur}
+            onChangeText={onChange}
             onSubmitEditing={() => registrationForm.setFocus('password')}
+            placeholder="Enter your email"
+            returnKeyType="next"
+            testID="register-email-input"
+            value={value}
           />
         )}
       />
@@ -450,21 +450,21 @@ export default function EnhancedLogin() {
         control={registrationForm.control}
         name="password"
         render={({
-          field: { onChange, onBlur, value },
+          field: { onBlur, onChange, value },
           fieldState: { error },
         }) => (
           <Input
-            label="Password"
-            placeholder="Create a password"
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            secureTextEntry
-            leftIcon="lock-closed"
             error={error?.message}
-            testID="register-password-input"
-            returnKeyType="next"
+            label="Password"
+            leftIcon="lock-closed"
+            onBlur={onBlur}
+            onChangeText={onChange}
             onSubmitEditing={() => registrationForm.setFocus('confirmPassword')}
+            placeholder="Create a password"
+            returnKeyType="next"
+            secureTextEntry
+            testID="register-password-input"
+            value={value}
           />
         )}
       />
@@ -473,37 +473,37 @@ export default function EnhancedLogin() {
         control={registrationForm.control}
         name="confirmPassword"
         render={({
-          field: { onChange, onBlur, value },
+          field: { onBlur, onChange, value },
           fieldState: { error },
         }) => (
           <Input
-            label="Confirm Password"
-            placeholder="Confirm your password"
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            secureTextEntry
-            leftIcon="lock-closed"
             error={error?.message}
-            testID="register-confirm-password-input"
-            returnKeyType="go"
+            label="Confirm Password"
+            leftIcon="lock-closed"
+            onBlur={onBlur}
+            onChangeText={onChange}
             onSubmitEditing={registrationForm.handleSubmit(handleRegistration)}
+            placeholder="Confirm your password"
+            returnKeyType="go"
+            secureTextEntry
+            testID="register-confirm-password-input"
+            value={value}
           />
         )}
       />
 
       <Button
-        onPress={registrationForm.handleSubmit(handleRegistration)}
-        loading={isLoading}
         fullWidth
+        loading={isLoading}
+        onPress={registrationForm.handleSubmit(handleRegistration)}
         testID="register-submit-button"
       >
         Create Account
       </Button>
 
       <TouchableOpacity
-        onPress={() => setFormMode('login')}
         className="mt-4"
+        onPress={() => setFormMode('login')}
         testID="switch-to-login-link"
       >
         <Text className="text-blue-600 text-center text-sm">
@@ -520,39 +520,39 @@ export default function EnhancedLogin() {
         control={forgotPasswordForm.control}
         name="email"
         render={({
-          field: { onChange, onBlur, value },
+          field: { onBlur, onChange, value },
           fieldState: { error },
         }) => (
           <Input
-            label="Email Address"
-            placeholder="Enter your email"
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            keyboardType="email-address"
-            leftIcon="mail"
             error={error?.message}
-            testID="forgot-password-email-input"
-            returnKeyType="go"
+            keyboardType="email-address"
+            label="Email Address"
+            leftIcon="mail"
+            onBlur={onBlur}
+            onChangeText={onChange}
             onSubmitEditing={forgotPasswordForm.handleSubmit(
               handleForgotPassword,
             )}
+            placeholder="Enter your email"
+            returnKeyType="go"
+            testID="forgot-password-email-input"
+            value={value}
           />
         )}
       />
 
       <Button
-        onPress={forgotPasswordForm.handleSubmit(handleForgotPassword)}
-        loading={isLoading}
         fullWidth
+        loading={isLoading}
+        onPress={forgotPasswordForm.handleSubmit(handleForgotPassword)}
         testID="forgot-password-submit-button"
       >
         Send Reset Link
       </Button>
 
       <TouchableOpacity
-        onPress={() => setFormMode('login')}
         className="mt-4"
+        onPress={() => setFormMode('login')}
         testID="back-to-login-link"
       >
         <Text className="text-blue-600 text-center text-sm">
@@ -592,7 +592,7 @@ export default function EnhancedLogin() {
     return (
       <SafeAreaView className="flex-1 bg-white">
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#3b82f6" />
+          <ActivityIndicator color="#3b82f6" size="large" />
           <Text className="text-gray-600 mt-4">Redirecting...</Text>
         </View>
       </SafeAreaView>
@@ -613,7 +613,7 @@ export default function EnhancedLogin() {
           <View className="flex-1 justify-center p-6">
             {/* Header */}
             <View className="mb-8 items-center">
-              <Ionicons name="shield-checkmark" size={64} color="#3b82f6" />
+              <Ionicons color="#3b82f6" name="shield-checkmark" size={64} />
 
               <Text className="text-gray-900 mb-2 mt-4 text-center text-3xl font-bold">
                 ClientSync
@@ -631,20 +631,20 @@ export default function EnhancedLogin() {
             {/* Alert Messages */}
             {alertMessage && (
               <Alert
-                variant={alertMessage.variant}
-                message={alertMessage.message}
                 dismissible
+                message={alertMessage.message}
                 onDismiss={() => setAlertMessage(null)}
                 testID="login-alert"
+                variant={alertMessage.variant}
               />
             )}
 
             {/* Auth Error from Context */}
             {authError && !alertMessage && (
               <Alert
-                variant="error"
                 message={authError}
                 testID="auth-error-alert"
+                variant="error"
               />
             )}
 

@@ -17,83 +17,83 @@ import { SecureTokenStorage } from './storage.js';
 // API Configuration
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_CMS_API_URL || 'http://localhost:3001/api';
-const API_TIMEOUT = parseInt(
+const API_TIMEOUT = Number.parseInt(
   process.env.EXPO_PUBLIC_API_TIMEOUT || '30000',
   10,
 );
 
 export interface AuthService {
-  login(data: LoginData): Promise<{
-    success: boolean;
+  getCurrentUser(): Promise<{
     error?: string;
+    success: boolean;
     user?: AuthUser;
+  }>;
+  // Compatibility aliases for old Supabase-style API
+  getSession(): Promise<{
+    error?: string;
+    session: { user: AuthUser } | null;
+  }>;
+  initializeFromStorage(): Promise<{
     session?: AuthSession;
+    success: boolean;
+    user?: AuthUser;
+  }>;
+  isAuthenticated(): Promise<boolean>;
+  login(data: LoginData): Promise<{
+    error?: string;
+    session?: AuthSession;
+    success: boolean;
+    user?: AuthUser;
+  }>;
+  logout(): Promise<{ error?: string; success: boolean; }>;
+  onAuthStateChange(
+    callback: (event: { session?: AuthSession; user?: AuthUser }) => void,
+  ): () => void;
+  refreshToken(): Promise<{
+    error?: string;
+    session?: AuthSession;
+    success: boolean;
+    user?: AuthUser;
   }>;
   register(
     data: RegistrationData,
-  ): Promise<{ success: boolean; error?: string; message?: string }>;
-  logout(): Promise<{ success: boolean; error?: string }>;
-  getCurrentUser(): Promise<{
-    success: boolean;
-    user?: AuthUser;
-    error?: string;
-  }>;
-  refreshToken(): Promise<{
-    success: boolean;
-    error?: string;
-    user?: AuthUser;
-    session?: AuthSession;
-  }>;
-  initializeFromStorage(): Promise<{
-    success: boolean;
-    user?: AuthUser;
-    session?: AuthSession;
-  }>;
-  isAuthenticated(): Promise<boolean>;
+  ): Promise<{ error?: string; message?: string; success: boolean; }>;
   requestPasswordReset(
     email: string,
-  ): Promise<{ success: boolean; error?: string; message?: string }>;
+  ): Promise<{ error?: string; message?: string; success: boolean; }>;
   resetPassword(
     token: string,
     password: string,
     passwordConfirm: string,
-  ): Promise<{ success: boolean; error?: string; message?: string }>;
-  updateProfile(data: {
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-  }): Promise<{ success: boolean; error?: string; user?: AuthUser }>;
-  updatePreferences(prefs: {
-    language?: string;
-    theme?: 'light' | 'dark';
-    notifications?: {
-      push?: boolean;
-      email?: boolean;
-      sms?: boolean;
-      tripUpdates?: boolean;
-      promotions?: boolean;
-      reminders?: boolean;
-    };
-    location?: boolean;
-  }): Promise<{ success: boolean; error?: string }>;
-  // Compatibility aliases for old Supabase-style API
-  getSession(): Promise<{
-    session: { user: AuthUser } | null;
-    error?: string;
-  }>;
+  ): Promise<{ error?: string; message?: string; success: boolean; }>;
   signIn(data: LoginData): Promise<{
-    user?: AuthUser;
+    error?: string;
     session?: AuthSession;
-    error?: string;
-  }>;
-  signUp(data: RegistrationData): Promise<{
     user?: AuthUser;
-    error?: string;
   }>;
   signOut(): Promise<{ error?: string }>;
-  onAuthStateChange(
-    callback: (event: { session?: AuthSession; user?: AuthUser }) => void,
-  ): () => void;
+  signUp(data: RegistrationData): Promise<{
+    error?: string;
+    user?: AuthUser;
+  }>;
+  updatePreferences(prefs: {
+    language?: string;
+    location?: boolean;
+    notifications?: {
+      email?: boolean;
+      promotions?: boolean;
+      push?: boolean;
+      reminders?: boolean;
+      sms?: boolean;
+      tripUpdates?: boolean;
+    };
+    theme?: 'light' | 'dark';
+  }): Promise<{ error?: string; success: boolean; }>;
+  updateProfile(data: {
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+  }): Promise<{ error?: string; success: boolean; user?: AuthUser }>;
 }
 
 /**
@@ -123,12 +123,12 @@ class PayloadAuthService implements AuthService {
 
       const response = await fetch(url, {
         ...options,
-        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
           ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
           ...options.headers,
         },
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -156,26 +156,26 @@ class PayloadAuthService implements AuthService {
   }
 
   async login(data: LoginData): Promise<{
-    success: boolean;
     error?: string;
-    user?: AuthUser;
     session?: AuthSession;
+    success: boolean;
+    user?: AuthUser;
   }> {
     try {
       const response = await this.makeRequest('/users/login', {
-        method: 'POST',
         body: JSON.stringify({
           email: data.email,
           password: data.password,
         }),
+        method: 'POST',
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         return {
-          success: false,
           error:
             errorData.message || `Login failed with status ${response.status}`,
+          success: false,
         };
       }
 
@@ -183,114 +183,114 @@ class PayloadAuthService implements AuthService {
 
       if (result.user) {
         const user: AuthUser = {
-          id: result.user.id,
           email: result.user.email,
+          emailVerified: result.user.emailVerified || false,
           firstName: result.user.firstName || '',
+          id: result.user.id,
           lastName: result.user.lastName || '',
           role: result.user.role || 'user',
-          emailVerified: result.user.emailVerified || false,
         };
 
         const session: AuthSession = {
-          token: result.token,
-          refreshToken: result.refreshToken,
           expiresAt: result.exp
             ? new Date(result.exp * 1000)
             : new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours
+          refreshToken: result.refreshToken,
+          token: result.token,
         };
 
         // Store auth data securely
-        await SecureTokenStorage.storeAuthData({ user, session });
+        await SecureTokenStorage.storeAuthData({ session, user });
 
-        return { success: true, user, session };
+        return { session, success: true, user };
       }
 
-      return { success: false, error: 'Invalid response from server' };
+      return { error: 'Invalid response from server', success: false };
     } catch (error) {
       console.error('Login error:', error);
       return {
-        success: false,
         error:
           error instanceof Error ? error.message : 'Network error during login',
+        success: false,
       };
     }
   }
 
   async register(
     data: RegistrationData,
-  ): Promise<{ success: boolean; error?: string; message?: string }> {
+  ): Promise<{ error?: string; message?: string; success: boolean; }> {
     try {
       // First, check if email is allowed via allowlist endpoint
       const allowlistResponse = await this.makeRequest(
         '/auth/check-allowlist',
         {
-          method: 'POST',
           body: JSON.stringify({
             email: data.email,
           }),
+          method: 'POST',
         },
       );
 
       if (!allowlistResponse.ok) {
         const allowlistError = await allowlistResponse.json().catch(() => ({}));
         return {
-          success: false,
           error:
             allowlistError.error || 'Email not authorized for registration',
+          success: false,
         };
       }
 
       const allowlistResult = await allowlistResponse.json();
       if (!allowlistResult.success || !allowlistResult.allowed) {
         return {
-          success: false,
           error:
             allowlistResult.error || 'Email not authorized for registration',
+          success: false,
         };
       }
 
       // Proceed with registration if allowlist check passed
       const response = await this.makeRequest('/users', {
-        method: 'POST',
         body: JSON.stringify({
           email: data.email,
-          password: data.password,
-          passwordConfirm: data.confirmPassword,
           firstName: data.firstName || '',
           lastName: data.lastName || '',
+          password: data.password,
+          passwordConfirm: data.confirmPassword,
         }),
+        method: 'POST',
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         return {
-          success: false,
           error:
             errorData.message ||
             `Registration failed with status ${response.status}`,
+          success: false,
         };
       }
 
       await response.json();
 
       return {
-        success: true,
         message:
           'Account created successfully. Please check your email to verify your account.',
+        success: true,
       };
     } catch (error) {
       console.error('Registration error:', error);
       return {
-        success: false,
         error:
           error instanceof Error
             ? error.message
             : 'Network error during registration',
+        success: false,
       };
     }
   }
 
-  async logout(): Promise<{ success: boolean; error?: string }> {
+  async logout(): Promise<{ error?: string; success: boolean; }> {
     try {
       const response = await this.makeRequest('/users/logout', {
         method: 'POST',
@@ -313,9 +313,9 @@ class PayloadAuthService implements AuthService {
   }
 
   async getCurrentUser(): Promise<{
+    error?: string;
     success: boolean;
     user?: AuthUser;
-    error?: string;
   }> {
     try {
       const response = await this.makeAuthenticatedRequest('/users/me');
@@ -326,11 +326,11 @@ class PayloadAuthService implements AuthService {
           await SecureTokenStorage.clearAuthData();
         }
         return {
-          success: false,
           error:
             response.status === 401
               ? 'Not authenticated'
               : 'Failed to get user info',
+          success: false,
         };
       }
 
@@ -338,12 +338,12 @@ class PayloadAuthService implements AuthService {
 
       if (result.user) {
         const user: AuthUser = {
-          id: result.user.id,
           email: result.user.email,
+          emailVerified: result.user.emailVerified || false,
           firstName: result.user.firstName || '',
+          id: result.user.id,
           lastName: result.user.lastName || '',
           role: result.user.role || 'user',
-          emailVerified: result.user.emailVerified || false,
         };
 
         // Update stored user data
@@ -352,21 +352,21 @@ class PayloadAuthService implements AuthService {
         return { success: true, user };
       }
 
-      return { success: false, error: 'Invalid user data' };
+      return { error: 'Invalid user data', success: false };
     } catch (error) {
       console.error('Get current user error:', error);
       return {
-        success: false,
         error: error instanceof Error ? error.message : 'Network error',
+        success: false,
       };
     }
   }
 
   async refreshToken(): Promise<{
-    success: boolean;
     error?: string;
-    user?: AuthUser;
     session?: AuthSession;
+    success: boolean;
+    user?: AuthUser;
   }> {
     try {
       const refreshToken = await SecureTokenStorage.getRefreshToken();
@@ -374,17 +374,17 @@ class PayloadAuthService implements AuthService {
       if (!refreshToken) {
         await SecureTokenStorage.clearAuthData();
         return {
-          success: false,
           error: 'No refresh token available',
+          success: false,
         };
       }
 
       const response = await fetch(`${this.baseUrl}/users/refresh-token`, {
-        method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${refreshToken}`,
+          'Content-Type': 'application/json',
         },
+        method: 'POST',
       });
 
       if (!response.ok) {
@@ -393,8 +393,8 @@ class PayloadAuthService implements AuthService {
           await SecureTokenStorage.clearAuthData();
         }
         return {
-          success: false,
           error: 'Failed to refresh token',
+          success: false,
         };
       }
 
@@ -402,20 +402,20 @@ class PayloadAuthService implements AuthService {
 
       if (result.token && result.user) {
         const user: AuthUser = {
-          id: result.user.id,
           email: result.user.email,
+          emailVerified: result.user.emailVerified || false,
           firstName: result.user.firstName || '',
+          id: result.user.id,
           lastName: result.user.lastName || '',
           role: result.user.role || 'user',
-          emailVerified: result.user.emailVerified || false,
         };
 
         const session: AuthSession = {
-          token: result.token,
-          refreshToken: result.refreshToken || refreshToken, // Keep existing refresh token if not returned
           expiresAt: result.exp
             ? new Date(result.exp * 1000)
             : new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours
+          refreshToken: result.refreshToken || refreshToken, // Keep existing refresh token if not returned
+          token: result.token,
         };
 
         // Update stored tokens
@@ -425,26 +425,26 @@ class PayloadAuthService implements AuthService {
         );
         await SecureTokenStorage.updateStoredUser(user);
 
-        return { success: true, user, session };
+        return { session, success: true, user };
       }
 
-      return { success: false, error: 'Invalid refresh response' };
+      return { error: 'Invalid refresh response', success: false };
     } catch (error) {
       console.error('Token refresh error:', error);
       return {
-        success: false,
         error:
           error instanceof Error
             ? error.message
             : 'Network error during token refresh',
+        success: false,
       };
     }
   }
 
   async initializeFromStorage(): Promise<{
+    session?: AuthSession;
     success: boolean;
     user?: AuthUser;
-    session?: AuthSession;
   }> {
     try {
       const storedAuth = await SecureTokenStorage.getAuthData();
@@ -458,9 +458,9 @@ class PayloadAuthService implements AuthService {
 
       if (isValid) {
         return {
+          session: storedAuth.session,
           success: true,
           user: storedAuth.user,
-          session: storedAuth.session,
         };
       }
 
@@ -473,9 +473,9 @@ class PayloadAuthService implements AuthService {
         refreshResult.session
       ) {
         return {
+          session: refreshResult.session,
           success: true,
           user: refreshResult.user,
-          session: refreshResult.session,
         };
       }
 
@@ -514,39 +514,39 @@ class PayloadAuthService implements AuthService {
 
   async requestPasswordReset(
     email: string,
-  ): Promise<{ success: boolean; error?: string; message?: string }> {
+  ): Promise<{ error?: string; message?: string; success: boolean; }> {
     try {
       const response = await this.makeRequest('/auth/forgot-password', {
-        method: 'POST',
         body: JSON.stringify({
           email: email.toLowerCase(),
         }),
+        method: 'POST',
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         return {
-          success: false,
           error: errorData.error || 'Failed to send password reset email',
+          success: false,
         };
       }
 
       const result = await response.json();
 
       return {
-        success: true,
         message:
           result.message ||
           'If an account with this email exists, a password reset link has been sent.',
+        success: true,
       };
     } catch (error) {
       console.error('Password reset request error:', error);
       return {
-        success: false,
         error:
           error instanceof Error
             ? error.message
             : 'Network error during password reset request',
+        success: false,
       };
     }
   }
@@ -555,70 +555,70 @@ class PayloadAuthService implements AuthService {
     token: string,
     password: string,
     passwordConfirm: string,
-  ): Promise<{ success: boolean; error?: string; message?: string }> {
+  ): Promise<{ error?: string; message?: string; success: boolean; }> {
     try {
       if (password !== passwordConfirm) {
         return {
-          success: false,
           error: 'Passwords do not match',
+          success: false,
         };
       }
 
       if (password.length < 8) {
         return {
-          success: false,
           error: 'Password must be at least 8 characters long',
+          success: false,
         };
       }
 
       const response = await this.makeRequest('/auth/reset-password', {
-        method: 'POST',
         body: JSON.stringify({
-          token,
           password,
           passwordConfirm,
+          token,
         }),
+        method: 'POST',
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         return {
-          success: false,
           error: errorData.error || 'Failed to reset password',
+          success: false,
         };
       }
 
       const result = await response.json();
 
       return {
-        success: true,
         message: result.message || 'Password has been successfully reset',
+        success: true,
       };
     } catch (error) {
       console.error('Password reset error:', error);
       return {
-        success: false,
         error:
           error instanceof Error
             ? error.message
             : 'Network error during password reset',
+        success: false,
       };
     }
   }
 
   async updateProfile(data: {
+    email?: string;
     firstName?: string;
     lastName?: string;
-    email?: string;
-  }): Promise<{ success: boolean; error?: string; user?: AuthUser }> {
+  }): Promise<{ error?: string; success: boolean; user?: AuthUser }> {
     try {
       const apiClient = getAPIClient();
       const response = await apiClient.updateProfile(data);
 
       if (!response.success) {
         return {
-          success: false,
           error: response.error?.getUserMessage() || 'Failed to update profile',
+          success: false,
         };
       }
 
@@ -633,43 +633,43 @@ class PayloadAuthService implements AuthService {
       }
 
       return {
-        success: false,
         error: 'Invalid response from server',
+        success: false,
       };
     } catch (error) {
       console.error('Update profile error:', error);
       return {
-        success: false,
         error:
           error instanceof Error
             ? error.message
             : 'Network error during profile update',
+        success: false,
       };
     }
   }
 
   async updatePreferences(prefs: {
     language?: string;
-    theme?: 'light' | 'dark';
+    location?: boolean;
     notifications?: {
-      push?: boolean;
       email?: boolean;
+      promotions?: boolean;
+      push?: boolean;
+      reminders?: boolean;
       sms?: boolean;
       tripUpdates?: boolean;
-      promotions?: boolean;
-      reminders?: boolean;
     };
-    location?: boolean;
-  }): Promise<{ success: boolean; error?: string }> {
+    theme?: 'light' | 'dark';
+  }): Promise<{ error?: string; success: boolean; }> {
     try {
       const apiClient = getAPIClient();
       const response = await apiClient.updatePreferences(prefs);
 
       if (!response.success) {
         return {
-          success: false,
           error:
             response.error?.getUserMessage() || 'Failed to update preferences',
+          success: false,
         };
       }
 
@@ -679,19 +679,19 @@ class PayloadAuthService implements AuthService {
     } catch (error) {
       console.error('Update preferences error:', error);
       return {
-        success: false,
         error:
           error instanceof Error
             ? error.message
             : 'Network error during preferences update',
+        success: false,
       };
     }
   }
 
   // Compatibility methods for Supabase-style API
   async getSession(): Promise<{
-    session: { user: AuthUser } | null;
     error?: string;
+    session: { user: AuthUser } | null;
   }> {
     const authData = await SecureTokenStorage.getAuthData();
     if (authData && authData.user) {
@@ -705,21 +705,21 @@ class PayloadAuthService implements AuthService {
   }
 
   async signIn(data: LoginData): Promise<{
-    user?: AuthUser;
-    session?: AuthSession;
     error?: string;
+    session?: AuthSession;
+    user?: AuthUser;
   }> {
     const result = await this.login(data);
     return {
-      user: result.user,
-      session: result.session,
       error: result.error,
+      session: result.session,
+      user: result.user,
     };
   }
 
   async signUp(data: RegistrationData): Promise<{
-    user?: AuthUser;
     error?: string;
+    user?: AuthUser;
   }> {
     const result = await this.register(data);
     return {

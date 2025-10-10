@@ -6,23 +6,23 @@
  */
 
 export interface APIError {
-  message: string;
   code?: string;
   errors?: Array<{
     field: string;
     message: string;
   }>;
+  message: string;
 }
 
 export enum ErrorType {
-  NETWORK = 'NETWORK',
   AUTHENTICATION = 'AUTHENTICATION',
   AUTHORIZATION = 'AUTHORIZATION',
-  VALIDATION = 'VALIDATION',
+  NETWORK = 'NETWORK',
+  OFFLINE = 'OFFLINE',
   SERVER = 'SERVER',
   TIMEOUT = 'TIMEOUT',
-  OFFLINE = 'OFFLINE',
   UNKNOWN = 'UNKNOWN',
+  VALIDATION = 'VALIDATION',
 }
 
 export class PayloadAPIError extends Error {
@@ -210,17 +210,17 @@ export function createOfflineError(): PayloadAPIError {
  * Retry configuration
  */
 export interface RetryConfig {
-  maxRetries: number;
+  backoffFactor: number;
   baseDelay: number;
   maxDelay: number;
-  backoffFactor: number;
+  maxRetries: number;
 }
 
 export const DEFAULT_RETRY_CONFIG: RetryConfig = {
-  maxRetries: 3,
-  baseDelay: 1000,
-  maxDelay: 10000,
   backoffFactor: 2,
+  baseDelay: 1000,
+  maxDelay: 10_000,
+  maxRetries: 3,
 };
 
 /**
@@ -286,12 +286,12 @@ class DefaultErrorReporter implements ErrorReporter {
     // Log error to console in development
     if (__DEV__) {
       console.error('PayloadAPIError:', {
-        message: error.message,
-        type: error.type,
         code: error.code,
-        errors: error.errors,
         context,
+        errors: error.errors,
+        message: error.message,
         stack: error.stack,
+        type: error.type,
       });
     }
 

@@ -8,11 +8,11 @@ import colors from 'src/ui/colors.ts';
 import Text from 'src/ui/Text.tsx';
 
 interface PrivacySetting {
-  id: string;
-  title: string;
   description: string;
   enabled: boolean;
   icon: string;
+  id: string;
+  title: string;
 }
 
 const PrivacyItem = ({
@@ -24,32 +24,32 @@ const PrivacyItem = ({
 }) => (
   <View className="border-gray-100 flex-row items-center border-b px-4 py-4">
     <View className="bg-gray-100 mr-4 h-10 w-10 items-center justify-center rounded-full">
-      <Ionicons name={item.icon as any} size={20} color={colors.purple} />
+      <Ionicons color={colors.purple} name={item.icon as any} size={20} />
     </View>
     <View className="flex-1">
       <Text className="text-gray-900 text-base font-medium">{item.title}</Text>
       <Text className="text-gray-600 text-sm">{item.description}</Text>
     </View>
     <Switch
-      value={item.enabled}
       onValueChange={() => onToggle(item.id)}
-      trackColor={{ false: '#f3f4f6', true: colors.purple }}
       thumbColor={item.enabled ? '#ffffff' : '#ffffff'}
+      trackColor={{ false: '#f3f4f6', true: colors.purple }}
+      value={item.enabled}
     />
   </View>
 );
 
 const ActionItem = ({
-  icon,
-  title,
   description,
+  icon,
   onPress,
+  title,
   variant = 'default',
 }: {
-  icon: string;
-  title: string;
   description: string;
+  icon: string;
   onPress: () => void;
+  title: string;
   variant?: 'default' | 'danger';
 }) => (
   <Pressable
@@ -58,9 +58,9 @@ const ActionItem = ({
   >
     <View className="bg-gray-100 mr-4 h-10 w-10 items-center justify-center rounded-full">
       <Ionicons
+        color={variant === 'danger' ? '#dc2626' : colors.purple}
         name={icon as any}
         size={20}
-        color={variant === 'danger' ? '#dc2626' : colors.purple}
       />
     </View>
     <View className="flex-1">
@@ -71,39 +71,39 @@ const ActionItem = ({
       </Text>
       <Text className="text-gray-600 text-sm">{description}</Text>
     </View>
-    <Ionicons name="chevron-forward" size={20} color={colors.black} />
+    <Ionicons color={colors.black} name="chevron-forward" size={20} />
   </Pressable>
 );
 
 export default function PrivacyScreen() {
-  const [privacySettings, setPrivacySettings] = useState<PrivacySetting[]>([
+  const [privacySettings, setPrivacySettings] = useState<Array<PrivacySetting>>([
     {
-      id: 'location-sharing',
-      title: 'Location Sharing',
       description: 'Share your location with emergency contacts',
       enabled: true,
       icon: 'location',
+      id: 'location-sharing',
+      title: 'Location Sharing',
     },
     {
-      id: 'travel-history',
-      title: 'Travel History',
       description: 'Allow access to your travel history',
       enabled: true,
       icon: 'time',
+      id: 'travel-history',
+      title: 'Travel History',
     },
     {
-      id: 'analytics',
-      title: 'Analytics',
       description: 'Help improve the app with usage analytics',
       enabled: false,
       icon: 'analytics',
+      id: 'analytics',
+      title: 'Analytics',
     },
     {
-      id: 'crash-reports',
-      title: 'Crash Reports',
       description: 'Automatically send crash reports',
       enabled: true,
       icon: 'bug',
+      id: 'crash-reports',
+      title: 'Crash Reports',
     },
   ]);
 
@@ -120,8 +120,8 @@ export default function PrivacyScreen() {
       'Download Data',
       'Your data will be prepared and sent to your email address. This may take a few minutes.',
       [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Download', onPress: () => {} },
+        { style: 'cancel', text: 'Cancel' },
+        { onPress: () => {}, text: 'Download' },
       ],
     );
   };
@@ -131,24 +131,24 @@ export default function PrivacyScreen() {
       'Delete All Data',
       'This will permanently delete all your data. This action cannot be undone.',
       [
-        { text: 'Cancel', style: 'cancel' },
+        { style: 'cancel', text: 'Cancel' },
         {
-          text: 'Delete',
-          style: 'destructive',
           onPress: () => {
             Alert.alert(
               'Confirm Deletion',
               'Are you absolutely sure? This will delete all your trips, preferences, and account data.',
               [
-                { text: 'Cancel', style: 'cancel' },
+                { style: 'cancel', text: 'Cancel' },
                 {
-                  text: 'Delete Forever',
-                  style: 'destructive',
                   onPress: () => {},
+                  style: 'destructive',
+                  text: 'Delete Forever',
                 },
               ],
             );
           },
+          style: 'destructive',
+          text: 'Delete',
         },
       ],
     );
@@ -159,8 +159,8 @@ export default function PrivacyScreen() {
       'Request Account Deletion',
       'We will process your account deletion request within 30 days. You will receive a confirmation email.',
       [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Request', onPress: () => {} },
+        { style: 'cancel', text: 'Cancel' },
+        { onPress: () => {}, text: 'Request' },
       ],
     );
   };
@@ -181,9 +181,9 @@ export default function PrivacyScreen() {
               <View className="mb-3 flex-row items-center">
                 <View className="bg-purple-100 mr-4 h-12 w-12 items-center justify-center rounded-full">
                   <Ionicons
+                    color={colors.purple}
                     name="shield-checkmark"
                     size={24}
-                    color={colors.purple}
                   />
                 </View>
                 <View className="flex-1">
@@ -208,10 +208,10 @@ export default function PrivacyScreen() {
             <View className="mx-4 rounded-lg bg-white">
               {privacySettings.map((item, index, array) => (
                 <View
-                  key={item.id}
                   className={
                     index === array.length - 1 ? '' : 'border-gray-100 border-b'
                   }
+                  key={item.id}
                 >
                   <PrivacyItem item={item} onToggle={handleToggle} />
                 </View>
@@ -226,16 +226,16 @@ export default function PrivacyScreen() {
             </Text>
             <View className="mx-4 rounded-lg bg-white">
               <ActionItem
-                icon="download"
-                title="Download My Data"
                 description="Get a copy of all your data"
+                icon="download"
                 onPress={handleDownloadData}
+                title="Download My Data"
               />
               <ActionItem
-                icon="trash"
-                title="Delete All Data"
                 description="Permanently delete all your data"
+                icon="trash"
                 onPress={handleDeleteData}
+                title="Delete All Data"
                 variant="danger"
               />
             </View>
@@ -248,10 +248,10 @@ export default function PrivacyScreen() {
             </Text>
             <View className="mx-4 rounded-lg bg-white">
               <ActionItem
-                icon="person-remove"
-                title="Request Account Deletion"
                 description="Permanently delete your account"
+                icon="person-remove"
                 onPress={handleRequestDeletion}
+                title="Request Account Deletion"
                 variant="danger"
               />
             </View>
@@ -261,7 +261,7 @@ export default function PrivacyScreen() {
           <View className="mx-4 mb-4">
             <View className="bg-blue-50 rounded-lg p-4">
               <View className="flex-row items-start">
-                <Ionicons name="information-circle" size={20} color="#2563eb" />
+                <Ionicons color="#2563eb" name="information-circle" size={20} />
                 <View className="ml-3 flex-1">
                   <Text className="text-blue-800 mb-2 text-sm">
                     <fbt desc="Privacy notice title">Your Privacy Matters</fbt>
@@ -281,10 +281,10 @@ export default function PrivacyScreen() {
           {/* Action Buttons */}
           <View className="mx-4 mb-6">
             <View className="flex-row space-x-3">
-              <Button variant="outline" className="flex-1" onPress={() => {}}>
+              <Button className="flex-1" onPress={() => {}} variant="outline">
                 <fbt desc="Privacy policy">Privacy Policy</fbt>
               </Button>
-              <Button variant="outline" className="flex-1" onPress={() => {}}>
+              <Button className="flex-1" onPress={() => {}} variant="outline">
                 <fbt desc="Terms of service">Terms of Service</fbt>
               </Button>
             </View>

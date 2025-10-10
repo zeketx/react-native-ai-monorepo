@@ -12,46 +12,46 @@ import Text from './Text.js';
 export type AlertVariant = 'success' | 'error' | 'warning' | 'info';
 
 export interface AlertProps {
-  variant: AlertVariant;
-  title?: string;
-  message: string;
   dismissible?: boolean;
+  message: string;
   onDismiss?: () => void;
   testID?: string;
+  title?: string;
+  variant: AlertVariant;
 }
 
 const Alert: React.FC<AlertProps> = ({
-  variant,
-  title,
-  message,
   dismissible = false,
+  message,
   onDismiss,
   testID,
+  title,
+  variant,
 }) => {
   const variantStyles = {
-    success: {
-      container: 'bg-green-50 border-green-200',
-      icon: { name: 'checkmark-circle' as const, color: '#16a34a' },
-      title: 'text-green-800',
-      message: 'text-green-700',
-    },
     error: {
       container: 'bg-red-50 border-red-200',
-      icon: { name: 'alert-circle' as const, color: '#dc2626' },
-      title: 'text-red-800',
+      icon: { color: '#dc2626', name: 'alert-circle' as const },
       message: 'text-red-700',
-    },
-    warning: {
-      container: 'bg-yellow-50 border-yellow-200',
-      icon: { name: 'warning' as const, color: '#d97706' },
-      title: 'text-yellow-800',
-      message: 'text-yellow-700',
+      title: 'text-red-800',
     },
     info: {
       container: 'bg-blue-50 border-blue-200',
-      icon: { name: 'information-circle' as const, color: '#2563eb' },
-      title: 'text-blue-800',
+      icon: { color: '#2563eb', name: 'information-circle' as const },
       message: 'text-blue-700',
+      title: 'text-blue-800',
+    },
+    success: {
+      container: 'bg-green-50 border-green-200',
+      icon: { color: '#16a34a', name: 'checkmark-circle' as const },
+      message: 'text-green-700',
+      title: 'text-green-800',
+    },
+    warning: {
+      container: 'bg-yellow-50 border-yellow-200',
+      icon: { color: '#d97706', name: 'warning' as const },
+      message: 'text-yellow-700',
+      title: 'text-yellow-800',
     },
   };
 
@@ -65,9 +65,9 @@ const Alert: React.FC<AlertProps> = ({
       <View className="flex-row">
         <View className="mr-3 flex-shrink-0">
           <Ionicons
+            color={styles.icon.color}
             name={styles.icon.name}
             size={20}
-            color={styles.icon.color}
           />
         </View>
 
@@ -95,7 +95,7 @@ const Alert: React.FC<AlertProps> = ({
             onPress={onDismiss}
             testID={`${testID}-dismiss`}
           >
-            <Ionicons name="close" size={18} color={styles.icon.color} />
+            <Ionicons color={styles.icon.color} name="close" size={18} />
           </TouchableOpacity>
         )}
       </View>

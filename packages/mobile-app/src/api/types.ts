@@ -9,89 +9,89 @@ import type { AuthUser } from '../auth/index.js';
 
 // Base API Response Types
 export interface APIResponse<T = any> {
-  success: boolean;
   data?: T;
   error?: string;
-  message?: string;
   errors?: Array<{
     field: string;
     message: string;
   }>;
+  message?: string;
+  success: boolean;
 }
 
 export interface PaginatedResponse<T = any> {
-  docs: T[];
-  totalDocs: number;
-  limit: number;
-  page: number;
-  totalPages: number;
+  docs: Array<T>;
   hasNextPage: boolean;
   hasPrevPage: boolean;
+  limit: number;
   nextPage: number | null;
+  page: number;
   prevPage: number | null;
+  totalDocs: number;
+  totalPages: number;
 }
 
 // User Related Types
 export interface User extends AuthUser {
-  preferences?: UserPreferences;
-  trips?: Trip[];
-  createdAt: string;
-  updatedAt: string;
-  profileImage?: Media;
-  bio?: string;
-  phoneNumber?: string;
-  dateOfBirth?: string;
   address?: Address;
+  bio?: string;
+  createdAt: string;
+  dateOfBirth?: string;
+  phoneNumber?: string;
+  preferences?: UserPreferences;
+  profileImage?: Media;
+  trips?: Array<Trip>;
+  updatedAt: string;
 }
 
 export interface UserPreferences {
-  language: string;
-  theme: 'light' | 'dark';
-  notifications: NotificationPreferences;
-  location: boolean;
-  timezone?: string;
-  dateFormat?: string;
   currency?: string;
+  dateFormat?: string;
+  language: string;
+  location: boolean;
+  notifications: NotificationPreferences;
+  theme: 'light' | 'dark';
+  timezone?: string;
 }
 
 export interface NotificationPreferences {
-  push: boolean;
   email: boolean;
+  promotions: boolean;
+  push: boolean;
+  reminders: boolean;
   sms: boolean;
   tripUpdates: boolean;
-  promotions: boolean;
-  reminders: boolean;
 }
 
 export interface Address {
-  street: string;
   city: string;
-  state: string;
-  country: string;
-  zipCode: string;
   coordinates?: {
     latitude: number;
     longitude: number;
   };
+  country: string;
+  state: string;
+  street: string;
+  zipCode: string;
 }
 
 // Trip Related Types
 export interface Trip {
-  id: string;
-  title: string;
-  description?: string;
-  status: TripStatus;
-  startDate: string;
-  endDate: string;
-  destination: Destination;
-  itinerary?: ItineraryItem[];
-  participants?: TripParticipant[];
   budget?: TripBudget;
-  documents?: Media[];
-  notes?: string;
-  tags?: string[];
-  isPublic: boolean;
   createdAt: string;
+  description?: string;
+  destination: Destination;
+  documents?: Array<Media>;
+  endDate: string;
+  id: string;
+  isPublic: boolean;
+  itinerary?: Array<ItineraryItem>;
+  notes?: string;
+  participants?: Array<TripParticipant>;
+  startDate: string;
+  status: TripStatus;
+  tags?: Array<string>;
+  title: string;
   updatedAt: string;
   user: string | User;
 }
@@ -104,191 +104,191 @@ export type TripStatus =
   | 'cancelled';
 
 export interface Destination {
-  name: string;
-  country: string;
   city: string;
-  region?: string;
   coordinates: {
     latitude: number;
     longitude: number;
   };
-  timezone?: string;
+  country: string;
   description?: string;
   image?: Media;
+  name: string;
+  region?: string;
+  timezone?: string;
 }
 
 export interface ItineraryItem {
-  id: string;
-  title: string;
+  attachments?: Array<Media>;
+  confirmationNumber?: string;
+  cost?: {
+    amount: number;
+    currency: string;
+  };
   description?: string;
-  type: 'flight' | 'hotel' | 'activity' | 'restaurant' | 'transport' | 'other';
-  startDate: string;
   endDate?: string;
+  id: string;
   location?: {
-    name: string;
     address: string;
     coordinates?: {
       latitude: number;
       longitude: number;
     };
+    name: string;
   };
-  cost?: {
-    amount: number;
-    currency: string;
-  };
-  confirmationNumber?: string;
   notes?: string;
-  attachments?: Media[];
+  startDate: string;
   status: 'planned' | 'booked' | 'confirmed' | 'cancelled';
+  title: string;
+  type: 'flight' | 'hotel' | 'activity' | 'restaurant' | 'transport' | 'other';
 }
 
 export interface TripParticipant {
   id: string;
-  user: string | User;
-  role: 'organizer' | 'participant';
-  status: 'invited' | 'accepted' | 'declined';
   joinedAt?: string;
   permissions: {
+    canDelete: boolean;
     canEdit: boolean;
     canInvite: boolean;
-    canDelete: boolean;
   };
+  role: 'organizer' | 'participant';
+  status: 'invited' | 'accepted' | 'declined';
+  user: string | User;
 }
 
 export interface TripBudget {
-  total: number;
+  categories: Array<BudgetCategory>;
   currency: string;
-  categories: BudgetCategory[];
-  spent: number;
   remaining: number;
+  spent: number;
+  total: number;
 }
 
 export interface BudgetCategory {
-  name: string;
   budgeted: number;
-  spent: number;
   color?: string;
+  name: string;
+  spent: number;
 }
 
 // Media Related Types
 export interface Media {
-  id: string;
-  filename: string;
-  originalName: string;
-  mimeType: string;
-  filesize: number;
-  width?: number;
-  height?: number;
-  url: string;
-  thumbnailUrl?: string;
   alt?: string;
   caption?: string;
   createdAt: string;
+  filename: string;
+  filesize: number;
+  height?: number;
+  id: string;
+  mimeType: string;
+  originalName: string;
+  thumbnailUrl?: string;
   updatedAt: string;
   uploadedBy?: string | User;
+  url: string;
+  width?: number;
 }
 
 export interface MediaUploadResponse {
-  id: string;
   filename: string;
-  url: string;
+  id: string;
   thumbnailUrl?: string;
+  url: string;
 }
 
 // Request/Response DTOs
 export interface UpdateProfileDTO {
+  address?: Address;
+  bio?: string;
+  dateOfBirth?: string;
+  email?: string;
   firstName?: string;
   lastName?: string;
-  email?: string;
-  bio?: string;
   phoneNumber?: string;
-  dateOfBirth?: string;
-  address?: Address;
   profileImage?: string;
 }
 
 export interface UpdatePreferencesDTO {
-  language?: string;
-  theme?: 'light' | 'dark';
-  notifications?: Partial<NotificationPreferences>;
-  location?: boolean;
-  timezone?: string;
-  dateFormat?: string;
   currency?: string;
+  dateFormat?: string;
+  language?: string;
+  location?: boolean;
+  notifications?: Partial<NotificationPreferences>;
+  theme?: 'light' | 'dark';
+  timezone?: string;
 }
 
 export interface CreateTripDTO {
-  title: string;
-  description?: string;
-  startDate: string;
-  endDate: string;
-  destination: Omit<Destination, 'image'>;
-  isPublic?: boolean;
   budget?: Omit<TripBudget, 'spent' | 'remaining'>;
-  tags?: string[];
+  description?: string;
+  destination: Omit<Destination, 'image'>;
+  endDate: string;
+  isPublic?: boolean;
+  startDate: string;
+  tags?: Array<string>;
+  title: string;
 }
 
 export interface UpdateTripDTO {
-  title?: string;
-  description?: string;
-  startDate?: string;
-  endDate?: string;
-  destination?: Partial<Destination>;
-  status?: TripStatus;
-  isPublic?: boolean;
   budget?: Partial<TripBudget>;
-  tags?: string[];
+  description?: string;
+  destination?: Partial<Destination>;
+  endDate?: string;
+  isPublic?: boolean;
   notes?: string;
+  startDate?: string;
+  status?: TripStatus;
+  tags?: Array<string>;
+  title?: string;
 }
 
 export interface CreateItineraryItemDTO {
-  tripId: string;
-  title: string;
+  confirmationNumber?: string;
+  cost?: ItineraryItem['cost'];
   description?: string;
-  type: ItineraryItem['type'];
-  startDate: string;
   endDate?: string;
   location?: ItineraryItem['location'];
-  cost?: ItineraryItem['cost'];
-  confirmationNumber?: string;
   notes?: string;
+  startDate: string;
+  title: string;
+  tripId: string;
+  type: ItineraryItem['type'];
 }
 
 export interface UpdateItineraryItemDTO {
-  title?: string;
+  confirmationNumber?: string;
+  cost?: ItineraryItem['cost'];
   description?: string;
-  type?: ItineraryItem['type'];
-  startDate?: string;
   endDate?: string;
   location?: ItineraryItem['location'];
-  cost?: ItineraryItem['cost'];
-  confirmationNumber?: string;
   notes?: string;
+  startDate?: string;
   status?: ItineraryItem['status'];
+  title?: string;
+  type?: ItineraryItem['type'];
 }
 
 export interface InviteParticipantDTO {
-  tripId: string;
   email: string;
-  role: 'participant';
   permissions: TripParticipant['permissions'];
+  role: 'participant';
+  tripId: string;
 }
 
 // Search and Filter Types
 export interface SearchQuery {
-  q?: string;
-  page?: number;
   limit?: number;
-  sort?: string;
   order?: 'asc' | 'desc';
+  page?: number;
+  q?: string;
+  sort?: string;
 }
 
 export interface TripSearchQuery extends SearchQuery {
-  status?: TripStatus;
-  startDate?: string;
-  endDate?: string;
   destination?: string;
-  tags?: string[];
+  endDate?: string;
+  startDate?: string;
+  status?: TripStatus;
+  tags?: Array<string>;
   userId?: string;
 }
 
@@ -299,74 +299,74 @@ export interface UserSearchQuery extends SearchQuery {
 
 // Notification Types
 export interface Notification {
-  id: string;
-  type: 'trip_invite' | 'trip_update' | 'reminder' | 'system';
-  title: string;
-  message: string;
-  data?: Record<string, any>;
-  read: boolean;
-  createdAt: string;
-  expiresAt?: string;
   actionUrl?: string;
+  createdAt: string;
+  data?: Record<string, any>;
+  expiresAt?: string;
+  id: string;
+  message: string;
+  read: boolean;
   recipient: string | User;
+  title: string;
+  type: 'trip_invite' | 'trip_update' | 'reminder' | 'system';
 }
 
 export interface CreateNotificationDTO {
-  type: Notification['type'];
-  title: string;
-  message: string;
-  data?: Record<string, any>;
-  recipient: string;
-  expiresAt?: string;
   actionUrl?: string;
+  data?: Record<string, any>;
+  expiresAt?: string;
+  message: string;
+  recipient: string;
+  title: string;
+  type: Notification['type'];
 }
 
 // Analytics Types
 export interface UserAnalytics {
-  totalTrips: number;
   completedTrips: number;
-  upcomingTrips: number;
   favoriteDestinations: Array<{
-    name: string;
     count: number;
+    name: string;
   }>;
+  totalTrips: number;
   travelStatistics: {
-    totalDays: number;
-    totalCountries: number;
     totalCities: number;
+    totalCountries: number;
+    totalDays: number;
   };
+  upcomingTrips: number;
 }
 
 export interface TripAnalytics {
+  averageRating?: number;
   budgetUtilization: number;
   completedItems: number;
-  totalItems: number;
   participantCount: number;
-  averageRating?: number;
+  totalItems: number;
 }
 
 // WebSocket Types
 export interface WebSocketMessage {
-  type: 'trip_update' | 'user_update' | 'notification' | 'sync';
   data: any;
   timestamp: string;
-  userId?: string;
   tripId?: string;
+  type: 'trip_update' | 'user_update' | 'notification' | 'sync';
+  userId?: string;
 }
 
 // Sync Types
 export interface SyncStatus {
-  lastSync: string;
-  pendingUploads: number;
-  pendingDownloads: number;
   conflicts: number;
+  lastSync: string;
+  pendingDownloads: number;
+  pendingUploads: number;
   status: 'synced' | 'syncing' | 'error' | 'offline';
 }
 
 export interface ConflictResolution {
-  type: 'user' | 'trip' | 'media';
   localData: any;
   remoteData: any;
   resolution: 'local' | 'remote' | 'merge';
   timestamp: string;
+  type: 'user' | 'trip' | 'media';
 }

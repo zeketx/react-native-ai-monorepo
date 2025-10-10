@@ -44,7 +44,7 @@ import type {
 // API Configuration
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_CMS_API_URL || 'http://localhost:3001/api';
-const API_TIMEOUT = parseInt(
+const API_TIMEOUT = Number.parseInt(
   process.env.EXPO_PUBLIC_API_TIMEOUT || '30000',
   10,
 );
@@ -60,10 +60,10 @@ export type {
 };
 
 export interface APIResponse<T = any> {
-  success: boolean;
   data?: T;
   error?: PayloadAPIError;
   message?: string;
+  success: boolean;
 }
 
 /**
@@ -76,8 +76,8 @@ export class PayloadAPIClient {
   private offlineQueue: Array<{
     endpoint: string;
     options: RequestInit;
-    resolve: (value: any) => void;
     reject: (reason?: any) => void;
+    resolve: (value: any) => void;
   }> = [];
 
   constructor(
@@ -133,12 +133,12 @@ export class PayloadAPIClient {
 
       const response = await fetch(url, {
         ...options,
-        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
           ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
           ...options.headers,
         },
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -173,8 +173,8 @@ export class PayloadAPIClient {
 
       const data = await response.json();
       return {
-        success: true,
         data,
+        success: true,
       };
     } catch (error) {
       clearTimeout(timeoutId);
@@ -202,14 +202,14 @@ export class PayloadAPIClient {
       this.offlineQueue.push({
         endpoint,
         options,
-        resolve,
         reject,
+        resolve,
       });
 
       // Return offline response
       resolve({
-        success: false,
         error: createOfflineError(),
+        success: false,
       });
     });
   }
@@ -226,15 +226,15 @@ export class PayloadAPIClient {
     const queue = [...this.offlineQueue];
     this.offlineQueue = [];
 
-    for (const { endpoint, options, resolve, reject } of queue) {
+    for (const { endpoint, options, reject, resolve } of queue) {
       try {
         const result = await this.makeRequestInternal(endpoint, options);
         resolve(result);
       } catch (error) {
         if (error instanceof PayloadAPIError) {
           resolve({
-            success: false,
             error,
+            success: false,
           });
         } else {
           reject(error);
@@ -255,8 +255,8 @@ export class PayloadAPIClient {
    */
   async updateProfile(data: UpdateProfileDTO): Promise<APIResponse<User>> {
     return this.makeRequest<User>('/users/me', {
-      method: 'PATCH',
       body: JSON.stringify(data),
+      method: 'PATCH',
     });
   }
 
@@ -267,8 +267,8 @@ export class PayloadAPIClient {
     prefs: UpdatePreferencesDTO,
   ): Promise<APIResponse<void>> {
     return this.makeRequest<void>('/users/me/preferences', {
-      method: 'PATCH',
       body: JSON.stringify(prefs),
+      method: 'PATCH',
     });
   }
 
@@ -310,8 +310,8 @@ export class PayloadAPIClient {
    */
   async createTrip(data: CreateTripDTO): Promise<APIResponse<Trip>> {
     return this.makeRequest<Trip>('/trips', {
-      method: 'POST',
       body: JSON.stringify(data),
+      method: 'POST',
     });
   }
 
@@ -323,8 +323,8 @@ export class PayloadAPIClient {
     data: UpdateTripDTO,
   ): Promise<APIResponse<Trip>> {
     return this.makeRequest<Trip>(`/trips/${id}`, {
-      method: 'PATCH',
       body: JSON.stringify(data),
+      method: 'PATCH',
     });
   }
 
@@ -336,8 +336,8 @@ export class PayloadAPIClient {
     status: TripStatus,
   ): Promise<APIResponse<void>> {
     return this.makeRequest<void>(`/trips/${id}/status`, {
-      method: 'PATCH',
       body: JSON.stringify({ status }),
+      method: 'PATCH',
     });
   }
 
@@ -358,11 +358,11 @@ export class PayloadAPIClient {
     formData.append('file', file);
 
     return this.makeRequest<MediaUploadResponse>('/media', {
-      method: 'POST',
       body: formData,
       headers: {
         // Don't set Content-Type for FormData, let the browser set it
       },
+      method: 'POST',
     });
   }
 
@@ -389,8 +389,8 @@ export class PayloadAPIClient {
     data: CreateItineraryItemDTO,
   ): Promise<APIResponse<ItineraryItem>> {
     return this.makeRequest<ItineraryItem>('/itinerary', {
-      method: 'POST',
       body: JSON.stringify(data),
+      method: 'POST',
     });
   }
 
@@ -402,8 +402,8 @@ export class PayloadAPIClient {
     data: UpdateItineraryItemDTO,
   ): Promise<APIResponse<ItineraryItem>> {
     return this.makeRequest<ItineraryItem>(`/itinerary/${id}`, {
-      method: 'PATCH',
       body: JSON.stringify(data),
+      method: 'PATCH',
     });
   }
 

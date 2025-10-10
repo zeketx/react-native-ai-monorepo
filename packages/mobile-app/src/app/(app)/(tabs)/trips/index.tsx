@@ -8,28 +8,28 @@ import Text from 'src/ui/Text.tsx';
 // Mock data for trips
 const mockTrips = [
   {
-    id: '1',
-    title: 'Business Trip to Tokyo',
     destination: 'Tokyo, Japan',
-    startDate: '2024-07-15',
     endDate: '2024-07-20',
+    id: '1',
+    startDate: '2024-07-15',
     status: 'upcoming',
+    title: 'Business Trip to Tokyo',
   },
   {
-    id: '2',
-    title: 'Client Meeting in New York',
     destination: 'New York, USA',
-    startDate: '2024-06-01',
     endDate: '2024-06-05',
+    id: '2',
+    startDate: '2024-06-01',
     status: 'completed',
+    title: 'Client Meeting in New York',
   },
   {
-    id: '3',
-    title: 'Conference in London',
     destination: 'London, UK',
-    startDate: '2024-08-10',
     endDate: '2024-08-15',
+    id: '3',
+    startDate: '2024-08-10',
     status: 'planning',
+    title: 'Conference in London',
   },
 ];
 
@@ -61,7 +61,7 @@ const getStatusIcon = (status: string) => {
 
 export default function TripsScreen() {
   const renderTripItem = ({ item }: { item: (typeof mockTrips)[0] }) => (
-    <Link href={`/(app)/(tabs)/trips/${item.id}`} asChild>
+    <Link asChild href={`/(app)/(tabs)/trips/${item.id}`}>
       <Pressable className="border-gray-200 mb-3 rounded-lg border bg-white p-4">
         <View className="mb-2 flex-row items-center justify-between">
           <Text
@@ -72,9 +72,9 @@ export default function TripsScreen() {
           </Text>
           <View className="flex-row items-center">
             <Ionicons
+              color={getStatusColor(item.status)}
               name={getStatusIcon(item.status)}
               size={16}
-              color={getStatusColor(item.status)}
             />
             <Text
               className="ml-1 text-sm font-medium"
@@ -86,12 +86,12 @@ export default function TripsScreen() {
         </View>
 
         <View className="mb-2 flex-row items-center">
-          <Ionicons name="location" size={16} color={colors.black} />
+          <Ionicons color={colors.black} name="location" size={16} />
           <Text className="text-gray-600 ml-2">{item.destination}</Text>
         </View>
 
         <View className="flex-row items-center">
-          <Ionicons name="calendar-outline" size={16} color={colors.black} />
+          <Ionicons color={colors.black} name="calendar-outline" size={16} />
           <Text className="text-gray-600 ml-2">
             {item.startDate} - {item.endDate}
           </Text>
@@ -104,29 +104,27 @@ export default function TripsScreen() {
     <>
       <Stack.Screen
         options={{
-          title: String(fbs('Trips', 'Trips screen header title')),
           headerRight: () => (
-            <Link href="/(app)/add-trip" asChild>
+            <Link asChild href="/(app)/add-trip">
               <Pressable className="mr-2 p-2">
-                <Ionicons name="add" size={24} color={colors.purple} />
+                <Ionicons color={colors.purple} name="add" size={24} />
               </Pressable>
             </Link>
           ),
+          title: String(fbs('Trips', 'Trips screen header title')),
         }}
       />
 
       <View className="bg-gray-50 flex-1 px-4 pt-4">
         <FlatList
           data={mockTrips}
-          renderItem={renderTripItem}
           keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-12">
               <Ionicons
+                color={colors.black}
                 name="airplane-outline"
                 size={64}
-                color={colors.black}
               />
               <Text className="text-gray-900 mt-4 text-lg font-medium">
                 <fbt desc="No trips message">No trips yet</fbt>
@@ -138,6 +136,8 @@ export default function TripsScreen() {
               </Text>
             </View>
           }
+          renderItem={renderTripItem}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </>
