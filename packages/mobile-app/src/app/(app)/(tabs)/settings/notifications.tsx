@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Stack } from 'expo-router';
-import { fbs } from 'fbtee';
+import fbt, { fbs } from 'fbtee';
 import { useState } from 'react';
 import { ScrollView, Switch, View } from 'react-native';
 import colors from 'src/ui/colors.ts';
@@ -132,7 +132,8 @@ export default function NotificationsScreen() {
                   </Text>
                   <Text className="text-gray-600 mt-1 text-sm">
                     <fbt desc="Enabled notifications count">
-                      {enabledCount} of {notifications.length} enabled
+                      <fbt:param name="enabledCount">{enabledCount}</fbt:param> of{' '}
+                      <fbt:param name="totalCount">{notifications.length}</fbt:param> enabled
                     </fbt>
                   </Text>
                 </View>
