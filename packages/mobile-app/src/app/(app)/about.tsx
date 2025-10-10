@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import Constants from 'expo-constants';
 import { router, Stack } from 'expo-router';
 import { fbs } from 'fbtee';
 import { Linking, Pressable, ScrollView, View } from 'react-native';

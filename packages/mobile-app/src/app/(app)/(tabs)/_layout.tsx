@@ -40,7 +40,13 @@ export default function TabLayout() {
               )}
             </Pressable>
           ),
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({
+            focused,
+            color,
+          }: {
+            focused: boolean;
+            color: string;
+          }) => (
             <Ionicons
               name={focused ? 'airplane' : 'airplane-outline'}
               size={24}
@@ -53,7 +59,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({
+            focused,
+            color,
+          }: {
+            focused: boolean;
+            color: string;
+          }) => (
             <Ionicons
               name={focused ? 'person' : 'person-outline'}
               size={24}
@@ -66,7 +78,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          tabBarIcon: ({ focused, color }) => (
+          tabBarIcon: ({
+            focused,
+            color,
+          }: {
+            focused: boolean;
+            color: string;
+          }) => (
             <Ionicons
               name={focused ? 'settings' : 'settings-outline'}
               size={24}

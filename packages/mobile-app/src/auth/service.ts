@@ -76,6 +76,24 @@ export interface AuthService {
     };
     location?: boolean;
   }): Promise<{ success: boolean; error?: string }>;
+  // Compatibility aliases for old Supabase-style API
+  getSession(): Promise<{
+    session: { user: AuthUser } | null;
+    error?: string;
+  }>;
+  signIn(data: LoginData): Promise<{
+    user?: AuthUser;
+    session?: AuthSession;
+    error?: string;
+  }>;
+  signUp(data: RegistrationData): Promise<{
+    user?: AuthUser;
+    error?: string;
+  }>;
+  signOut(): Promise<{ error?: string }>;
+  onAuthStateChange(
+    callback: (event: { session?: AuthSession; user?: AuthUser }) => void,
+  ): () => void;
 }
 
 /**
@@ -668,6 +686,65 @@ class PayloadAuthService implements AuthService {
             : 'Network error during preferences update',
       };
     }
+  }
+
+  // Compatibility methods for Supabase-style API
+  async getSession(): Promise<{
+    session: { user: AuthUser } | null;
+    error?: string;
+  }> {
+    const authData = await SecureTokenStorage.getAuthData();
+    if (authData && authData.user) {
+      return {
+        session: {
+          user: authData.user,
+        },
+      };
+    }
+    return { session: null };
+  }
+
+  async signIn(data: LoginData): Promise<{
+    user?: AuthUser;
+    session?: AuthSession;
+    error?: string;
+  }> {
+    const result = await this.login(data);
+    return {
+      user: result.user,
+      session: result.session,
+      error: result.error,
+    };
+  }
+
+  async signUp(data: RegistrationData): Promise<{
+    user?: AuthUser;
+    error?: string;
+  }> {
+    const result = await this.register(data);
+    return {
+      error: result.error,
+      user: undefined, // Registration doesn't return user immediately
+    };
+  }
+
+  async signOut(): Promise<{ error?: string }> {
+    const result = await this.logout();
+    return {
+      error: result.error,
+    };
+  }
+
+  onAuthStateChange(
+    callback: (event: { session?: AuthSession; user?: AuthUser }) => void,
+  ): () => void {
+    // For Payload CMS, we don't have real-time auth state changes
+    // This is a compatibility shim - the actual implementation should
+    // be handled at the app level through context/state management
+    console.warn(
+      'onAuthStateChange is a compatibility shim for Payload CMS and does not provide real-time updates',
+    );
+    return () => {}; // Return empty unsubscribe function
   }
 }
 
