@@ -8,211 +8,211 @@ import Text from 'src/ui/Text.tsx';
 // Mock itinerary data
 const mockItineraries = {
   '1': {
-    tripTitle: 'Business Trip to Tokyo',
     days: [
       {
-        date: '2024-07-15',
-        dayName: 'Monday',
         activities: [
           {
+            location: 'JFK Airport',
             time: '10:00 AM',
             title: 'Flight Departure',
-            location: 'JFK Airport',
             type: 'travel',
           },
           {
+            location: 'Haneda Airport',
             time: '2:00 PM',
             title: 'Arrival in Tokyo',
-            location: 'Haneda Airport',
             type: 'travel',
           },
           {
+            location: 'Hotel Okura Tokyo',
             time: '4:00 PM',
             title: 'Hotel Check-in',
-            location: 'Hotel Okura Tokyo',
             type: 'accommodation',
           },
           {
+            location: 'Ginza District',
             time: '7:00 PM',
             title: 'Welcome Dinner',
-            location: 'Ginza District',
             type: 'dining',
           },
         ],
+        date: '2024-07-15',
+        dayName: 'Monday',
       },
       {
-        date: '2024-07-16',
-        dayName: 'Tuesday',
         activities: [
           {
+            location: 'Tokyo HQ',
             time: '9:00 AM',
             title: 'Client Meeting',
-            location: 'Tokyo HQ',
             type: 'business',
           },
           {
+            location: 'Sushi Jiro',
             time: '12:00 PM',
             title: 'Lunch Meeting',
-            location: 'Sushi Jiro',
             type: 'dining',
           },
           {
+            location: 'Tokyo HQ',
             time: '2:00 PM',
             title: 'Product Demo',
-            location: 'Tokyo HQ',
             type: 'business',
           },
           {
+            location: 'Roppongi',
             time: '6:00 PM',
             title: 'Team Dinner',
-            location: 'Roppongi',
             type: 'dining',
           },
         ],
+        date: '2024-07-16',
+        dayName: 'Tuesday',
       },
       {
-        date: '2024-07-17',
-        dayName: 'Wednesday',
         activities: [
           {
+            location: 'Tokyo HQ',
             time: '10:00 AM',
             title: 'Contract Discussion',
-            location: 'Tokyo HQ',
             type: 'business',
           },
           {
+            location: 'Asakusa',
             time: '2:00 PM',
             title: 'Senso-ji Temple Visit',
-            location: 'Asakusa',
             type: 'tourism',
           },
           {
+            location: 'Shibuya',
             time: '5:00 PM',
             title: 'Shopping',
-            location: 'Shibuya',
             type: 'personal',
           },
           {
+            location: 'Shibuya Sky',
             time: '8:00 PM',
             title: 'Farewell Dinner',
-            location: 'Shibuya Sky',
             type: 'dining',
           },
         ],
+        date: '2024-07-17',
+        dayName: 'Wednesday',
       },
     ],
+    tripTitle: 'Business Trip to Tokyo',
   },
   '2': {
-    tripTitle: 'Client Meeting in New York',
     days: [
       {
-        date: '2024-06-01',
-        dayName: 'Saturday',
         activities: [
           {
+            location: 'LAX Airport',
             time: '8:00 AM',
             title: 'Flight Departure',
-            location: 'LAX Airport',
             type: 'travel',
           },
           {
+            location: 'JFK Airport',
             time: '5:00 PM',
             title: 'Arrival in NYC',
-            location: 'JFK Airport',
             type: 'travel',
           },
           {
+            location: 'The Plaza Hotel',
             time: '7:00 PM',
             title: 'Hotel Check-in',
-            location: 'The Plaza Hotel',
             type: 'accommodation',
           },
         ],
+        date: '2024-06-01',
+        dayName: 'Saturday',
       },
       {
-        date: '2024-06-02',
-        dayName: 'Sunday',
         activities: [
           {
+            location: 'Central Park',
             time: '10:00 AM',
             title: 'Central Park Walk',
-            location: 'Central Park',
             type: 'tourism',
           },
           {
+            location: 'MoMA',
             time: '2:00 PM',
             title: 'Museum Visit',
-            location: 'MoMA',
             type: 'tourism',
           },
           {
+            location: 'Times Square',
             time: '8:00 PM',
             title: 'Broadway Show',
-            location: 'Times Square',
             type: 'entertainment',
           },
         ],
+        date: '2024-06-02',
+        dayName: 'Sunday',
       },
     ],
+    tripTitle: 'Client Meeting in New York',
   },
   '3': {
-    tripTitle: 'Conference in London',
     days: [
       {
-        date: '2024-08-10',
-        dayName: 'Saturday',
         activities: [
           {
+            location: 'LAX Airport',
             time: '2:00 PM',
             title: 'Flight Departure',
-            location: 'LAX Airport',
             type: 'travel',
           },
           {
+            location: 'Heathrow Airport',
             time: '8:00 AM+1',
             title: 'Arrival in London',
-            location: 'Heathrow Airport',
             type: 'travel',
           },
           {
+            location: 'The Savoy London',
             time: '11:00 AM',
             title: 'Hotel Check-in',
-            location: 'The Savoy London',
             type: 'accommodation',
           },
         ],
+        date: '2024-08-10',
+        dayName: 'Saturday',
       },
       {
-        date: '2024-08-11',
-        dayName: 'Sunday',
         activities: [
           {
+            location: 'ExCeL London',
             time: '9:00 AM',
             title: 'Conference Opening',
-            location: 'ExCeL London',
             type: 'business',
           },
           {
+            location: 'ExCeL London',
             time: '11:00 AM',
             title: 'Keynote Speech',
-            location: 'ExCeL London',
             type: 'business',
           },
           {
+            location: 'ExCeL London',
             time: '2:00 PM',
             title: 'Panel Discussion',
-            location: 'ExCeL London',
             type: 'business',
           },
           {
+            location: 'Canary Wharf',
             time: '7:00 PM',
             title: 'Networking Dinner',
-            location: 'Canary Wharf',
             type: 'dining',
           },
         ],
+        date: '2024-08-11',
+        dayName: 'Sunday',
       },
     ],
+    tripTitle: 'Conference in London',
   },
 };
 
@@ -265,7 +265,7 @@ export default function ItineraryScreen() {
   if (!itinerary) {
     return (
       <View className="bg-gray-50 flex-1 items-center justify-center">
-        <Ionicons name="alert-circle" size={64} color={colors.black} />
+        <Ionicons color={colors.black} name="alert-circle" size={64} />
         <Text className="text-gray-900 mt-4 text-lg font-medium">
           <fbt desc="Itinerary not found">Itinerary not found</fbt>
         </Text>
@@ -288,10 +288,10 @@ export default function ItineraryScreen() {
           </Text>
 
           {itinerary.days.map((day, dayIndex) => (
-            <View key={dayIndex} className="mb-6">
+            <View className="mb-6" key={dayIndex}>
               <View className="rounded-lg bg-white p-4">
                 <View className="mb-4 flex-row items-center">
-                  <Ionicons name="calendar" size={20} color={colors.purple} />
+                  <Ionicons color={colors.purple} name="calendar" size={20} />
                   <Text className="text-gray-900 ml-2 text-lg font-semibold">
                     {day.dayName}, {day.date}
                   </Text>
@@ -299,14 +299,14 @@ export default function ItineraryScreen() {
 
                 {day.activities.map((activity, activityIndex) => (
                   <View
-                    key={activityIndex}
                     className="mb-4 flex-row items-start last:mb-0"
+                    key={activityIndex}
                   >
                     <View className="mr-3 mt-1">
                       <Ionicons
+                        color={getActivityColor(activity.type)}
                         name={getActivityIcon(activity.type)}
                         size={18}
-                        color={getActivityColor(activity.type)}
                       />
                     </View>
                     <View className="flex-1">
@@ -320,9 +320,9 @@ export default function ItineraryScreen() {
                       </View>
                       <View className="flex-row items-center">
                         <Ionicons
+                          color={colors.black}
                           name="location-outline"
                           size={14}
-                          color={colors.black}
                         />
                         <Text className="text-gray-600 ml-1 text-sm">
                           {activity.location}

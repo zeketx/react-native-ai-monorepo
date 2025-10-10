@@ -7,11 +7,11 @@ import colors from 'src/ui/colors.ts';
 import Text from 'src/ui/Text.tsx';
 
 interface NotificationSetting {
-  id: string;
-  title: string;
   description: string;
   enabled: boolean;
   icon: string;
+  id: string;
+  title: string;
 }
 
 const NotificationItem = ({
@@ -23,78 +23,78 @@ const NotificationItem = ({
 }) => (
   <View className="border-gray-100 flex-row items-center border-b px-4 py-4">
     <View className="bg-gray-100 mr-4 h-10 w-10 items-center justify-center rounded-full">
-      <Ionicons name={item.icon as any} size={20} color={colors.purple} />
+      <Ionicons color={colors.purple} name={item.icon as any} size={20} />
     </View>
     <View className="flex-1">
       <Text className="text-gray-900 text-base font-medium">{item.title}</Text>
       <Text className="text-gray-600 text-sm">{item.description}</Text>
     </View>
     <Switch
-      value={item.enabled}
       onValueChange={() => onToggle(item.id)}
-      trackColor={{ false: '#f3f4f6', true: colors.purple }}
       thumbColor={item.enabled ? '#ffffff' : '#ffffff'}
+      trackColor={{ false: '#f3f4f6', true: colors.purple }}
+      value={item.enabled}
     />
   </View>
 );
 
 export default function NotificationsScreen() {
-  const [notifications, setNotifications] = useState<NotificationSetting[]>([
+  const [notifications, setNotifications] = useState<Array<NotificationSetting>>([
     {
-      id: 'trip-reminders',
-      title: 'Trip Reminders',
       description: 'Get notified about upcoming trips',
       enabled: true,
       icon: 'airplane',
+      id: 'trip-reminders',
+      title: 'Trip Reminders',
     },
     {
-      id: 'booking-confirmations',
-      title: 'Booking Confirmations',
       description: 'Receive booking confirmation notifications',
       enabled: true,
       icon: 'checkmark-circle',
+      id: 'booking-confirmations',
+      title: 'Booking Confirmations',
     },
     {
-      id: 'flight-updates',
-      title: 'Flight Updates',
       description: 'Get notified about flight changes',
       enabled: true,
       icon: 'time',
+      id: 'flight-updates',
+      title: 'Flight Updates',
     },
     {
-      id: 'weather-alerts',
-      title: 'Weather Alerts',
       description: 'Weather updates for your destinations',
       enabled: false,
       icon: 'partly-sunny',
+      id: 'weather-alerts',
+      title: 'Weather Alerts',
     },
     {
-      id: 'document-expiry',
-      title: 'Document Expiry',
       description: 'Reminders for passport and visa expiry',
       enabled: true,
       icon: 'document-text',
+      id: 'document-expiry',
+      title: 'Document Expiry',
     },
     {
-      id: 'expense-reminders',
-      title: 'Expense Reminders',
       description: 'Reminders to submit travel expenses',
       enabled: false,
       icon: 'receipt',
+      id: 'expense-reminders',
+      title: 'Expense Reminders',
     },
     {
-      id: 'itinerary-updates',
-      title: 'Itinerary Updates',
       description: 'Changes to your travel itinerary',
       enabled: true,
       icon: 'list',
+      id: 'itinerary-updates',
+      title: 'Itinerary Updates',
     },
     {
-      id: 'marketing',
-      title: 'Marketing & Promotions',
       description: 'Special offers and travel deals',
       enabled: false,
       icon: 'megaphone',
+      id: 'marketing',
+      title: 'Marketing & Promotions',
     },
   ]);
 
@@ -138,9 +138,9 @@ export default function NotificationsScreen() {
                 </View>
                 <View className="bg-purple-100 h-12 w-12 items-center justify-center rounded-full">
                   <Ionicons
+                    color={colors.purple}
                     name="notifications"
                     size={24}
-                    color={colors.purple}
                   />
                 </View>
               </View>
@@ -166,12 +166,12 @@ export default function NotificationsScreen() {
                 )
                 .map((item, index, array) => (
                   <View
-                    key={item.id}
                     className={
                       index === array.length - 1
                         ? ''
                         : 'border-gray-100 border-b'
                     }
+                    key={item.id}
                   >
                     <NotificationItem item={item} onToggle={handleToggle} />
                   </View>
@@ -189,8 +189,8 @@ export default function NotificationsScreen() {
                 .filter((n) => n.id === 'expense-reminders')
                 .map((item) => (
                   <NotificationItem
-                    key={item.id}
                     item={item}
+                    key={item.id}
                     onToggle={handleToggle}
                   />
                 ))}
@@ -207,8 +207,8 @@ export default function NotificationsScreen() {
                 .filter((n) => n.id === 'marketing')
                 .map((item) => (
                   <NotificationItem
-                    key={item.id}
                     item={item}
+                    key={item.id}
                     onToggle={handleToggle}
                   />
                 ))}
@@ -219,7 +219,7 @@ export default function NotificationsScreen() {
           <View className="mx-4 mb-4">
             <View className="bg-blue-50 rounded-lg p-4">
               <View className="flex-row items-start">
-                <Ionicons name="information-circle" size={20} color="#2563eb" />
+                <Ionicons color="#2563eb" name="information-circle" size={20} />
                 <View className="ml-3 flex-1">
                   <Text className="text-blue-800 text-sm">
                     <fbt desc="Notification settings info">

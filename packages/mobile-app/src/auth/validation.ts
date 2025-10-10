@@ -24,6 +24,13 @@ export const loginSchema = z.object({
 // Registration validation schema
 export const registrationSchema = z
   .object({
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
+    email: z
+      .string()
+      .min(1, 'Email is required')
+      .email('Please enter a valid email address')
+      .toLowerCase()
+      .trim(),
     firstName: z
       .string()
       .min(1, 'First name is required')
@@ -34,12 +41,6 @@ export const registrationSchema = z
       .min(1, 'Last name is required')
       .max(50, 'Last name must be less than 50 characters')
       .trim(),
-    email: z
-      .string()
-      .min(1, 'Email is required')
-      .email('Please enter a valid email address')
-      .toLowerCase()
-      .trim(),
     password: z
       .string()
       .min(8, 'Password must be at least 8 characters')
@@ -48,7 +49,6 @@ export const registrationSchema = z
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
         'Password must contain at least one lowercase letter, one uppercase letter, and one number',
       ),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
@@ -68,7 +68,7 @@ export const forgotPasswordSchema = z.object({
 // Reset password validation schema
 export const resetPasswordSchema = z
   .object({
-    token: z.string().min(1, 'Reset token is required'),
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
     password: z
       .string()
       .min(8, 'Password must be at least 8 characters')
@@ -77,7 +77,7 @@ export const resetPasswordSchema = z
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
         'Password must contain at least one lowercase letter, one uppercase letter, and one number',
       ),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
+    token: z.string().min(1, 'Reset token is required'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
@@ -120,10 +120,10 @@ export const validatePassword = (password: string): boolean => {
 export const getPasswordStrength = (
   password: string,
 ): {
+  feedback: Array<string>;
   score: number;
-  feedback: string[];
 } => {
-  const feedback: string[] = [];
+  const feedback: Array<string> = [];
   let score = 0;
 
   if (password.length >= 8) {
@@ -156,11 +156,11 @@ export const getPasswordStrength = (
     feedback.push('Add numbers');
   }
 
-  if (/[^a-zA-Z0-9]/.test(password)) {
+  if (/[^\dA-Za-z]/.test(password)) {
     score += 1;
   } else {
     feedback.push('Add special characters for extra security');
   }
 
-  return { score, feedback };
+  return { feedback, score };
 };

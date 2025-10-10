@@ -22,22 +22,22 @@ const aboutItems = [
     value: 'ClientSync Team',
   },
   {
+    action: () => Linking.openURL('https://clientsync.com'),
     icon: 'globe',
     title: 'Website',
     value: 'clientsync.com',
-    action: () => Linking.openURL('https://clientsync.com'),
   },
   {
+    action: () => Linking.openURL('https://clientsync.com/privacy'),
     icon: 'document-text',
     title: 'Privacy Policy',
     value: 'View Privacy Policy',
-    action: () => Linking.openURL('https://clientsync.com/privacy'),
   },
   {
+    action: () => Linking.openURL('https://clientsync.com/terms'),
     icon: 'shield-checkmark',
     title: 'Terms of Service',
     value: 'View Terms of Service',
-    action: () => Linking.openURL('https://clientsync.com/terms'),
   },
 ];
 
@@ -50,13 +50,13 @@ export default function AboutModal() {
     <>
       <Stack.Screen
         options={{
-          title: String(fbs('About', 'About modal title')),
           headerLeft: () => (
-            <Pressable onPress={handleClose} className="p-2">
-              <Ionicons name="close" size={24} color={colors.black} />
+            <Pressable className="p-2" onPress={handleClose}>
+              <Ionicons color={colors.black} name="close" size={24} />
             </Pressable>
           ),
           presentation: 'modal',
+          title: String(fbs('About', 'About modal title')),
         }}
       />
 
@@ -65,7 +65,7 @@ export default function AboutModal() {
           {/* App Info */}
           <View className="mb-4 items-center rounded-lg bg-white p-4">
             <View className="bg-purple-100 mb-4 h-20 w-20 items-center justify-center rounded-full">
-              <Ionicons name="airplane" size={40} color={colors.purple} />
+              <Ionicons color={colors.purple} name="airplane" size={40} />
             </View>
 
             <Text className="text-gray-900 mb-2 text-2xl font-bold">
@@ -88,16 +88,16 @@ export default function AboutModal() {
 
             {aboutItems.map((item, index) => (
               <Pressable
-                key={index}
-                onPress={item.action}
                 className="border-gray-100 flex-row items-center border-b py-3 last:border-b-0"
                 disabled={!item.action}
+                key={index}
+                onPress={item.action}
               >
                 <View className="bg-gray-100 mr-3 h-8 w-8 items-center justify-center rounded-full">
                   <Ionicons
+                    color={colors.black}
                     name={item.icon as any}
                     size={16}
-                    color={colors.black}
                   />
                 </View>
                 <View className="flex-1">
@@ -108,9 +108,9 @@ export default function AboutModal() {
                 </View>
                 {item.action && (
                   <Ionicons
+                    color={colors.black}
                     name="chevron-forward"
                     size={16}
-                    color={colors.black}
                   />
                 )}
               </Pressable>

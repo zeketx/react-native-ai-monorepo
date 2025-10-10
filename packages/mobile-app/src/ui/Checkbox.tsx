@@ -10,20 +10,20 @@ import { TouchableOpacity, View } from 'react-native';
 import Text from './Text.js';
 
 export interface CheckboxProps {
-  label?: string;
   checked: boolean;
-  onPress: () => void;
   disabled?: boolean;
   error?: string;
+  label?: string;
+  onPress: () => void;
   testID?: string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
-  label,
   checked,
-  onPress,
   disabled = false,
   error,
+  label,
+  onPress,
   testID,
 }) => {
   const hasError = Boolean(error);
@@ -32,8 +32,8 @@ const Checkbox: React.FC<CheckboxProps> = ({
     <View className="mb-4">
       <TouchableOpacity
         className="flex-row items-center"
-        onPress={onPress}
         disabled={disabled}
+        onPress={onPress}
         testID={testID}
       >
         <View
@@ -47,7 +47,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
                 : 'border-gray-300 bg-white'
           } ${disabled ? 'opacity-50' : ''} `}
         >
-          {checked && <Ionicons name="checkmark" size={14} color="#ffffff" />}
+          {checked && <Ionicons color="#ffffff" name="checkmark" size={14} />}
         </View>
 
         {label && (
@@ -61,7 +61,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
       {error && (
         <View className="ml-8 mt-1 flex-row items-center">
-          <Ionicons name="alert-circle" size={16} color="#ef4444" />
+          <Ionicons color="#ef4444" name="alert-circle" size={16} />
           <Text
             className="text-red-600 ml-1 text-sm"
             testID={`${testID}-error`}

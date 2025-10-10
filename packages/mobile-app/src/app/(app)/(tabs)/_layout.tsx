@@ -13,12 +13,12 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        headerShown: true,
         sceneStyle: {
           backgroundColor: 'transparent',
         },
         tabBarActiveTintColor: colors.purple,
         tabBarInactiveTintColor: colors.black,
-        headerShown: true,
       }}
     >
       <Tabs.Screen
@@ -41,16 +41,16 @@ export default function TabLayout() {
             </Pressable>
           ),
           tabBarIcon: ({
-            focused,
             color,
+            focused,
           }: {
-            focused: boolean;
             color: string;
+            focused: boolean;
           }) => (
             <Ionicons
+              color={color}
               name={focused ? 'airplane' : 'airplane-outline'}
               size={24}
-              color={color}
             />
           ),
           title: String(fbs('Trips', 'Trips tab title')),
@@ -60,16 +60,16 @@ export default function TabLayout() {
         name="profile"
         options={{
           tabBarIcon: ({
-            focused,
             color,
+            focused,
           }: {
-            focused: boolean;
             color: string;
+            focused: boolean;
           }) => (
             <Ionicons
+              color={color}
               name={focused ? 'person' : 'person-outline'}
               size={24}
-              color={color}
             />
           ),
           title: String(fbs('Profile', 'Profile tab title')),
@@ -79,16 +79,16 @@ export default function TabLayout() {
         name="settings"
         options={{
           tabBarIcon: ({
-            focused,
             color,
+            focused,
           }: {
-            focused: boolean;
             color: string;
+            focused: boolean;
           }) => (
             <Ionicons
+              color={color}
               name={focused ? 'settings' : 'settings-outline'}
               size={24}
-              color={color}
             />
           ),
           title: String(fbs('Settings', 'Settings tab title')),

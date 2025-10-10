@@ -8,40 +8,40 @@ export interface LoginData {
 }
 
 export interface RegistrationData {
-  email: string;
-  password: string;
   confirmPassword: string;
+  email: string;
   firstName?: string;
   lastName?: string;
+  password: string;
 }
 
 export interface AuthUser {
-  id: string;
   email: string;
+  emailVerified: boolean;
   firstName: string;
+  id: string;
   lastName: string;
   role: string;
-  emailVerified: boolean;
 }
 
 export interface AuthSession {
-  token: string;
-  refreshToken?: string;
   expiresAt: Date;
+  refreshToken?: string;
+  token: string;
 }
 
 // Authentication result types
 export interface LoginResult {
-  success: boolean;
   error?: string;
-  user?: AuthUser;
   session?: AuthSession;
+  success: boolean;
+  user?: AuthUser;
 }
 
 export interface RegistrationResult {
-  success: boolean;
   error?: string;
   message?: string;
+  success: boolean;
 }
 
 // Utility functions

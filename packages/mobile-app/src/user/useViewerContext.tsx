@@ -25,8 +25,8 @@ type LocalSettings = Readonly<{
 }>;
 
 type ViewerContext = Readonly<{
-  user: AuthUser;
   session: AuthSession;
+  user: AuthUser;
 }>;
 
 const getLocalStorageKey = (userID: string) =>
@@ -72,7 +72,7 @@ const [ViewerContext, useViewerContext] = createContextHook(() => {
         authService = getAuthService();
 
         // Check for existing session
-        const { session: existingSession, error } =
+        const { error, session: existingSession } =
           await authService.getSession();
 
         if (error) {
@@ -83,8 +83,8 @@ const [ViewerContext, useViewerContext] = createContextHook(() => {
           setAuthError(formatAuthError(error));
         } else if (existingSession?.user) {
           setViewerContext({
+            session: existingSession as unknown as AuthSession,
             user: existingSession.user,
-            session: existingSession,
           });
 
           // Load user's local settings
@@ -102,18 +102,20 @@ const [ViewerContext, useViewerContext] = createContextHook(() => {
 
         // Set up auth state change listener
         if (authService) {
-          unsubscribe = authService.onAuthStateChange((event) => {
-            if (event.session?.user) {
-              setViewerContext({
-                user: event.user!,
-                session: event.session,
-              });
-              setAuthError(null);
-            } else {
-              setViewerContext(null);
-              setLocalSettings(initialLocalSettings);
-            }
-          });
+          unsubscribe = authService.onAuthStateChange(
+            (event: { session?: AuthSession; user?: AuthUser }) => {
+              if (event.session && event.user) {
+                setViewerContext({
+                  session: event.session,
+                  user: event.user,
+                });
+                setAuthError(null);
+              } else {
+                setViewerContext(null);
+                setLocalSettings(initialLocalSettings);
+              }
+            },
+          );
         }
       } catch (error) {
         console.error('Failed to initialize authentication:', error);
@@ -161,31 +163,31 @@ const [ViewerContext, useViewerContext] = createContextHook(() => {
 
         const authService = getAuthService();
         const {
-          user: authUser,
-          session: authSession,
           error,
+          session: authSession,
+          user: authUser,
         } = await authService.signIn(loginData);
 
         if (error) {
           setAuthError(formatAuthError(error));
-          return { success: false, error: formatAuthError(error) };
+          return { error: formatAuthError(error), success: false };
         }
 
         if (authUser && authSession) {
           setViewerContext({
-            user: authUser,
             session: authSession,
+            user: authUser,
           });
           router.replace('/');
           return { success: true };
         }
 
-        return { success: false, error: 'Login failed - no user returned' };
+        return { error: 'Login failed - no user returned', success: false };
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : 'Login failed';
         setAuthError(errorMessage);
-        return { success: false, error: errorMessage };
+        return { error: errorMessage, success: false };
       } finally {
         setIsLoading(false);
       }
@@ -199,32 +201,32 @@ const [ViewerContext, useViewerContext] = createContextHook(() => {
       setAuthError(null);
 
       const authService = getAuthService();
-      const { user: authUser, error } =
+      const { error, user: authUser } =
         await authService.signUp(registrationData);
 
       if (error) {
         setAuthError(formatAuthError(error));
-        return { success: false, error: formatAuthError(error) };
+        return { error: formatAuthError(error), success: false };
       }
 
       if (authUser) {
         // Note: User will need to confirm email before they can sign in
         return {
-          success: true,
           message:
             'Registration successful! Please check your email to confirm your account.',
+          success: true,
         };
       }
 
       return {
-        success: false,
         error: 'Registration failed - no user returned',
+        success: false,
       };
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Registration failed';
       setAuthError(errorMessage);
-      return { success: false, error: errorMessage };
+      return { error: errorMessage, success: false };
     } finally {
       setIsLoading(false);
     }
@@ -257,16 +259,16 @@ const [ViewerContext, useViewerContext] = createContextHook(() => {
 
   return {
     // Authentication state
+    authError,
     isAuthenticated: !!user,
     isLoading,
-    authError,
-    user,
     session,
+    user,
 
     // Authentication methods
     login,
-    register,
     logout,
+    register,
 
     // App state
     locale,

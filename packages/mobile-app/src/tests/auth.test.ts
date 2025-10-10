@@ -3,20 +3,20 @@
  * Tests for the Supabase authentication integration
  */
 
-import { authService } from '@clientsync/shared';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-// Mock Supabase client for testing
+// Mock Supabase client for testing (unused but kept for reference)
+// @ts-expect-error - Mock kept for reference
+ 
 const mockSupabaseClient = {
   auth: {
-    signInWithPassword: vi.fn(),
-    signUp: vi.fn(),
-    signOut: vi.fn(),
     getSession: vi.fn(),
-    refreshSession: vi.fn(),
     onAuthStateChange: vi.fn(),
+    refreshSession: vi.fn(),
+    signInWithPassword: vi.fn(),
+    signOut: vi.fn(),
+    signUp: vi.fn(),
   },
-  rpc: vi.fn(),
   from: vi.fn().mockReturnValue({
     select: vi.fn().mockReturnValue({
       eq: vi.fn().mockReturnValue({
@@ -24,21 +24,22 @@ const mockSupabaseClient = {
       }),
     }),
   }),
+  rpc: vi.fn(),
 };
 
 vi.mock('@clientsync/shared', () => ({
   authService: {
-    login: vi.fn(),
-    register: vi.fn(),
-    logout: vi.fn(),
     getCurrentSession: vi.fn(),
+    login: vi.fn(),
+    logout: vi.fn(),
     refreshSession: vi.fn(),
+    register: vi.fn(),
   },
   validateEmail: (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
   validatePassword: (password: string) => ({
-    isValid: password.length >= 8,
     errors:
       password.length < 8 ? ['Password must be at least 8 characters'] : [],
+    isValid: password.length >= 8,
   }),
 }));
 
@@ -77,21 +78,21 @@ describe('Authentication Service', () => {
     it('should handle successful login', async () => {
       const mockSession = {
         access_token: 'mock-token',
+        expires_at: Math.floor(Date.now() / 1000) + 3600,
         refresh_token: 'mock-refresh-token',
         user: {
-          id: 'user-123',
           email: 'test@example.com',
+          id: 'user-123',
           profile: {
-            id: 'profile-123',
-            user_id: 'user-123',
-            role: 'client' as const,
-            first_name: 'John',
-            last_name: 'Doe',
             created_at: new Date().toISOString(),
+            first_name: 'John',
+            id: 'profile-123',
+            last_name: 'Doe',
+            role: 'client' as const,
             updated_at: new Date().toISOString(),
+            user_id: 'user-123',
           },
         },
-        expires_at: Math.floor(Date.now() / 1000) + 3600,
       };
 
       const mockAuthService = await import('@clientsync/shared');
@@ -116,8 +117,8 @@ describe('Authentication Service', () => {
       const mockAuthService = await import('@clientsync/shared');
       vi.mocked(mockAuthService.authService.login).mockResolvedValue({
         error: {
-          message: 'Invalid credentials',
           code: 'INVALID_CREDENTIALS',
+          message: 'Invalid credentials',
         },
       });
 
@@ -139,18 +140,18 @@ describe('Authentication Service', () => {
 
       const result = await mockAuthService.authService.register({
         email: 'newuser@example.com',
-        password: 'StrongP@ssw0rd',
         firstName: 'Jane',
         lastName: 'Doe',
+        password: 'StrongP@ssw0rd',
         role: 'client',
       });
 
       expect(result.error).toBeUndefined();
       expect(mockAuthService.authService.register).toHaveBeenCalledWith({
         email: 'newuser@example.com',
-        password: 'StrongP@ssw0rd',
         firstName: 'Jane',
         lastName: 'Doe',
+        password: 'StrongP@ssw0rd',
         role: 'client',
       });
     });
@@ -161,8 +162,8 @@ describe('Authentication Service', () => {
       const mockSession = {
         access_token: 'mock-token',
         user: {
-          id: 'user-123',
           email: 'test@example.com',
+          id: 'user-123',
         },
       };
 
@@ -185,8 +186,8 @@ describe('Authentication Service', () => {
         data: {
           access_token: 'new-token',
           user: {
-            id: 'user-123',
             email: 'test@example.com',
+            id: 'user-123',
           },
         },
       });

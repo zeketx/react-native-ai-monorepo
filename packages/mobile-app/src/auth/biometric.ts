@@ -9,23 +9,23 @@ import { Platform } from 'react-native';
 import { SecureTokenStorage } from './storage.js';
 
 export interface BiometricCapabilities {
+  availableTypes: Array<LocalAuthentication.AuthenticationType>;
   hasHardware: boolean;
   isEnrolled: boolean;
-  availableTypes: LocalAuthentication.AuthenticationType[];
-  supportedTypes: string[];
+  supportedTypes: Array<string>;
 }
 
 export interface BiometricAuthResult {
-  success: boolean;
   error?: string;
   errorCode?: string;
+  success: boolean;
 }
 
 export interface BiometricPreferences {
   enabled: boolean;
-  promptTitle?: string;
-  promptSubtitle?: string;
   fallbackLabel?: string;
+  promptSubtitle?: string;
+  promptTitle?: string;
 }
 
 class BiometricAuthService {
@@ -69,9 +69,9 @@ class BiometricAuthService {
       });
 
       this.capabilities = {
+        availableTypes,
         hasHardware,
         isEnrolled,
-        availableTypes,
         supportedTypes,
       };
 
@@ -80,9 +80,9 @@ class BiometricAuthService {
       console.error('Error checking biometric capabilities:', error);
 
       this.capabilities = {
+        availableTypes: [],
         hasHardware: false,
         isEnrolled: false,
-        availableTypes: [],
         supportedTypes: [],
       };
 
@@ -124,30 +124,30 @@ class BiometricAuthService {
    * Authenticate using biometrics
    */
   async authenticate(options?: {
-    promptMessage?: string;
     cancelLabel?: string;
-    fallbackLabel?: string;
     disableDeviceFallback?: boolean;
+    fallbackLabel?: string;
+    promptMessage?: string;
   }): Promise<BiometricAuthResult> {
     try {
       const isAvailable = await this.isAvailable();
 
       if (!isAvailable) {
         return {
-          success: false,
           error: 'Biometric authentication is not available on this device',
           errorCode: 'NOT_AVAILABLE',
+          success: false,
         };
       }
 
       const biometricType = await this.getPrimaryBiometricType();
 
       const result = await LocalAuthentication.authenticateAsync({
+        cancelLabel: options?.cancelLabel || 'Cancel',
+        disableDeviceFallback: options?.disableDeviceFallback || false,
+        fallbackLabel: options?.fallbackLabel || 'Use Password',
         promptMessage:
           options?.promptMessage || `Use ${biometricType} to sign in`,
-        cancelLabel: options?.cancelLabel || 'Cancel',
-        fallbackLabel: options?.fallbackLabel || 'Use Password',
-        disableDeviceFallback: options?.disableDeviceFallback || false,
       });
 
       if (result.success) {
@@ -176,16 +176,16 @@ class BiometricAuthService {
       }
 
       return {
-        success: false,
         error: errorMessage,
         errorCode,
+        success: false,
       };
     } catch (error) {
       console.error('Biometric authentication error:', error);
       return {
-        success: false,
         error: error instanceof Error ? error.message : 'Authentication failed',
         errorCode: 'UNKNOWN',
+        success: false,
       };
     }
   }
@@ -207,25 +207,25 @@ class BiometricAuthService {
    * Enable biometric login
    */
   async enableBiometricLogin(options?: {
-    promptTitle?: string;
-    promptSubtitle?: string;
     fallbackLabel?: string;
+    promptSubtitle?: string;
+    promptTitle?: string;
   }): Promise<BiometricAuthResult> {
     try {
       const isAvailable = await this.isAvailable();
 
       if (!isAvailable) {
         return {
-          success: false,
           error: 'Biometric authentication is not available on this device',
           errorCode: 'NOT_AVAILABLE',
+          success: false,
         };
       }
 
       // Authenticate first to confirm user identity
       const authResult = await this.authenticate({
-        promptMessage: 'Authenticate to enable biometric login',
         disableDeviceFallback: false,
+        promptMessage: 'Authenticate to enable biometric login',
       });
 
       if (!authResult.success) {
@@ -235,9 +235,9 @@ class BiometricAuthService {
       // Save preferences
       const preferences: BiometricPreferences = {
         enabled: true,
-        promptTitle: options?.promptTitle,
-        promptSubtitle: options?.promptSubtitle,
         fallbackLabel: options?.fallbackLabel,
+        promptSubtitle: options?.promptSubtitle,
+        promptTitle: options?.promptTitle,
       };
 
       await SecureTokenStorage.setBiometricPreferences(preferences);
@@ -246,12 +246,12 @@ class BiometricAuthService {
     } catch (error) {
       console.error('Error enabling biometric login:', error);
       return {
-        success: false,
         error:
           error instanceof Error
             ? error.message
             : 'Failed to enable biometric login',
         errorCode: 'UNKNOWN',
+        success: false,
       };
     }
   }
@@ -293,9 +293,9 @@ class BiometricAuthService {
 
       if (!isEnabled) {
         return {
-          success: false,
           error: 'Biometric login is not enabled',
           errorCode: 'NOT_ENABLED',
+          success: false,
         };
       }
 
@@ -303,18 +303,18 @@ class BiometricAuthService {
       const biometricType = await this.getPrimaryBiometricType();
 
       return await this.authenticate({
+        cancelLabel: 'Cancel',
+        disableDeviceFallback: false,
+        fallbackLabel: preferences?.fallbackLabel || 'Use Password',
         promptMessage:
           preferences?.promptTitle || `Use ${biometricType} to sign in`,
-        cancelLabel: 'Cancel',
-        fallbackLabel: preferences?.fallbackLabel || 'Use Password',
-        disableDeviceFallback: false,
       });
     } catch (error) {
       console.error('Error authenticating for login:', error);
       return {
-        success: false,
         error: error instanceof Error ? error.message : 'Authentication failed',
         errorCode: 'UNKNOWN',
+        success: false,
       };
     }
   }

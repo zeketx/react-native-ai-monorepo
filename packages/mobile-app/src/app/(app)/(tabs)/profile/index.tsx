@@ -8,89 +8,89 @@ import useViewerContext from 'src/user/useViewerContext.tsx';
 
 // Mock user data
 const mockUser = {
-  id: '1',
-  name: 'John Doe',
-  email: 'john.doe@example.com',
   avatar: 'https://via.placeholder.com/150',
-  title: 'Senior Business Analyst',
   company: 'ClientSync Corp',
-  phone: '+1 (555) 123-4567',
-  location: 'San Francisco, CA',
+  email: 'john.doe@example.com',
+  id: '1',
   joinDate: '2023-01-15',
+  location: 'San Francisco, CA',
+  name: 'John Doe',
+  phone: '+1 (555) 123-4567',
+  recentTrips: [
+    { date: '2024-07-15', id: '1', title: 'Business Trip to Tokyo' },
+    { date: '2024-06-01', id: '2', title: 'Client Meeting in New York' },
+    { date: '2024-08-10', id: '3', title: 'Conference in London' },
+  ],
   stats: {
-    totalTrips: 12,
-    upcomingTrips: 3,
     completedTrips: 9,
     countries: 8,
+    totalTrips: 12,
+    upcomingTrips: 3,
   },
-  recentTrips: [
-    { id: '1', title: 'Business Trip to Tokyo', date: '2024-07-15' },
-    { id: '2', title: 'Client Meeting in New York', date: '2024-06-01' },
-    { id: '3', title: 'Conference in London', date: '2024-08-10' },
-  ],
+  title: 'Senior Business Analyst',
 };
 
 const ProfileItem = ({
   icon,
   label,
-  value,
   onPress,
+  value,
 }: {
   icon: string;
   label: string;
-  value: string;
   onPress?: () => void;
+  value: string;
 }) => (
   <Pressable
     className="border-gray-100 flex-row items-center border-b px-4 py-3"
     onPress={onPress}
   >
-    <Ionicons name={icon as any} size={20} color={colors.black} />
+    <Ionicons color={colors.black} name={icon as any} size={20} />
     <View className="ml-3 flex-1">
       <Text className="text-gray-500 text-sm">{label}</Text>
       <Text className="text-gray-900 text-base">{value}</Text>
     </View>
     {onPress && (
-      <Ionicons name="chevron-forward" size={20} color={colors.black} />
+      <Ionicons color={colors.black} name="chevron-forward" size={20} />
     )}
   </Pressable>
 );
 
 const StatCard = ({
+  icon,
   title,
   value,
-  icon,
 }: {
+  icon: string;
   title: string;
   value: number;
-  icon: string;
 }) => (
   <View className="flex-1 items-center rounded-lg bg-white p-4">
-    <Ionicons name={icon as any} size={24} color={colors.purple} />
+    <Ionicons color={colors.purple} name={icon as any} size={24} />
     <Text className="text-gray-900 mt-2 text-2xl font-bold">{value}</Text>
     <Text className="text-gray-600 text-center text-sm">{title}</Text>
   </View>
 );
 
 export default function ProfileScreen() {
-  const { isAuthenticated } = useViewerContext();
+  const { isAuthenticated: _isAuthenticated } = useViewerContext();
 
   return (
     <>
       <Stack.Screen
         options={{
-          title: String(fbs('Profile', 'Profile screen header title')),
           headerRight: () => (
-            <Link href="/(app)/(tabs)/profile/edit" asChild>
+            <Link asChild href="/(app)/(tabs)/profile/edit">
               <Pressable className="mr-2 p-2">
                 <Ionicons
+                  color={colors.purple}
                   name="create-outline"
                   size={24}
-                  color={colors.purple}
                 />
               </Pressable>
             </Link>
           ),
+          title: String(fbs('Profile', 'Profile screen header title')),
         }}
       />
 
@@ -99,7 +99,7 @@ export default function ProfileScreen() {
         <View className="bg-white px-4 py-6">
           <View className="items-center">
             <View className="bg-gray-200 h-24 w-24 items-center justify-center rounded-full">
-              <Ionicons name="person" size={48} color={colors.black} />
+              <Ionicons color={colors.black} name="person" size={48} />
             </View>
             <Text className="text-gray-900 mt-3 text-xl font-bold">
               {mockUser.name}
@@ -116,26 +116,26 @@ export default function ProfileScreen() {
           </Text>
           <View className="flex-row space-x-3">
             <StatCard
+              icon="airplane"
               title="Total Trips"
               value={mockUser.stats.totalTrips}
-              icon="airplane"
             />
             <StatCard
+              icon="globe"
               title="Countries"
               value={mockUser.stats.countries}
-              icon="globe"
             />
           </View>
           <View className="mt-3 flex-row space-x-3">
             <StatCard
+              icon="calendar"
               title="Upcoming"
               value={mockUser.stats.upcomingTrips}
-              icon="calendar"
             />
             <StatCard
+              icon="checkmark-circle"
               title="Completed"
               value={mockUser.stats.completedTrips}
-              icon="checkmark-circle"
             />
           </View>
         </View>
@@ -169,12 +169,12 @@ export default function ProfileScreen() {
           <View className="rounded-lg bg-white">
             {mockUser.recentTrips.map((trip, index) => (
               <Link
-                key={trip.id}
-                href={`/(app)/(tabs)/trips/${trip.id}`}
                 asChild
+                href={`/(app)/(tabs)/trips/${trip.id}`}
+                key={trip.id}
               >
                 <Pressable className="border-gray-100 flex-row items-center border-b px-4 py-3 last:border-b-0">
-                  <Ionicons name="airplane" size={20} color={colors.purple} />
+                  <Ionicons color={colors.purple} name="airplane" size={20} />
                   <View className="ml-3 flex-1">
                     <Text className="text-gray-900 text-base">
                       {trip.title}
@@ -182,9 +182,9 @@ export default function ProfileScreen() {
                     <Text className="text-gray-600 text-sm">{trip.date}</Text>
                   </View>
                   <Ionicons
+                    color={colors.black}
                     name="chevron-forward"
                     size={20}
-                    color={colors.black}
                   />
                 </Pressable>
               </Link>
@@ -198,20 +198,20 @@ export default function ProfileScreen() {
             <ProfileItem
               icon="shield-checkmark"
               label="Privacy & Security"
-              value="Manage your privacy settings"
               onPress={() => {}}
+              value="Manage your privacy settings"
             />
             <ProfileItem
               icon="help-circle"
               label="Help & Support"
-              value="Get help with your account"
               onPress={() => {}}
+              value="Get help with your account"
             />
             <ProfileItem
               icon="log-out"
               label="Sign Out"
-              value="Sign out of your account"
               onPress={() => {}}
+              value="Sign out of your account"
             />
           </View>
         </View>

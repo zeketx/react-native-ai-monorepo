@@ -25,7 +25,9 @@
       "Bash(pnpm --filter cms dev)",
       "Bash(pnpm prettier:*)",
       "Bash(pnpm --filter mobile-app test)",
-      "Bash(pnpm:*)"
+      "Bash(pnpm:*)",
+      "Bash(git commit:*)",
+      "Bash(timeout 10 pnpm dev:*)"
     ],
     "deny": []
   }

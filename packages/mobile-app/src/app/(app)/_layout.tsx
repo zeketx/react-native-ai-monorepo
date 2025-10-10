@@ -26,22 +26,22 @@ function TabLayout() {
           <Stack.Screen
             name="add-trip"
             options={{
-              presentation: 'modal',
               headerShown: true,
+              presentation: 'modal',
             }}
           />
           <Stack.Screen
             name="support"
             options={{
-              presentation: 'modal',
               headerShown: true,
+              presentation: 'modal',
             }}
           />
           <Stack.Screen
             name="about"
             options={{
-              presentation: 'modal',
               headerShown: true,
+              presentation: 'modal',
             }}
           />
         </Stack>
