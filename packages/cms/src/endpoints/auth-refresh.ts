@@ -11,7 +11,8 @@ export const refreshTokenEndpoint: Endpoint = {
   method: 'post',
   handler: async (req) => {
     try {
-      const { refreshToken } = req.body
+      const body = await req.json()
+      const { refreshToken } = body
 
       if (!refreshToken) {
         return new Response(

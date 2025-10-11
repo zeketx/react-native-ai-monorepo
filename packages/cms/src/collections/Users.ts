@@ -5,12 +5,14 @@ export const Users: CollectionConfig = {
   auth: {
     tokenExpiration: 7200, // 2 hours
     verify: {
-      generateEmailHTML: ({ req, token, user }) => {
+      generateEmailHTML: (args) => {
+        const token = args?.token || ''
+        const user = args?.user
         const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/verify-email?token=${token}`
         return `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #333;">Welcome to ClientSync!</h1>
-            <p>Hello ${user.firstName || 'there'},</p>
+            <p>Hello ${user?.firstName || 'there'},</p>
             <p>Please verify your email address by clicking the button below:</p>
             <div style="text-align: center; margin: 30px 0;">
               <a href="${url}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
@@ -30,12 +32,14 @@ export const Users: CollectionConfig = {
       generateEmailSubject: () => 'Verify your ClientSync account',
     },
     forgotPassword: {
-      generateEmailHTML: ({ req, token, user }) => {
+      generateEmailHTML: (args) => {
+        const token = args?.token || ''
+        const user = args?.user
         const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/reset-password?token=${token}`
         return `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #333;">Reset Your Password</h1>
-            <p>Hello ${user.firstName || 'there'},</p>
+            <p>Hello ${user?.firstName || 'there'},</p>
             <p>You requested to reset your password for your ClientSync account.</p>
             <p>Click the button below to set a new password:</p>
             <div style="text-align: center; margin: 30px 0;">
@@ -277,6 +281,10 @@ export const Users: CollectionConfig = {
     ],
   },
   access: {
+    // Only admins can create new users
+    create: ({ req: { user } }) => {
+      return user?.role === 'admin' || user?.role === 'super-admin'
+    },
     // Users can read their own profile and admins can read all
     read: ({ req: { user } }) => {
       if (user?.role === 'admin' || user?.role === 'super-admin') {

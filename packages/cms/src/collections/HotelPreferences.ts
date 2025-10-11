@@ -288,7 +288,7 @@ export const HotelPreferences: CollectionConfig = {
         {
           name: 'proximityRequirements',
           type: 'array',
-          dbName: 'proximity_reqs',
+          dbName: 'prox_reqs',
           fields: [
             {
               name: 'landmark',
